@@ -1,0 +1,342 @@
+Trainer name: Jagadeeswaran Rangappan
+Modules	11	
+Session 36
+in virtual mode
+------------------------------
+Mathematical Foundations  agenda
+
+22/7
+
+circle has radius, diameter, circumference
+
+ration  of circumference to the diameter is 22/7
+
+What are the types of numbers?
+	whole number
+	natural number
+	real number
+	fractions
+	unreal number
+	rational number
+	irrational number
+	integers		negative, positive and zero
+	prime
+	complex
+
+
+
+
+byte
+short
+int
+long
+	all the above are integer family
+float		2.5f
+double		3.5
+	floating point numbers family
+
+
+
+
+integers, fractions, real and complex
+
+
+Fibonacci series
+	0 1 1 2 3 5 8 13 21 34
+
+
+Set theory
+	{	}	i call this brackets as set brackets
+
+{0, 1, 100, 20, 3, 45}
+
+Set is a collection of distinct objects/ elements
+
+Set in java
+	rejects duplicates
+	order of set depends on type of set
+		TreeSet		is sorted
+		LinkedHashSet	is ordered	(remembers the order in which elements were added)
+		HashSet		order is based on hashCode() method 	(and equals() method)
+
+
+
+Number system
+	decimal
+	binary
+	octal
+	hexadecimal
+
+
+int x=20;
+x=010;		//what is the value of x?		this is octal
+x=0x10;		//what is the value of x?		this is hexa decimal
+
+
+010	as 10		because you belief in the beginning has no meaning
+BUT IN JAVA, 0 in the beginning has a meaning:
+	it is OCTAL notation
+
+
+what is the minumum number in an octal digit?
+	0
+max
+	7
+0
+1
+2
+3
+4
+5
+6
+7
+	these are the only possible digits in octal number system
+
+
+
+
+
+25
+	can be viewed as a number
+	or 2 digits
+	or 2 characters
+
+
+0
+1
+2
+3
+4
+5
+6
+7
+10
+11
+12
+13
+14
+15
+16
+17
+20
+
+
+Binary
+	can anyone tell me real life example where we use binary?
+		ON	OFF
+0 0 0 0 0 0 0 0
+1 1 1 1 1 1 1 1
+	Between these 2, there are so many possible combinations
+	can anyone tell me, how many possible combinations are there?
+0 to 255 =	256 possible value
+
+
+convert binary into decimal
+
+128+ 64+ 32+ 16+ 8+ 4+ 2 +1
+
+
+
+int	is 4 bytes		32 bit
+
+
+65536	rows
+256	columns
+
+
+in java, data types
+
+byte	1 byte	8 bits		11111111	 256	divide by 2 so that
+			-128 to 127
+short	2 bytes	16 bit		1111 1111 1111 1111		65536 possible values
+
+	divide by 2		-32768 to 32767 
+
+binary
+octal
+hexadecimal
+
+where is hexadecimal useful?
+	color codes
+		Tell me, what is the color referring to	FF FF FF		White
+						00 00 00 		Black
+	if all three red, green, blue are equal, it will be in GREY SCALE
+
+Color codes normally are in
+	0-255	red		0-FF		FF refers to 255
+	0-255	green
+	0-255	blue
+
+
+16 digits
+
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+A
+B
+C
+D
+E
+F
+
+
+
+
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10		
+11
+12
+
+
+19
+20
+
+
+
+
+UNION				10 + 10 is upto 20
+UNION ALL			10 + 10 is always 20
+INTERSECT			common elements between 2 sets
+MINUS				all elements of 1st set minus common elements with 2nd set
+
+Venn diagram
+
+UNION of 2 sets
+
+1st set has 10 elements
+2nd set has 10 elements
+	ideally, if you union these 2 sets, how many will be there in the result?
+		upto 20 elements
+
+
+Logical Gates:
+	NOT
+	AND
+	OR
+	XOR
+	
+
+
+. Exponents and Logarithms (20 mins)
+   - Properties of exponentiation.
+   - Introduction to logarithms.
+   - Connection between exponents and logarithms.
+
+
+
+10 power 2	is 	100
+log 100 base 10	is	2
+
+
+2 power 1
+2 power 2
+2 power 3
+
+factorial is another way of understand series
+
+what is factorial of 100?
+	100 * factorial (100-1)
+where is factorial or similar kind of series used in real life
+
+IPL
+10 teams play across each other only ONCE
+
+so, tell me, how many matches, each team will play
+
+each team play with 9 other teams
+	9 is the correct answer
+
+TOTALLY how many matches will be conducted?
+	9+8+7+6+5+4+3+2+1	=	
+
+
+3 teams
+	2+1	
+
+
+
+a b
+a c
+b c
+
+4 teams		a,b,c,d
+	3 + 2 + 1		=6
+
+a b
+a c
+a d
+b c
+b d
+c d
+
+
+Order of growth of
+	sorting algorithms		Big O notation
+
+
+what are algorithms
+	searching algorithms
+		linear
+		binary			only on sorted list
+		hashing			store data based on hashing function
+	sorting algorithms
+		bubble
+		quick
+		heap
+		merge
+		insertion
+		
+
+
+
+
+
+O(1) - Excellent/Best
+
+O(log n) - Good
+
+O(n) - Fair
+
+O(n log n) - Bad
+
+O(n^2), O(2^n) and O(n!) - Horrible/Worst
+
+
+What is probability?
+	number of time it is possible to occur	/	total number of possibilities
+
+
+if i play a dice game,
+	total possibilities:		0, 1, 2, 3, 4, 5, 6
+		7 possibilities
+
+tell me, what is the probability of getting 6?
+		1/7
+
+in asp.net there is something called "Adrotator"
+	that will ask you the number for probability	to show an ad
+
+
+
+
+
+
+
+
