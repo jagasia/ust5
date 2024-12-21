@@ -334,8 +334,11 @@ in asp.net there is something called "Adrotator"
 	that will ask you the number for probability	to show an ad
 
 
+in programs, 
+	for ex:
+		PriorityQueue
 
-
+we can specify a value for each element
 
 
 

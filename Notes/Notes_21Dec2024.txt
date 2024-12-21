@@ -1,0 +1,268 @@
+SDLC
+What does SDLC stands for?
+	Software Development Life cycle
+
+What are the phases of SDLC?
+	Requirement gathering		/ Planning
+	Analysis
+	Design
+	Implementation
+	Testing
+	Deployment
+	Maintenance
+
+7 phases of sdlc
+
+Rational Corporation	(adopted by IBM corporation)
+	defines RUP
+
+RUP	is 	Rational Unified Process
+
+RUP defines SDLC as
+	Inception			requirements gathering/ planning
+	Ellaboration		analysis/ design
+	Construction		coding/ implementation
+	Transition
+	Production
+
+
+Inception:
+	Planning, Requirements gathering
+	conception
+
+inception is no more customers' responsibility
+we, are going to do the inception by ourselves and propose the solution to the customer
+
+Requirement gathering
+	observe the existing process
+	appoint a domain expert
+
+
+speed
+accuracy
+storage/ durability		if data is lost? how can we manage?????????????????
+
+scalability			ability to scale to growing or reducing needs
+persistence
+transaction management
+security			
+
+
+You want to conduct a test in your school.
+
+my software is going to 
+	save your time		to evaluate the test papers, i take 1 week
+	accurate			evaluation and scoring
+
+
+features	->	benefits
+
+inception is upto the point we understand that the customer needs a solution.
+
+You need to discuss this with your team
+	Analysis
+		record the requirements in the form of SRS document	Software Requirement Specifications
+	
+
+Analysis vs Design
+	analysis will produce a document		SRS	paragraphs
+		i am going to implement these
+	design is all about diagrams
+		E-R diagram
+		Database diagram
+		UML diagrams
+			user view
+				use case diagram
+			structural view
+				class diagram
+				object diagram
+				package diagram
+				deployment diagram
+			behavioral view
+				sequence diagram
+				state machine diagram
+				activity diagram
+				interaction overview diagram
+
+		Wireframes		UI
+
+
+
+ANALYSIS
+	ellaboration
+
+DESIGN
+	how many tables, what are they?
+		normalization
+
+	how many classes, what are they?
+		attributes
+		methods
+			if you ellaborate the method, you get flowchart?	in uml it is activity diagram
+		when is an object constructed, or destroyed?
+			sequence diagram	(mentions the lifeline of objects)
+		which object's which method calls method of which object
+			in an order
+
+
+
+Construction/ implementation/ coding
+	
+Test phase
+	test cases are used to test the code
+
+Deployment
+	has been done in different ways over the period of decades
+		earlier, it was developed in development computer and then 
+			transitioned to production computer
+		now a days, we develop, deploy and maintain the project in cloud
+			by ourselves
+
+
+	Project vs Product
+		project is developed for a specific client		customized
+		product is developed for a segment of clients and then promoted or sold
+		we develop the product (targeting some segment) but not for a specific client
+			example for product:		MS Office
+
+
+Maintenance
+	what is maintenance?
+		ex:
+			zoho books
+				we use it to maintain out accounts book
+					create expense
+					create purchase order
+					create invoice
+			govt set some rules for invoice number format (suddenly today)
+				now, zoho books is not installed in my computer at all
+				it is there in cloud. So, zoho will update the rules in their 					product
+				can we call it as maintenance
+	how maintenance was done when we delivered the product as CD or downloads?
+		patches were released
+		microsoft releases software updates
+
+
+product vs service
+	delivering our software as a
+		product
+		service		(more advantages)
+
+
+Product is bought
+Service is subscribed
+
+Samsung	vs Airtel
+
+	Samsung delivers "product"			you pay only once
+	Airtel delivers "service"			you pay monthly/ quarterly/ yearly
+
+
+	
+Adv of s/w as a service:
+	up to date
+	maintenance			client, you focus on your business, i take care of tech
+	subscription			according to your requirement
+	agility				quick provisioning (if you need to buy infra, it will take time to provision. And a head ache when de-provisioning)
+
+
+
+key software development roles
+--------------------------------------
+Product manager  
+Product owner
+Engineering manager  
+Software architect  
+Software developers 
+UX/UI designers 
+QA engineer 
+Business analyst  
+Scrum master 
+Testers 
+Team lead or Technical lead
+
+
+https://alcor-bpo.com/10-key-roles-in-a-software-development-team-who-is-responsible-for-what/
+
+
+Feasibility
+to be able to find if it is feasible or not
+	features
+	time
+	resource		tech, human
+		if you keep one of these factors tangible, then it is mostly always feasible
+
+What is the difference between QA and QC?
+	Quality Assurance
+		methods, that we follow that ensures the quality of the product being developed
+		are you following the processes, that will product quality product
+	Quality Control
+		to find bugs, defects
+
+
+		quality of the product
+		quality of the process to develop the product
+		quality of the quality process itself
+
+
+Scrum Master
+	sprint planning, 
+	determining durations, and 
+	outlining tasks for each cycle. 
+
+
+
+	
+Full Stack Development 
+	both front-end and back-end development
+
+some of the technologies used in Full stack developement
+MERN
+	Mongodb ExpressJs ReactJs NodeJs
+MEAN
+	Mongodb ExpressJs Angular NodeJs
+
+Dotnet
+
+Java
+
+Python
+
+
+Front-end
+	HTML5
+	CSS3
+	Bootstrap
+	Tailwind
+	Javascript ES6
+	JQuery
+	Typescript
+	Angular
+	ReactJs
+
+Back-end
+	Java SE
+	Java EE
+	Spring
+	Spring boot
+	Microservices
+	Restful webservices/ REST apis
+	MySql/ Oracle/ MS SQL Server/ H2/ PostgrSQL/ 
+	MongoDb
+	DJango
+	
+
+Postman
+Swagger
+SonarQube
+Docker
+Kubernetes
+AWS
+Jira
+Jenkins
+Git
+Maven
+CI/CD
+
+
+
