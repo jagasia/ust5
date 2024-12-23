@@ -1,0 +1,354 @@
+- Understand the fundamentals of programming and problem-solving.
+- Learn the concept of pseudo code and its importance.
+- Explore different types of programming languages and their characteristics.
+- Gain insights into the role of compilers in the programming process.
+- Understand control flow structures and their application.
+- Grasp the concept of functions and their significance in programming.
+
+Last session, we discussed about SDLC and its phases.
+We actually, translate the design documents into code.
+For ex:
+	class diagram
+		contains attributes and operations (methods/ functions)
+
+what should i write inside those methods?
+	this is exactly where we are now.
+	this is also mentioned in the activity diagrams (sophisticated flow chart)
+
+our programming / coding / problem solving
+
+we write program to make a computer help us to solve a problem
+the program, may
+	calculate
+	validate
+	compute
+	make decisions
+	
+input 	process		output		
+
+IPO cycle because, the output may be used as input for another process
+
+a+b
+	a and b are data
+	+ is the algorithm
+
+now, that i know the formula, i do like this
+sometimes, 
+	Math.sqrt(a,b);		i may not know the formula, but still, i can get output
+
+a+b	=>		sum(a,b)
+
+a class can have data members
+and methods
+
+algorithm and data structures
+
+
+printf("hello world");
+
+
+we are not doing from the scratch.
+there are some functions and operators already provided with the programming language itself.
+so, we are building our program above that layer.
+
+problem:
+	display the result in 2 digits precision
+
+1st programmer, uses multiply, round, divide approach
+	float f=12.45454545f;
+        f*=100;
+        f=Math.round(f);
+        f/=100;
+        System.out.println(f);
+
+2nd programmer uses String.format or System.out.printf or System.out.format
+3rd programmer uses DecimalFormat
+
+
+Algorithmic thinking
+-----------------------
+11, 8, 90, 4, 45, 28, 15
+
+what is the largest number in this list?
+	you have answered as 90
+
+most of you have found it very fast.
+
+But if you want your program to find?
+
+You need to observe how you found it?
+	slow down and write down as steps
+
+
+
+
+what is algorithm?
+	step by step instructions to solve a problem
+	should be in a human understandable language like English
+	it should not contain any syntax specific to 1 programming language
+
+
+Technology is an application of Science
+Science is trying to define whatever that exists.
+
+
+A person can ride a bicycle, without knowing
+	center of gravity
+	centripetal / centrifugal force
+
+now, science is defining these paradigms that already exists
+sometime, science can suggest something which does not exists yet
+
+
+Problem solving steps:
+	understand the problem
+	analyze the problem
+		ellaborate the problem
+		identify the sub problems
+		ex:
+			find all prime numbers between x and y
+			ensure that each digit of those prime numbers are also prime
+
+			you can solve the above problem, if you can split it into multiple sub 			problems
+
+			what is a prime number?
+			how to find if a number or digit is prime or not?
+				if number <2, it is not prime
+				if number is 2, it is prime
+				if number is 3 or above,
+					if the number is divisible by any of the following, it is 					not prime
+						2, 3, ... upto square root of number
+			
+			how to find numbers between x and y?
+				for loop
+				while loop
+				do loop
+			
+			how to extract a digit from a number?
+				modulo the number by 10	(you will get last digit)
+				divide the number by 100	(you will remove last digit)
+				repeat until the number exist above 0
+
+		design the solution
+			loop from x to y	and in each iterator, keep the current number in i
+			check if i is prime or not
+			if prime, then
+				iterate for each digit in i and keep the digit in d
+					check if d is prime or not
+			
+
+Procedural programming
+	allows us to create functions and call them
+
+imagine, if you solve the below problem,
+
+			find all prime numbers between x and y
+			ensure that each digit of those prime numbers are also prime
+
+
+If you are allowed to create procedures/ functions/ methods,
+what will you do?
+
+	create a function that gets a number as argument and checks if a number is prime or not 
+		fnIsPrime(num)
+	create a function, that gets a number as argument, and iterate it for each digit in that number
+		fnCheckDigits(num)
+		in this function, call the 
+			fnIsPrime(num) for each digit
+	create a function that gets x and y and iterate all numbers between x and y
+		fnFromXToY(x,y)		and each element is stored in i
+			in each iteration, call fnIsPrime(i)
+				if we get true, then 
+					call fnCheckDigits(i)
+
+
+
+   - Definition and purpose of pseudo code.
+   - Writing simple algorithms in pseudo code.
+   - Importance of clear and readable pseudo code.
+
+
+https://www.smartdraw.com/flowchart/flowchart-symbols.htm?srsltid=AfmBOorLNyNwHo56VXcZ8KQKa4yJCiu7bk70KehzJgxlMfpbQrBH0XHS
+
+
+pseudo code
+	is almost like a program, that human can understand
+	it is mere translation of pseudo code into a particular language program
+
+Task:
+Run Length IV
+ 
+Write a program to find the length of the longest running sequence of even numbers in the given array. Also find the starting index of the longest running sequence of even numbers.
+ 
+Example :
+ 
+Consider the array ... { 2, 16, 15, 2, 6, 8, 10, 7, 22, 4 , 6}
+ 
+The 3 even number sequences in this array are {2, 16}, {2, 6, 8, 10} and {22, 4, 6}.
+The longest running even number sequence is {2, 6, 8, 10}
+The length of the longest running even number sequence is 4 and the starting index is 3.
+ 
+Note:
+The array indexing starts from 0.
+If there are multiple choices, select the choice where the starting index is minimum.
+ 
+Input and Output Format:
+ 
+The first line of the input consists of an integer n that corresponds to the number of elements in the array. The next 'n' lines of input consists of a single integer that correspond to the elements in the array.
+ 
+The first line of the output consists of the length of the longest running even number sequence and the second line of the output consists of the starting index of the longest running even number sequence.
+ 
+Sample Input :
+11
+2
+16
+15
+2
+6
+8
+10
+7
+22
+4
+6
+ 
+Sample Output :
+4
+3
+
+
+	there should be a count variable
+	
+Traverse through the array
+	visit each element of the array
+	check if current element is even or not
+		if yes, increment count
+		if no, count is set to zero
+// Online Java Compiler
+// Use this editor to write, compile and run your Java code online
+import java.util.*;
+
+class Main {
+    public static void main(String[] args) {
+        Scanner sc=new Scanner(System.in);
+        int n=sc.nextInt();
+        int []arr=new int[n];
+        for(int i=0;i<n;i++)
+        {
+            arr[i]=sc.nextInt();
+        }
+        // System.out.println(Arrays.toString(arr));
+        int count=0;
+        int maxCount=0;
+        int startIndex=-1;
+        int maxStartIndex=-1;
+        for(int i=0;i<n;i++)
+        {
+            if(arr[i]%2==0)
+            {
+                count++;
+                if(count==1)
+                {
+                    startIndex=i;
+                    
+                }
+                if(count>maxCount)
+                {
+                    maxCount=count;
+                    maxStartIndex=startIndex;
+                }
+            }else
+            {
+                count=0;
+            }
+            // System.out.printf("Count is %d Start index is %d and maxStartIndex is %d\n", count, startIndex, maxStartIndex);
+        }
+        System.out.println(".............................");
+        System.out.println(maxCount);
+        System.out.println(maxStartIndex);
+    }
+}
+
+----------------------------
+
+   - Explanation of compilers and their role in programming.
+   - Differentiating between interpreted and compiled languages.
+
+
+What is the role of a compiler in programming?
+	compilers translates high level language code to a machine language code
+	not always,
+	some compilers like JIT (Just In Time compilers) convert byte code into machine's native language code.
+	so, anyways, it is doing a translation work
+
+the compilation process 
+	in c, c++
+	are different from
+		java, c#, vb.net 
+
+in java, dotnet languages,
+	compilation happens in 2 stages
+
+in c, c++
+	the source code (we write) is translated into machine language (object) code by the compiler
+	a code compiled in a particular platform, does not work in another platform.
+	because, the machine language is different in different platforms
+
+	Turbo C program, does not run in Linux GCC
+
+in java,
+	the java compiler, does not translate our java code into machine language code.
+	but it will translate our java code into an intermediate level byte code.
+	in whichever platform, we execute the byte code, the java runtime environment (jre)
+	further translates the byte code into machine language code (using JIT compiler)
+
+this is how java becomes platform independent.
+
+Explanation of control flow structures: sequential, conditional, and iterative.
+   - Examples demonstrating control flow in programming.
+
+
+declaration
+assigning values to the variable, constants, arrays.
+conditional statements
+	if
+	if else
+	if else if 
+	if else if else
+		there can be any number of else if for an if. but only 1 optional else
+	switch case
+		c, c++, c#, java
+iterative statements
+	while
+	do while
+	for loop
+	for each loop
+		but these are specific to languages
+		in PL/SQL language
+			basic LOOP
+			while LOOP
+			FOR LOOP
+			FOR EACH LOOP		CURSORS
+
+
+
+Functions in Programming (15 mins)
+   - Definition and purpose of functions.
+   - Creating and using functions.
+   - Advantages of modular programming.
+
+creating re-usable code as functions (also called as methods/ sub routines/ procedures)
+write once, call many times
+
+modularity
+	functions
+	class
+	packages
+	components
+
+if modularity is not provided by languages, then the complexity of the application is difficult to be handled
+
+
+
+
+
