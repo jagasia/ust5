@@ -1,0 +1,284 @@
+Git
+pull
+push
+clone
+merging branches
+what is head?
+
+Practical:
+	Create a new git repository on your local machine and make an initial commit
+
+everybody will be able to do this?
+1) in your computer, you need to choose a folder that is considered as local repository
+2) in github.com, create a new repository
+3) in your local folder,
+	if you are doing for the first time, then
+		git config --global user.name <<username>>
+		git config --global user.email <<email>>
+
+you do this once
+
+	git init
+this command will create a .git folder (hidden) in your computer in current location
+as long as this folder is present, your current folder is considered as a git repository (local)
+
+
+You have pushed your reactjs project to git
+	all files are pushed to remote repository
+	including "node_modules" folder
+		this is not good idea, because, 
+			node_modules is huge, around 50k files
+			whoever pulls this project, can add this "node_modules" in their project by 
+				themselves using
+					npm install
+					npm i
+
+so, what we can do, we can ignore this node_modules by using
+	.gitignore
+
+this file is usually created automatically when we create react project
+but since git was not installed that time, it was not created
+after git is installed,
+if you create react project, then
+	.gitignore will be added and configured to ignore node_modules automatically
+
+
+now, lets clone the following repository:
+	https://github.com/Srinumani/TODOLIST_REACT_API.git
+
+
+we have done a 
+	git clone https://github.com/Srinumani/TODOLIST_REACT_API.git
+
+it created a folder now in our current location
+we check inside the folder
+	cd TODOLIST_REACT_API
+
+this folder, is a git local repository
+	you can see .git folder here
+and also, remote origin is already added
+	git remote -v
+to see the origin
+
+just because, i have cloned your repository, it does not gives me permission to push my changes
+but i can pull
+
+
+what is pull?
+	i need to check into the folder and pull
+	
+create a folder TODOLIST_REACT_API
+	mkdir TODOLIST_REACT_API
+	cd TODOLIST_REACT_API
+	git init
+	git remote add origin https://github.com/Srinumani/TODOLIST_REACT_API.git
+	git pull origin main
+
+
+now, you understand the difference between 
+	git clone
+	git pull
+
+also, git clone is used only once
+git pull is used again and again to pull the changes from the remote repository
+	pull is incremental
+		only the changes are detected and pulled
+
+clone is costly
+	everything is pulled unncessary
+
+I need couple of volunteers, who can do pull and push in your system:
+	Share your git email id in chat window
+	i will send invite to make you a collaborator for my new repository
+
+
+srinumanikanta0011@gmail.com
+brahmeshwarthakur1@gmail.com
+kavinkumars218@gmail.com
+
+
+
+Demo:
+i have logged into github.com
+and created a remote repository
+	https://github.com/jagasia/practical-demo-1
+
+and also have chosen a local folder in my system as a local repository
+
+Steps for adding the collaborators:
+-----------------------------------------
+	open the remote repository in github.com
+		settings
+			collaborators
+				Add people
+					search them by username or email and send invite
+
+now, among the invites, 
+	earlier, it was showing "Pending invite"
+	now, they all have accepted the invites (via their emails)
+refresh to see the updated status
+
+collaborators are allowed to not only pull, but also push, add/ delete branches, merge, etc
+
+
+now, i have created a project in eclipse:
+	
+Manikanda	->	Employee.java
+	you need to create the following properties
+		id, name, department
+
+Takur		->	Department.java
+		id, name
+
+Kavin		->	Location.java
+		id name
+
+i will push the project created so far to the remote:
+
+D:\Jag\UST\Wave4\practical-demo-1>git init
+Initialized empty Git repository in D:/Jag/UST/Wave4/practical-demo-1/.git/
+
+D:\Jag\UST\Wave4\practical-demo-1>git remote add origin https://github.com/jagasia/practical-demo-1
+
+the above 2 commands
+	git init
+	git remote add origin ....
+	git branch -M jag
+
+are done only once.
+
+now,
+	git add .
+	git commit -m "jag has pushed initial starter project
+	git push -u origin jag
+
+
+
+
+listen,
+	each one of you will push using your name as branch name
+	
+
+all of you
+	i) can clone my repository
+		in this case, git init and git remote are already added
+		only thing, is you need to check inside the folder which is created
+			cd practical-demo-1
+or
+	ii) create a local repository by yourself and pull
+		in this case, you have to create the folder 	"practical-demo-1"
+		cd practical-demo-1
+			git init
+			git remote add origin .....
+			git pull origin jag
+
+now, collaborators, 
+	Kavin has contributed to
+		Location.java
+
+what i will do?
+	i will pull kavin's branch
+i have got Location.java code
+i contribute to the same file
+and push the changes to git
+
+now that we have the following branches:
+	jag
+	kavin
+	thakur
+
+how to merge 
+	kavin
+	thakur
+		to jag
+
+in such case, "jag" as HEAD
+
+After merge, only HEAD will remain
+
+
+
+
+Significance of code review:
+Can help reduce bugs in code.
+Validate that all coding requirements have been filled.
+An effective way to learn from peers and get familiar with the code base.
+Helps maintain code styling across the team.
+Team cohesion — encourage developers to talk to each other on best practices and coding standards.
+Improves overall code quality due to peer pressure.
+
+
+code quality, code review
+	does not focus on 
+		functional testing bugs		black box testing
+		a functional testing conducts tests that will check your code, by running the code
+			again test cases
+		but code review and code quality are checking the quality of the code
+		checking whether the coding standards, good practices are followed
+
+1) every variable declared, must be initialized
+2) a method can have only 1 return statement
+3) comments
+	comments must explain the code	good comments
+	a program, which is commented, is a bad comment. Ideally, we must remove those lines
+4) every if condition, true, else parts to have {} even if there is only 1 line
+5) System.out.println
+	should be replaced by logging/ loggers
+
+we can use tools like
+	sonar qube to test our code quality		white box testing
+
+
+Make sure code compiles successfully.
+Read and annotate your code.		annotate means comment
+Build and run tests that validate the scope of your code.
+All code in codebase should be tested.
+Link relevant tickets/items in your task management tool (JIRA for example) to your pull request.
+Do not assign a reviewer until you’ve finalized the above.
+
+
+1: Adding a customer
+2: Updating an existing customer
+3: Deleting a customer
+4: Finding customer by id
+5: Exit
+
+switch(choice)
+{
+	case 1:		//adding a customer
+			//write your code here
+	break;
+	case 2:		//update an existing customer
+	break;
+	case 3:		//delete a customer
+	break;
+	case 4:		//finding a customer by id
+	break
+	case 5:		return;
+}
+
+
+Git branches
+---------------
+
+
+feature: All features / new functions / major refactorings are done in feature branches, which branch off of and are merged back into the develop branch (usually after some kind of peer review).
+
+release: When enough features have accumulated or the next release time frame comes near, a new release branch is branched off of developing, which is solely dedicated to testing/bug fixing and any cleanup necessary (e.g. changing some path names, different default values for instrumentation, etc.).
+
+hotfix: If a major problem is found after release, the fix is developed in a hotfix branch, that is branched off of the master. Those are the only branches that will ever branch off of master.
+
+Note: Any commit in the master is a merge commit (either from a release or a hotfix branch) and represents a new release that is shipped to the customer.
+
+Please be aware that this model is mainly meant for a) big software projects that follow b) classic release versioning and c) have a separate QA team. Many popular repositories on GitHub follow a simpler model.
+
+
+feature
+release
+hotfix
+
+
+refactoring
+	is the process of modifying the structure of the code
+	without changing the logic
+

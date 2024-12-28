@@ -1,0 +1,566 @@
+Live Session: Java-Fundamentals
+
+Java as a platform
+Java Language
+	to be able to compile and execute a java program,
+	we need JRE
+
+what is the difference between
+	JDK, JRE, JVM
+
+JDK and JRE are physical entities that can be downloaded to our system
+	if you have jdk, then you will be able to
+		compile your code		javac
+		execute your code		java
+
+	if you have jre, then you will be able to
+		execute your code		java
+there is no compiler present in jre
+
+hence 
+	jdk is for the developers	who will compile and execute the java programs
+	jre is for the users		who wil run the programs (which are already compiled)
+
+
+jdk includes jre
+
+JDK
+	Java Development Kit	
+JRE
+	Java Runtime Environment
+JVM
+	Java Virtual Machine
+
+
+What are the platforms supported by Java
+	Tell me the Operating Systems in which java programs can RUN?
+
+Java is platform independent.
+	it does not mean, it can run in any platform.
+
+Platforms supported by Java:
+	Windows
+	Linux
+	MacOS
+
+independent means, the java language is always same, for whichever platform it runs
+
+What about Android OS?
+	java is supported in android or not? Because, android developers use java only?
+	
+Android is a modified Linux.
+	so, java for linux, works for android
+
+
+How java is platform independent?
+	how?
+
+In c, c++, the major issue was:
+	we write c language program in windows
+	and compile it in windows
+	works fine in windows
+
+	now, the same compiled code, if we run in linux, it does not run
+
+	Why?
+		the code compiled in windows, 
+		is in windows byte code
+
+		windows byte code does not work in linux os
+
+
+windows binary <>	linux binary
+
+Java, introduces 2 stage compilation
+	1) java code is compiled to an intermediate byte code (this code is not specific to any platform)
+	2) during runtime, JRE will use a compiler called JIT compiler and further translate byte code into machine specific language code		(machine language code)
+
+because of this 2 stage compilation, it is platform independent
+
+
+JIT
+	Just In Time compiler
+		this does not translate entire byte code, but instead, it will translate whichever is required in the execution flow
+
+	
+
+JVM
+	whenever you execute a java program, a JVM comes to memory
+	is not a physical file like JDK, JRE
+	JVM is process, that contains threads like class loader, garbage collector etc
+
+	only when the run the program, JVM process is created
+
+
+
+Write a java program, compile and execute it in cmd prompt
+
+public class App1
+{
+	public static void main(String []jags)
+	{
+		System.out.println("Hello world");
+	}
+}
+
+the above code is saved in
+	D:\Jag\UST\Wave4\Wave4_Batch5\Java
+as
+App1.java
+
+now, in cmd:-
+-----------------
+D:\Jag\UST\Wave4\Wave4_Batch5\Java>javac App1.java
+
+D:\Jag\UST\Wave4\Wave4_Batch5\Java>dir
+ Volume in drive D is Data
+ Volume Serial Number is 5619-2430
+
+ Directory of D:\Jag\UST\Wave4\Wave4_Batch5\Java
+
+28-12-2024  10:28    <DIR>          .
+28-12-2024  10:28    <DIR>          ..
+28-12-2024  10:28               413 App1.class
+28-12-2024  10:28               110 App1.java
+               2 File(s)            523 bytes
+               2 Dir(s)  648,796,999,680 bytes free
+
+D:\Jag\UST\Wave4\Wave4_Batch5\Java>
+
+
+
+
+
+javac App1.java
+	is used to compile a java file
+
+D:\Jag\UST\Wave4\Wave4_Batch5\Java>java App1
+Hello world
+
+java App1
+	is used to run the java class 	(that contains main method. If there is no main method, we can still compile the program, but cannot execute the code).
+
+
+
+
+public class App1
+{
+	public static void main(String []args)
+	{
+		System.out.println("Hello world");
+	}
+}
+
+
+
+in the above code,
+	we are creating a class called "App1"
+class naming conventions:
+	the class name must start with Capital letter only
+	the class name must be a noun
+	
+main method 
+	is the first method to execute, when the program is executed
+	this method will be called by jre, so this method must be public
+	this method does not return anything, so it is void
+	this method is called without using an object of the class, so it is static
+	this method can accept an array strings, so its argument is a String array
+
+Task:
+------
+Do this task using a notepad and command prompt
+create a class named as "App" and this class has main method
+in main method, you display
+	Hello <<x>>
+
+the value of x is args[0]
+
+while running the code, supply the command line argument
+
+	java App Jyothsna
+
+output should be
+	Hello Jyothsna
+
+Following participants have completed the activity:-
+Abhiraj
+Shaik Abdul Raashid
+Jyothsna
+Devika Lekshmy S
+Srinumanikanta
+Kollpara Sai Sriram
+Kavinkumar
+Ayush Bharadwaj
+Pramish
+
+Introducing IDEs
+	Integrated Development Environment
+	ex:
+		Eclipse
+		Netbeans
+		IntelliJ
+		Spring Tool Suite	(is a modified Eclipse)
+		Visual Studio Code
+
+Eclipse is considered as commonly used IDE for Java
+
+
+
+When I open eclipse, i will choose a workspace
+A workspace
+	is a folder where all the project i create in eclipse will be stored.
+
+
+If you have not created any project in eclipse/ sts
+	do it right now, and let me know, if you need support.
+
+	create a hello world in java using IDE
+
+
+-------------------------------------
+in java,
+	full capitals are used for constant data members
+		final int FULL_MARKS=100;
+	full small letters are used for operators
+		new
+		instanceof
+
+
+
+What are the data types you know in Java Language?
+	there are 8 data types in java language
+		boolean
+		byte
+		char
+		short
+		float
+		int
+		long
+		double
+
+Only these 8 are called as data types
+	Classes are types, and not data types
+data types are primitive, fundamental data types
+	because, all other types are represented in memory in the form of primitives only
+
+example
+	String is a class.
+		String str=new String("hello");
+			here, str is of String type		(not data type)
+
+		Date dt=new Date();		dt is of Date type
+			Date is a class under java.util package		Date is not a datatype
+
+		boolean		1 bit		true	false
+		byte		1 byte		-128 to 127
+		char		2 bytes		
+		short		2 bytes		-32768 to 32767
+		float		4 bytes
+		int		4 bytes
+		long		8 bytes
+		double		8 bytes
+
+If you are not aware of the range of values accepted by these data types, then it is dangerous
+that the value goes to negative after reaching max value.
+
+
+variables
+	can be 
+		value type	(or)
+		reference type
+
+
+If you declare a variable of any primitive type,
+	then they are value types
+	the value types do not have any member functions inside
+
+
+If you create a variable of anything other than primitives,
+	they are reference types
+
+example:
+	Date dt;		//reference variable
+	new Date();	//object of Date class
+
+	dt=new Date();	//the reference of the object is kept in a ref variable
+
+Memory structures
+	stack
+	heap
+
+Stack:
+	all variables declared inside a function (method) are stored in stack memory
+	because, every function we call, is pushed to call stack
+
+	main is the first function to be pushed to call stack
+	main calls f1()
+		f1 calls f2()
+			f2 calls f3()
+
+	now, f3 is in the top of the stack
+		once finished, f3 is poped out of the stack
+		now, f2 is in the top of the stack
+			after f2 is poped, f1
+				then main
+
+that is why, 
+	the variables declared in any function, is stored in stack
+
+
+
+import java.util.Date;
+
+public class App1 {
+
+	public static void main(String[] args) {
+		Date dt=new Date();
+		//dt is stored in stack
+		//new Date is stored in heap. Why?
+			//because, objects are always stored in heap
+
+		Date dt2;		//dt2 is stored in stack and if you open the locker, nothing is found				dt2 is actually null
+
+		new Date();	//a Date object is created in heap, but its reference is not kept in any stack variable
+
+		Date dt3=new Date();	//a stack variable dt3 is created. A new Date object is created in heap and its reference is kept in dt3 stack.
+
+
+
+
+	}
+}
+
+
+
+== operator
+	a==b	what is this?
+		i cannot answer now, because, i dont know whether a and b are value types or ref types
+		if a and b are value types, then their values are equal or not is checked
+		if a and b are reference types, then their references are equal or not is checked
+
+
+int a=20;
+int b=30;
+	a==b		returns false, because, a and b have different values
+
+
+Date d1=new Date();
+Date d2=new Date();
+	a==b		returns false, because, a and b have different references
+
+
+
+
+import java.util.Date;
+
+public class App1 {
+
+	public static void main(String[] args) {
+		Date d1=new Date(0);
+		System.out.println(d1);
+		Date d2=new Date(0);
+		System.out.println(d2);
+		System.out.println(d1==d2);		//false, even if their values are same
+	}
+}
+
+
+
+import java.util.Date;
+
+public class App1 {
+
+	public static void main(String[] args) {
+		Date d1=new Date(0);
+		System.out.println(d1);
+		Date d2=new Date(0);
+		System.out.println(d2);
+		System.out.println(d1.equals(d2));	//true, because, their values are same
+	}
+}
+
+
+you cannot use .equals() method for primitives, because, primitives have only values. No methods
+
+int a, b;
+	a.equals(b);		is not possible. there  is no methods inside primitives like int
+
+Integer a,b;
+	a.equals(b);		possible, Integer has methods inside
+
+
+You are supposed to learn operators in java
+
+Arithmetic operators
+	+ * - / %
+	++
+	--
+	-
+Logical operators
+	||
+	&&
+	!
+Comparison operators
+	>
+	<
+	>=
+	<=
+	!=
+	==
+Ternary operator
+	?:
+new operator
+instanceof operator
+
+Bitwise operators
+shift operators
+
+Getting input from the user:
+
+Task
+write a program to accept the following inputs from the user and display
+id
+full name
+cgpa
+
+sample input:
+123
+Raja Siva Kumar
+7.5
+
+sample output:
+123
+Raja Siva Kumar
+7.5
+
+
+Note:
+	id is int data type
+	name is String type
+	cgpa is float data type
+
+
+
+Problem:
+	whenever i use sc.nextLine() after any other next methods,
+	i get white space error
+
+because,
+	nextLine()
+		is the only method that accepts input until the delimiter called "newline"	\n
+	all other next methods like
+		next()
+		nextInt()
+		nextFloat()
+		nextLong()
+
+			accepts input until any delimiter is found	
+				space
+				tab
+				newline
+
+whenever a nextLine() is used after other next methods,
+	check the input obtained
+
+
+import java.util.Scanner;
+
+public class AppScannerDemo {
+
+	public static void main(String[] args) {
+		Scanner sc=new Scanner(System.in);
+		int id=sc.nextInt();
+		String name=sc.nextLine();
+		if(name.equals(""))
+			name=sc.nextLine();
+		float cgpa=sc.nextFloat();
+		
+		System.out.println(id);
+		System.out.println(name);
+		System.out.println(cgpa);
+	}
+
+}
+
+
+
+
+
+import java.util.Scanner;
+
+public class AppScannerDemo2 {
+
+	public static void main(String[] args) {
+		Scanner sc=new Scanner(System.in);
+		Scanner sc2=new Scanner(System.in);
+		int id=sc.nextInt();
+		String name=sc2.nextLine();
+		float cgpa=sc.nextFloat();
+		
+		System.out.println(id);
+		System.out.println(name);
+		System.out.println(cgpa);
+	}
+
+}
+
+
+
+Scanner 
+	java.util package
+
+provides methods to get input from the user
+	next()		accepts one word input from the user
+			why 1 word?	because, after the word, a space or tab or newline
+				is found means, upto that delimiter only it accepts input
+			returns String
+
+	nextInt()
+	nextFloat()
+	nextBoolean()
+	nextLong()
+	nextDouble()
+
+
+Task
+	Accept 2 character inputs from the user and check if first character is bigger than next
+	ex:
+		b is bigger than a
+
+Scanner does not provide a method to get character input
+but, we can use 
+	sc.next() method to get a String input
+		String has method to get a character at specific index
+
+	char c=sc.next().charAt(0);
+
+Arrays:
+---------
+syntax for arrays in java, is very much different from c, c++
+
+	int arr[]=new int[10];		//correct
+	int []arr=new int[5];		//correct
+	int arr[];
+	arr=new int[10];			//done in 2 lines. Why?
+			the scope of a variable is decided by where it is declared
+			so, we can declare an array earlier and 
+			later, after getting input from the user, we can size the array accordingly
+
+	int arr[]={5, 6, 8, 3, 9, 1, 4, 2};
+			the above array is created and initialized in same line
+
+
+Multi-dimensional arrays
+	in java, the multi-dimensional arrays are jagged arrays
+	jagged arrays are uneven size arrays
+
+ex:
+	if you consider the followin 2-dimensional array as rows and columns
+int arr[][]=new int[10];	//we have 10 rows and each row can be of different number of columns
+
+arr[0]=new int[5];		//0th row has 5 columns
+arr[1]=new int[7];		//1th row has 7 columns
+arr[2]=new int[3];		//2th row has 3 columns
+
+this is called as jagged array
+

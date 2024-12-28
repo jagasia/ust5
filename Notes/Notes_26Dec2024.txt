@@ -1,0 +1,360 @@
+We have completed 1st Module
+and 2nd Module
+
+Linux is useful in many situations
+	for example, Git Bash is a linux environment
+	and while deploying our applications in cloud, mostly cost effective solution may be linux
+	so, we will push our project to git (github/ gitlab/ bitbucket)
+		and in cloud, we connect to cloud using a terminal and
+		write commands in linux to pull the project, run it in cloud
+
+How many of you already have installed GIT in your computer/ laptop?
+
+for those who have installed git,
+	can you see "git bash" in you system?
+		Yes
+
+You can practise linux commands in this "Git Bash" itself.
+
+
+Linux commands
+
+in windows, we use "dir" to see the list of files and folders along with other details
+in linux, we use
+	ls
+	ls -l
+
+first of all, it is showing the files and folders of which location?
+you want to know what is the present working directory?
+	pwd
+
+but, we may want to work in any other specific location.
+so better close this git bash and 
+in windows file explorer, go to the required location
+
+
+	cd
+is used for change directory
+	cd ..
+is used to go back to parent directory or 1 level up
+	mkdir
+is used to to create a folder
+	rmdir
+is used to remove a folder
+	rm
+is used to remove a file
+
+How to create a file in linux shell?
+	touch one.txt
+
+i have create a file "one.txt"
+use "ls" to check
+
+how will you write some content into the file "one.txt"?
+as manikanta suggested, i use "echo"
+	echo "Hello world" > one.txt
+
+how to see the contents of a file?
+	cat one.txt
+
+in windows cmd prompt, "type" is used to see the contents of a file
+
+
+how can you edit the contents of this file?
+	nano
+
+like we use "Notepad" in windows, we can use lot of
+editors in linux like:
+	nano
+	vi
+
+in nano editor, we can type simply and finally
+we need to exit the editor.	the options are given below
+
+^X		Use CTRL+X to exit
+it may ask you the name of the file to save before exit
+
+lets use vi editor
+	vi one.txt
+
+we have 2 modes in vi editor
+	escape mode
+	insert mode
+
+
+escode mode
+	we can issue commands
+insert mode
+	we can type contents in the file
+
+currently it is in escape mode,
+	i type "i" to go into insert mode
+
+after typing work is over,
+	esc		:wq
+
+
+w for save
+q for quite
+
+--------------------------------------------
+Versioning vs Soure code control
+	Git is a version control system
+	
+Versioning and Source code control have minute difference
+very few difference
+	because, versions normally are related to the code which is build (compiled)
+	but source code is before compilation
+
+but, the concept of versoning also related to
+	my version of code
+	your version of code
+	trace the changes in the code
+	merge etc
+
+there are 2 or more programmers, the are working on same project
+each one contributes to the same project
+in such cases, we need to track who has wrote which code?
+trace the modifications also
+
+mostly if you push your source code into public repositories like github,
+then it becomes, Open Source
+
+
+Importance of version control in a collaborative coding environment:
+------------------------------------------------------------------------------
+Coding is implemented by a team of developers
+so, it is important that they should be allowed to collaborate and work on their
+individual modules or share the responsibility of coding together in order to achieve their goal.
+
+Git is also one of the DevOps technology
+
+Git can be installed in our system
+	in order to maintain local repository
+
+What is repository?
+	repository is any storage be it a directory or database or etc
+	in our local system, we have a "directory"
+		now, we want to sync this with a remote repository
+
+What is a remote repository?
+	a repository created in cloud like
+		GitHub
+		GitLab
+		BitBucket
+
+so, we are synchronizing our local directory to a directory in cloud
+
+Basically, our remote repository (public ) is READ-ONLY
+but in order to enable collaborative coding, we need to configure this repository and
+	add collaborators to this repository
+
+collaborators are invited via email
+and they can accept the invite and become collaborators.
+
+
+Explanation of version control and its significance.
+	to ensure the accountability of the code
+	and communication and traceabiliity of the code changes
+	whether changed or not, which part of the code is changed
+	for ex:
+		if any code is newly added (we see it in green)
+		if any portion of the code is deleted (we see it in red)
+		old vs new
+	and we can add comments to those changes also
+	so that it is a means of communication between the programmers who work as team
+
+
+
+Step-by-step guide on installing and configuring Git
+-----------------------------------------------------------
+ Verification of the Git installation.
+
+download git for windows from
+https://github.com/git-for-windows/git/releases/download/v2.47.1.windows.1/Git-2.47.1-64-bit.exe
+
+this will download the installer 
+double click to install
+
+C:\Users\rjaga>git --version
+git version 2.35.1.windows.2
+
+C:\Users\rjaga>
+
+
+after installing 2.47.1
+
+Microsoft Windows [Version 10.0.19045.5247]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\rjaga>git --version
+git version 2.47.1.windows.1
+
+C:\Users\rjaga>git -v
+git version 2.47.1.windows.1
+
+C:\Users\rjaga>
+
+
+Which git, you want to practice?
+	GitHub
+		is available for public
+
+
+Those who do not have account in GitHub.com,
+kindly signup
+	using personal email
+
+
+Whenever, you choose a folder in your computer
+to sync with a remote repository,
+choose the folder properly.
+
+ex:
+	d:\jag
+
+suppose this folder is created as local repository
+and sync to remote repository
+
+then
+	d:\jag\ust
+	d:\jag\personal
+	
+all these folders belongs to that remote repository
+and hence
+we cannot create another repository for
+	d:\jag\ust
+	d:\jag\personal
+
+but 
+	d:\raja
+can become a new git repository
+
+ANY SUB FOLDER, CANNOT BECOME ANOTHER REPOSITORY
+
+	d:\jag\ust\project
+
+project itself is pushed to a remote repository,
+then
+	d:\jag\ust\project\frontend
+	d:\jag\ust\project\backend
+
+frontend cannot be a new git repo
+and backend cannot be a new git repo
+
+BUT INCASE, WE HAVE NOT CREATE GIT REPO FOR "PROJECT"
+then it is possible that "fronend" is sync to one repo
+and "backend" to another repo
+
+
+
+
+4. Basics of Git (15 mins)
+   - Introduction to Git commands: init, add, commit, status.
+   - Overview of the Git workflow.
+
+Demo:
+i will show you how to sync my local repository to a remote repo
+
+what is a local repository
+	a folder / directory in our system
+	where .git folder (usually hidden)
+	is a local repository
+
+
+
+i have chosen a folder now
+	"demo"		D:\Jag\UST\Wave4\demo
+
+this is my local repository
+
+lets create a remote repository
+	in github.com
+		after login
+			click + icon
+				New Repository
+
+demo-26-dec
+
+
+lets create a file in our local repository
+	Readme.txt
+
+
+just because, you got the URL, will you be able to push files and folders to my remote repository?
+
+
+
+git config --global user.name yourusername
+git config --global user.email youremail
+
+
+the above is an one time activity and 
+only when you want to change user credentials, you need to repeat these commands.
+
+
+coming to our local repo
+D:\Jag\UST\Wave4\demo
+	go to cmd prompt in this location
+
+
+D:\Jag\UST\Wave4\demo>git init
+Initialized empty Git repository in D:/Jag/UST/Wave4/demo/.git/
+
+if you are doing this command in an existing repository, then it will say:
+
+D:\Jag\UST\Wave4\demo>git init
+Reinitialized existing Git repository in D:/Jag/UST/Wave4/demo/.git/
+
+this git init
+	is the command to make our local folder as a local git repository
+
+now, we want to add files
+	git add <<filename>>
+or
+	git add .
+
+. means all files in current location
+
+the time in which we issue the 
+	git add .
+is noted.
+
+though we commit and push the files later, 
+the time will be remembers when it is added
+
+git commands:
+-----------------
+git config --global user.name <<username>>
+git config --global user.email <<email>>
+git init
+git remote add origin https://github.com/jagasia/demo-2.git
+git add .
+git commit -m "first commit"
+git branch -M jag
+git push -u origin jag
+git branch
+git checkout <<branchname>>
+git switch <<branchname>>
+git status
+git clone
+git config --list
+
+
+What is the difference between
+	git clone
+	git pull
+
+
+clone will download the entire repo as a folder
+but if you want to use pull, then you create the folder and inside the folder, you need to pull
+
+clone is done only once
+if you do again, then you are overwritting the entire folder
+
+pull is incremental
+	only those changes are pulled, so the data traffic is minimal
+
+pull detect changes and pull those branches and files that are not present locally
+	ideally, when remote repo contains files, folders that are not contained locally, we use pull
+
