@@ -564,3 +564,7 @@ arr[2]=new int[3];		//2th row has 3 columns
 
 this is called as jagged array
 
+Arrays class has lot of static methods
+	sort()
+	toString()
+
