@@ -1,0 +1,490 @@
+Last Character
+
+Rahul was tired after studying for so long , so he thought to play a small game with the words from his book . He opens a random page and selects a random word from it , and also  chooses the last digit of that page number n . Given an array of characters,Write a program to help Rahul find the last character that occurs n(last digit of the page number) times in the array . If no such character exists,then print -1.
+
+Input Format:
+First input is an integer that denotes the size of the array.
+Second line consists of  series of characters  seperated by a space that denotes the array values.
+Third input is an integer that denotes the n value.
+
+Output Format:
+Output is a character that denotes the last character which occurs n times.
+
+Sample Input 1:
+8
+a a b c n s d n
+2
+
+Sample Output 1:
+n
+
+Explanation:
+    In the given array 'a' and 'n' occurs 2 times which is equal to the n value . Even though 'a' occurs twice ,'n' is the one that occurs last.    
+    
+Sample Input 2:
+5
+a b c d e
+3
+
+Sample Output 2:
+-1 
+
+
+
+
+How do you get a character input from the user?
+	sc.next().charAt(0);
+
+next()		String input until any delimiter is found
+nextLine()	String input until a \n is found
+
+
+
+
+
+
+
+a a b c n s d n
+
+	a
+a b c n s d n
+
+a
+b c n s d n
+
+b
+c n s d n
+
+c
+n s d n
+
+n
+s d n
+
+s
+d n
+
+d 
+n
+
+
+Solution:
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class App {
+
+	public static void main(String[] args) {
+		Scanner sc=new Scanner(System.in);
+		int noOfElements=sc.nextInt();
+		char arr[]=new char[noOfElements];
+		for(int i=0;i<arr.length;i++)
+		{
+			arr[i]=sc.next().charAt(0);
+		}
+	
+		int n=sc.nextInt();
+		char result='\0';
+		for(int i=0;i<noOfElements -1;i++)
+		{
+			int count=1;
+			for(int j=i+1;j<noOfElements;j++)
+			{
+//				System.out.printf("%c vs %c\n",arr[i],arr[j]);
+				if(arr[i]==arr[j])
+				{
+					count++;
+				}
+			}
+//			System.out.println(arr[i]+" occurs "+count+" times");
+			if(count==n)
+			{
+				result=arr[i];
+			}
+		}
+		System.out.println("The result is "+((result!='\0')?result:-1));
+	}
+
+}
+
+
+
+
+-------------------------------------------------------
+N-smallest Elements
+
+Shreya was attending a coding competition and she was progressing good . Suddenly she got stuck in a problem where she needs to find the n-smallest elements in an array . Given an array of integers of size N and n value as inputs , Write a program to help Shreya find the first - n smallest elements from the array but they must be in the same order as they are in given array.
+
+Input Format :
+First input is an integer that denotes the size of the array, N.
+Second line consists of series of integers seperated by a space that denotes the array values.
+Third input is an integer that denotes the n value.
+
+Output Format:
+Output is a series of integers seperated by a space that denotes the n smallest elements.
+
+Sample Input 1:
+5
+4 8 2 5 9
+3
+
+Sample Output 1:
+4 2 5
+
+Sample Input 2:
+10
+7 3 8 11 55 22 1 6 13 2
+5
+
+Sample Output 2:
+7 3 1 6 2 
+
+
+
+
+Solution:
+-----------
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+
+public class AppNSmallestElements {
+
+	public static void main(String[] args) {
+		Scanner sc=new Scanner(System.in);
+		int noOfElements=sc.nextInt();
+		int []arr=new int[noOfElements];
+		for(int i=0;i<noOfElements;i++)
+		{
+			arr[i]=sc.nextInt();
+		}
+		int n=sc.nextInt();
+		int clone[]=new int[noOfElements];
+		clone=Arrays.copyOf(arr, noOfElements);
+//		System.out.println("The cloned array is :");
+//		System.out.println(Arrays.toString(clone));
+		Arrays.sort(clone);
+		
+		clone=Arrays.copyOf(clone, n);
+//		System.out.println("After truncate: clone is :");
+//		System.out.println(Arrays.toString(clone));
+		
+		boolean isFirst=true;
+		for(int i=0;i<noOfElements;i++)
+		{
+			//check if current element is present in clone
+			for(int j=0;j<clone.length;j++)
+			{
+				if(arr[i]==clone[j])
+				{					
+					if(!isFirst)
+						System.out.print(' ');
+					System.out.print(arr[i]);
+					isFirst=false;
+					break;
+				}
+				
+			}
+		}
+	}
+
+}
+
+
+
+
+
+"What will be the result of compiling the following program?
+public class MyClass {
+long var;
+public void MyClass(long param) { var = param; } // (Line no 1)
+public static void main(String[] args) {
+MyClass a, b;
+a = new MyClass(); // (Line no 2) 
+}
+}"
+
+
+A compilation error will occur at (Line no 1), since constructors cannot specify a return value	
+
+A compilation error will occur at (2), since the class does not have a default constructor	
+
+A compilation error will occur at (Line no 2), since the class does not have a constructor that takes one argument of type int.	
+
+The program will compile without errors.
+
+
+
+
+
+Which of the following declarations are correct? (Choose TWO)	MCA	
+
+boolean b = TRUE;			Wrong. because, TRUE is not boolean. true and false are boolean
+
+byte b = 256;			Wrong. because, byte range is -128 to 127
+
+String s = "null";			Correct. We can enter any character inside ""
+
+int i = new Integer(“56”);		Correct, constructor of Integer class accepts Strings that contains 				only digits
+
+
+
+
+
+
+
+"What will be printed out if you attempt to compile and run the following code ? 
+public class AA {
+ public static void main(String[] args) {
+ 
+ int i = 9;
+
+  switch (i) {
+  default:
+   System.out.println(""default"");
+  case 0:
+   System.out.println(""zero"");
+   break;
+  case 1:
+   System.out.println(""one"");
+  case 2:
+   System.out.println(""two"");
+  }
+ }
+}"
+
+
+
+--------------------------------------------------
+Tic-Tac Toe Game
+
+Meyyappan and Roshan are playing tic tac toe game. A tic tac toe game is won only if any of X or O is consecutively marked in a straight line, either row-wise or column-wise or diagonally. Given a 2D matrix with only X and O, where X represents Meyyappan's game and O represents Roshan's game, determine who won the game. If no one has won it, then print "Draw".
+
+Input Format:
+Input consists of a 3x3 character matrix (only X and O).
+
+Output Format:
+Output is a string that denotes the winner of the game , Meyyappan/Roshan/Draw.
+
+Sample Input 1:
+X O O
+X O X
+O X X
+
+Sample Output 1:
+Roshan
+
+Sample Input 2:
+X X O
+O O X
+X O X
+
+Sample Output 2:
+Draw 
+
+
+
+for rows, 
+	0,0
+	0,1
+	0,2
+
+	1,0
+	1,1
+	1,2
+
+	2,0
+	2,1
+	2,2
+
+for these 3 rows, what is the for loop pattern?
+
+	i 0 to 2
+		j	0 to 2
+	arr[i][j]
+
+
+
+for cols,
+
+	0,0
+	1,0
+	2,0
+
+	0,1
+	1,1
+	2,1
+
+	0,2
+	1,2
+	2,2
+
+for above cols, we use j as outer loop and i as inner loop
+	arr[i][j]
+
+for diagonals,
+
+	0,0
+	1,1
+	2,2
+
+		for above, we dont need a nested loop. i loop is enough
+		arr[i][i]
+
+	0,2
+	1,1
+	2,0
+
+		for above, i = 0,1,2		j=2-i
+
+
+
+
+Solution:
+----------
+
+import java.util.Scanner;
+
+public class App {
+
+	public static void main(String[] args) {
+		Scanner sc=new Scanner(System.in);
+		char [][]arr=new char[3][3];
+		
+		for(int i=0;i<3;i++)
+			for(int j=0;j<3;j++)
+				arr[i][j]=sc.next().charAt(0);
+		//check if we got inputs correctly or not
+		
+//		for(int i=0;i<3;i++)
+//		{
+//			for(int j=0;j<3;j++)
+//			{
+//				System.out.print(arr[i][j]+"\t");
+//			}
+//			System.out.println();
+//		}
+		
+
+		int xCount=0;
+		int oCount=0;
+		
+		//rows check
+		for(int i=0;i<3;i++)
+		{
+			xCount=0;
+			oCount=0;
+			for(int j=0;j<3;j++)
+			{
+				if(arr[i][j]=='X')
+				{
+					xCount++;
+				}else
+				{
+					oCount++;
+				}
+			}
+			//at the end of inner loop, 1 row is over
+//			System.out.printf("%dth row X=%d and O=%d\n",i,xCount,oCount);
+			if(xCount==3)
+			{
+				System.out.println("Meyyappan");
+				return;	//or System.exit(0);
+			}
+			if(oCount==3)
+			{
+				System.out.println("Roshan");
+				return;
+			}
+		}
+		
+		//cols check
+		for(int j=0;j<3;j++)
+		{
+			xCount=0;
+			oCount=0;
+			for(int i=0;i<3;i++)
+			{
+				if(arr[i][j]=='X')
+				{
+					xCount++;
+				}else
+				{
+					oCount++;
+				}
+			}
+			//at the end of inner loop, 1 col is over
+//			System.out.printf("%dth col X=%d and O=%d\n",j,xCount,oCount);
+			if(xCount==3)
+			{
+				System.out.println("Meyyappan");
+				return;	//or System.exit(0);
+			}
+			if(oCount==3)
+			{
+				System.out.println("Roshan");
+				return;
+			}
+		}
+		
+		//diagonal 1
+		xCount=0;
+		oCount=0;
+		for(int i=0;i<3;i++)
+		{
+			if(arr[i][i]=='X')
+			{
+				xCount++;
+			}else
+			{
+				oCount++;
+			}
+		}
+		//end of diagonal 1
+		
+		if(xCount==3)
+		{
+			System.out.println("Meyyappan");
+			return;	//or System.exit(0);
+		}
+		if(oCount==3)
+		{
+			System.out.println("Roshan");
+			return;
+		}
+		
+		//2nd diagonal check
+		xCount=0;
+		oCount=0;
+		for(int i=0;i<3;i++)
+		{
+			xCount=0;
+			oCount=0;
+			
+				if(arr[i][2-i]=='X')
+				{
+					xCount++;
+				}else
+				{
+					oCount++;
+				}
+			
+			//end of diagonal 2 check
+			
+			if(xCount==3)
+			{
+				System.out.println("Meyyappan");
+				return;	//or System.exit(0);
+			}
+			if(oCount==3)
+			{
+				System.out.println("Roshan");
+				return;
+			}
+		}
+	}
+
+}
+
+

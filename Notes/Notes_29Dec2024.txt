@@ -1,0 +1,548 @@
+Arrays and Strings (continued)
+Live Session: Java-Intermediate
+
+Debugging
+------------
+IDEs support debugging by providing some tools for debugging.
+
+Errors
+	syntax errors / compile time errors
+	runtime errors	(exceptions - checked/ unchecked)
+	logical errors	(this is where debugging is required)
+
+
+What is debugging?
+	is a process of finding and fixing logical errors
+	logical errors are dangerous because, they are not much visible until, some test cases find them
+
+Demo:
+	we will use eclipse/sts IDE debugging features.
+
+
+
+public class App {
+
+	public static void main(String[] args) {
+		for(int i=0;i<=5;i++)
+		{
+			System.out.println("Hello");
+		}
+	}
+
+}
+
+
+this program prints "Hello" 6 times instead of 5
+
+this is a logical error
+
+
+
+now, the below code
+
+import java.util.Scanner;
+
+public class App {
+
+	public static void main(String[] args) {
+		Scanner sc=new Scanner(System.in);
+		int rno=sc.nextInt();
+		String name=sc.nextLine();
+		
+		for(int i=0;i<=5;i++)
+		{
+			System.out.println("Hello");
+		}
+		System.out.println(rno);
+		System.out.println(name);
+	}
+
+}
+
+
+is expected to get 2 inputs
+	rno
+	name
+
+but once i enter the rno, 
+name is not accepted from the user
+
+
+In order to debug a program, 
+	fix a breakpoint at a suitable line
+
+a declaration is not an executable code. so you do not fix a break point there
+it is always recommended to keep the break point in an executable statement.
+
+
+after you fix a breakpoint,
+	do not run the code.
+	instead, debug the code
+
+Run menu -> debug
+
+now, when we debug the application, 
+the program executes normally, and when it reaches a break point, the program goes to break mode
+and the window perspective changed from "java" perspective to "debug" perspective
+and hence showing all windows related to debug, visible
+
+Step into
+	moves to next line
+	if suppose, the next line is a function (method) call,
+		then it will step inside the function and proceed
+Step over
+	shows every statement as one statement and not taking us inside the methods
+	we will mostly use step over, when we decide to debug one method
+Step return
+	to return to the calling function, but it does not mean, it skips any line. Those lines are completed and returns to the calling function
+
+
+It is always recommended to use multiple lines of expressions instead of a long expression.
+
+ex:
+	int i=20;
+	int j=i+5/2*6;		//difficult to debug
+	
+	int j=0;
+	j=5/2;
+	j*=6;
+	j+=i;
+
+
+
+or use temporary variable
+
+--------------------------------------------
+Arrays
+-------
+Arrays can also be reference type
+
+array of
+	Strings
+	Date
+	Employee		(user defined class)
+	Product		(user defined class)
+	Department	(user defined class)
+
+
+class Employee
+{
+	int id;
+	String name;
+	
+}
+
+How do we create an object of Employee?
+	Employee raja;		//can we call raja as an object of Employee?	NO
+		raja, here is a reference variable which can hold the reference of an object of 		Employee
+
+
+
+Employee raja;		// is a reference variable and it is in stack if this is declared inside a 			method
+	then as of above, raja is null		raja is not an object
+
+Employee suresh=new Employee();		
+	//new Employee() creates an object of Employee, and its reference is stored in suresh
+	//now, you can call suresh as an object of Employee
+
+	suresh is not null.
+
+
+comparision between creation of a
+	value type variable
+	ref type variable
+
+int rno;		//complete. we have created an int variable. Enough
+Date dt;		//not enough. 	it is not an object
+dt=new Date();	//only now, dt is an object of Date
+
+
+same way, in arrays:
+
+int []arr=new int[10];		//array is created. complete.
+
+Date []dt=new Date[10];		//this is incomplete.		every element is null
+so,
+dt[0]=new Date();
+dt[1]=new Date();
+dt[2]=new Date();
+.....upto dt[9]
+
+Arrays for different data types both primitive and user defined
+
+Employee arr[]=new Employee[5];		//incomplete. Each element is null
+
+the array has 5 ref variables
+for(int i=0;i<arr.length;i++)
+{
+	arr[i]=new Employee();		//every element is initalized.
+}
+
+now, the array has 5 objects
+
+Task:
+-------
+Maximum Product
+Playing with arrays has become a hobby for Arun. This time Arun wants to find the greatest number in the array such that it is the product of any two numbers in the array.
+Write a program to help Arun to the do the task. If no such number exists, then print -1.
+[Note: The two number that are used to find the product can be the number itself.  For example, if the array elements are [1,2,3] , then 1*3 = 3 will be the solution for this array.]
+
+Input Format :
+First input is an integer value that denotes the size of the array.
+Second input is a series of integers separated by space that denotes the array values.
+
+Output Format :
+Output is an  integer that denotes the maximum product.
+
+Sample Input 1:
+5
+35 30 7 6 5
+Sample Output 1:
+35
+
+Sample Input 2:
+5
+2 4 6 89 78
+Sample Output 2:
+-1
+
+
+
+0
+1, 2, 3, 4
+
+1
+2, 3, 4
+
+2
+3, 4
+
+3
+4
+
+
+for loop with i
+0 to n-1-1
+
+for loop with j
+j=i+1 onwards until n-1
+
+
+
+
+import java.util.Scanner;
+
+public class AppMaxProduct {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int n = sc.nextInt();
+		int[] arr = new int[n];
+		// get n inputs
+		for (int i = 0; i < n; i++) {
+			arr[i] = sc.nextInt();
+		}
+
+		// logic starts here
+		int maxProduct=-1;
+		for (int i = 0; i < n - 1; i++) {
+			for (int j = i + 1; j < n; j++) {
+				int product = arr[i] * arr[j];
+//				System.out.printf("i=%d\tj=%d\tproduct=%d\n", i, j, product);
+				// check if product is matching with any of the array elements
+				for (int k = 0; k < n; k++) {
+					if(product==arr[k])
+					{
+//						System.out.printf("product=%d\tarr[k]=%d\n", product, arr[k]);
+						if(product>maxProduct)
+							maxProduct=product;
+					}
+				}
+			}
+		}
+		System.out.println(maxProduct);
+	}
+
+}
+
+--------------------------------
+Strings
+--------
+	String is not a character array.
+	String is a class in java.lang package.
+
+	String is immutable.
+
+String refers to string literal.
+
+
+public class App1 {
+
+	public static void main(String[] args) {
+		String str1="hello";
+		//String is immutable means, we cannot change the value
+		//do you know String is a class
+		
+		Employee e1=new Employee();
+		Employee e2=e1;	//what is e1? is it value? no, it is object
+		Employee e3=new Employee();
+		e2=e3;		//we cant say we changed value, we changed reference
+		
+		//so "hello" is a String literal or object but not value
+		str1="world";		//we have not changed value, but reference
+		
+		StringBuilder sb=new StringBuilder();
+		//sb has nothing inside		""
+		sb.append("This is a sentence");
+		sb.replace(5, 7, "was");
+		System.out.println(sb.toString());	//This was a sentence
+		
+		String str2="This is a sentence";
+		str2="This was a sentence";
+		//here, we have not changed the value, we changed the reference
+	}
+//		'h'	is a value	of char type
+	//	char c='e';		//e is a value
+}
+
+
+
+A string cannot be changed, it can be overwritten by another string object
+
+
+StringBuilder
+StringBuffer
+	both classes have same set of methods
+	except the difference, StringBuffer is synchronized	(means, when multiple threads try to modify one string builder object, they are allowed one by one only)
+
+StringBuilder is fast
+StringBuffer is thread safe
+
+Task:
+-------
+Accept a String input from the user, and display only the characters which are not vowels.
+
+ex:
+	input:	education
+	output:	dctn
+
+hint:
+	to access a character inside string using index, use
+		charAt(index)
+
+
+
+
+import java.util.Scanner;
+
+public class App {
+
+	public static void main(String[] args) {
+		Scanner sc=new Scanner(System.in);
+		String input=sc.nextLine();
+		//take a lowercase copy of input
+		String str=input.toLowerCase();
+		//iterate the String for each char in it
+		for(int i=0;i<str.length();i++)
+		{
+			char c=str.charAt(i);
+			switch(c)
+			{
+			case 'a':
+			case 'e':
+			case 'i':
+			case 'o':
+			case 'u':
+				break;
+			default:
+				System.out.print(c);
+			}
+		}
+	}
+
+}
+
+
+
+technique:	switch case
+situation:		when lot of == or != is used
+
+
+-------------------------------------------
+Task:
+-------
+Accept 2 string inputs from the user and declare whether they are anagrams or not.
+
+Can anyone tell me what is anagram?
+	anagrams are words that are made of same set of characters
+	i introduce rule, that both strings are of same length and each character occurrence matches in both strings
+
+ex:
+	tea
+	eat
+
+	meat
+	team
+
+tea	after sorting=>	aet	
+eat	after sorting=>	aet
+
+
+To sort a String:-
+	convert String into char array
+	Arrays.sort(arr)
+
+
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class AppAnagrams {
+
+	public static void main(String[] args) {
+		Scanner sc=new Scanner(System.in);
+		String str1=sc.next();
+		String str2=sc.next();
+		
+		//write your code here
+		char[] arr1 = str1.toCharArray();
+		char[] arr2 = str2.toCharArray();
+		
+		Arrays.sort(arr1);
+		Arrays.sort(arr2);
+		
+		String s1=new String(arr1);
+		String s2=new String(arr2);
+		
+//		if(s1.equals(s2)) {
+//			System.out.println("Anagrams");
+//		}
+//		else
+//		{
+//			System.out.println("Not anagrams");
+//		}
+		System.out.println((s1.equals(s2))?"Anagrams":"Not anagrams");
+	}
+
+}
+
+
+
+
+Task:
+What is a palindrome?
+A string which is same from forward or backward
+ex:
+	Malayalam
+	Madam	
+case insensitive
+Write a program to accept a string input and check if it is a palindrome or not?
+
+StringBuilder
+	reverse()			reverses the string inside the sb
+
+
+Regex:
+	Regular Expressions
+
+There are 2 scenarios, regex will be useful.
+	1) to check if a String matches a pattern or not
+	2) to retrieve the portions of the String that matches a pattern or not
+
+
+ex:
+	Check if the input string is a valid email address or not
+
+ex:
+	extract the phone numbers and email addresses found in a sentence
+
+Learn the symbols used in regex:
+
+symbol and multiplicity
+	\d+		here, \d refers to a digit 	and + refers to multiplicity ie., 1 or more
+
++	one or more
+*	zero or more
+?	zero or one	
+we can also mention the multiplicity using
+{2,3}	min 2 and max 3
+{1,}	min 1 and max unbounded		same as +
+{0,}	same as *			zero or more
+{,10}	max 10
+{3}	three times		the pattern should occur 3 times
+
+coming to symbols
+
+.	any			any char, number symbol, space, something
+	if you want a character called . should appear in the string, then use
+	either of the below
+		[.]
+		\.
+
+\d	digits
+\w	words
+\D	non digits
+
+[]	used to specify list of chars from which any one can occur.	how many times that depends 	on multiplicity
+	ex:
+		[aeiou]{5}		any vowel can come 5 times
+				aaeee	aeeii	eooui		uaieu
+
+		[A-Z]		any upper case character.	if not mentioned, then it is 1 time
+		[A-Za-z0-9]	any upper/lowe case char or number
+		[A-Za-z0-9_]	any upper/lowe case char or number or underscore
+
+(	)	normal bracket is used to group	and mention multiplicity so that that group 		occurs how many times
+
+|		or
+
+^$	to specify the beginning and end of pattern		Not necessary in java
+
+but in java, 		\ is an escape character. So, we should use \\ to define a \ character
+
+
+
+Demo:
+--------
+check if input string is email or not
+
+import java.util.Scanner;
+
+public class AppEmail {
+
+	public static void main(String[] args) {
+		Scanner sc=new Scanner(System.in);
+		String input=sc.nextLine();
+		String pattern="[A-Za-z][A-Za-z0-9_]*([.][a-z]+)?@[a-z]+[.](([a-z]{3})|([a-z]{2}[.][a-z]{2}))";
+		if(input.matches(pattern))
+			System.out.println("Valid email");
+		else
+			System.out.println("Invalid email");
+	}
+
+}
+
+
+
+
+
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class AppReg {
+
+	public static void main(String[] args) {
+		Scanner sc=new Scanner(System.in);
+		String input=sc.nextLine();
+		String patternMobile="\\d{10}";
+		Pattern p=Pattern.compile(patternMobile);
+		Matcher m = p.matcher(input);
+		while(m.find())
+			System.out.println(m.group());
+	}
+
+}
+
+
+

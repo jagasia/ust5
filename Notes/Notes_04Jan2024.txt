@@ -1,0 +1,524 @@
+Object Oriented Programming 
+Part -1
+a.	Classes and Objects
+b.	Constructors and its types
+c.	Polymorphism
+d.	Inheritance
+e.	Packages
+f.	Access Modifier
+
+
+What is object oriented programming?
+	Writing programs that depict real world objects
+	we try to represent the real world entites as exactly as they are in real world
+
+4 concepts of OOPS?
+	Abstraction
+	Encapsulation
+	Inheritance
+	Polymorphism
+
+What is abstraction?
+	focus on essential characteristics of object
+	An abstraction denotes the essential characteristics 
+	and this is possible, only when we hide those unessential characteristics
+
+for example,
+	if you are going to buy a vehicle, the sales person may know almost all information
+	about the vehicles.	But what they project? is what abstraction
+
+abstraction provides us the methods that are allowed for us
+
+exposing only the necessary information to the user
+
+
+abstraction and encapsulation complements each other
+
+encapsulation
+	"en" is positive	
+	capsule		covering or wrapping or boxing
+
+	wrapping data and methods inside a class or type (interface)
+
+	thereby the data is contained inside the class
+	
+using access specifiers, we can control
+	which members of the class is allowed to accessed from where
+
+Class
+------
+what is a class?
+	is a blueprint / prototype for creating objects
+	user defined type
+	is a wrapper that can contain, 
+		data members	(variable / constants)
+		methods
+
+
+
+the complexity of the application is handled effectively, by making the program modular.
+
+Modularity
+	methods
+	classes
+	packages
+
+
+
+in java, a program cannot run without a class
+because, main method is inside the class in java		
+
+Guideline for creating a class in java:
+1) class name must be a noun 
+2) class name must be in PascalCase		each 1st letter in upper case
+	ex:
+		ArrayIndexOutOfBoundsException
+3) a class shall be created in a file whose name is same as class name (good practise)
+	if a file has multiple classes then it is poor practise.
+		in such cases, only 1 class in that file can be public
+	so, ideally, every class shall be in its own file as a good practise.
+
+
+if i want to see the source of Student class, then if the file name is not Student.java, then i have
+to visit every file and search for the Student class. It is not easy.
+
+ctrl+shift+t
+	to search any class and see its source code
+or if your cursor is on a Class, then press "F3" to see the definition
+
+4) class name must be meaningful
+
+If you know E-R diagram,
+	the entities usually become
+		class in java
+		table in database
+
+	if the relationship between entities is Many To Many,
+	then the relationship may also become entity and there by a class
+
+
+
+
+in UML class diagram:
+	+	public
+	-	private
+	#	protected
+	~	default		package scope	internal
+
+
+for the class diagram you see:
+class Animal
+{
+	public int age;		//public not good
+	public String gender;
+
+	public boolean isMammal()
+	{
+		return false;
+	}
+}
+
+it is always good practise to have data members as non public
+private is good
+
+The class can contains
+	data members (non public)
+	constructors (no arg, all arg)
+	getters and setters (public)
+	toString 
+	equals
+
+
+data members
+	variables
+	constants
+
+How to create constants in java?
+	final
+
+ex:
+	final int MAX=100;		//notice that constants are in FULL UPPER CASE in java
+
+
+System.out.println(Integer.MAX_VALUE);	//why full caps? because, MAX_VALUE is a constant
+
+inside a method, we can declare final data members without value. 
+and value can be assigned only once.
+
+		final int MIN;	//Allowed. now, value not assigned
+		MIN=1;		//Allowed. one time allowed to assign
+//		MIN=2;		//ERROR
+
+
+inside a class, a class member declared as final, must be assigned the value during declaration itself.
+
+Question for you,
+	final data member of a class always created as static member (as a good practise)
+		why?
+
+	when a class level data member is final, it is not going be changed.
+	when it is not going to be changed, then it is same for all objects of the class.
+	Then why we need a separate copy of data member for every object?
+	So, by making it static, there exists only 1 copy of that data member for all the classes.
+
+static member of a class
+	is only 1 for the class and not for every object
+
+
+
+the final member of a class is already assigned a value and that value is same for all objects
+and hence it is declared as static to avoid every object having separate copy
+
+final
+	data member cannot be changed
+		if it is value type, then value cannot be changed
+		if it is ref type, then ref cannot be changed
+
+	method cannot be overridden
+		
+	class cannot be inherited
+
+Constructors:
+----------------
+	what is a constructor?
+		is a method with same name as class name
+		is used to initialize the object when it is created
+		is actually used to create an object
+		if constructor is private, then others cannot create an object of that class
+
+public class Person
+{
+
+}
+//how many constructors do you see here?
+
+/*	we see 0 constructors in this source code.
+	but during compilation, the compiler will add a default constructor to this class
+	so, source code contains 0 constructor and
+	compile code contains 1 constructor
+
+	can i show you the compiled code now?
+	to compile:
+		javac Person.java
+	to see the compiled code:
+		javap Person
+
+Compiled from "Person.java"
+public class Person {
+  public Person();
+}
+
+
+
+*/
+
+
+public class Department
+{
+	public Department(int id)
+	{}
+}
+
+//now, how many constructors, the compiled code will have?
+	1
+
+whenever, we do not create any constructor, then only compiler creates a default constructor.
+if we create any constructor, then compiler will not create any constructor.
+
+so, i strongly recommend, 
+	whenever, you create a constructor with argument, then 
+	you also create a constructor without argument
+
+
+
+
+Why do we need constructor with argument?
+	for injecting the data members to the object
+	constructor based injection
+
+another way of injecting data members to an object:
+	setter based injection
+
+Demo:
+--------
+to create a class based on instruction:
+
+Requirement 1:
+Let’s start off by creating two User objects and check whether they are equal.
+ 
+1.	Create a User Class with the following attributes:
+Member Field Name	Type
+name	String
+email	String
+phoneNumber	String
+location	String
+2.	Mark all the attributes as private
+3.	Create / Generate appropriate Getters & Setters
+4.	Add a default constructor and a parameterized constructor to take in all attributes in the given order: 
+User ( String name, String email, String phoneNumber , String location )
+5.	When the “User” object is printed, it should display the following details: [Override the toString method]
+Print format:
+Name: "name"
+Email: "email"
+PhoneNumber: "phoneNumber "
+Location: "location"
+6.	Two Users are considered the same if they have the same name, and email. Implement the logic in the appropriate function. (Case – Insensitive) [Override the equals method]
+
+The input format consists of User details separated by a comma in the below order,
+name, email, phoneNumber , location
+The Input to your program would be details of two Users, you need to display their details as given in "5th point(refer above)" and compare the two Users and display if the Users are same or different.
+
+Note: There is an empty line between display statements. Print the empty lines in the main method.
+
+Sample Input/Output:
+ 
+Enter user 1 detail:
+Oliver,oliver@gmail.com,7856124589,SanFrancisco
+Enter user 2 detail:
+Harry,harry@gmail.com,9856231478,NewYork
+ 
+User 1
+Name: Oliver
+Email: oliver@gmail.com
+PhoneNumber: 7856124589
+Location: SanFrancisco
+ 
+User 2
+Name: Harry
+Email: harry@gmail.com
+PhoneNumber: 9856231478
+Location: NewYork
+ 
+User 1 and User 2 are different
+
+Sample Input/Output 2: 
+Enter user 1 detail:
+Harry,harry@gmail.com,9856231478,NewYork
+Enter user 2 detail:
+haRRy,harry@gmail.com,9856231478 ,NewYork
+ 
+User 1
+Name: Harry
+Email: harry@gmail.com
+PhoneNumber: 9856231478
+Location: NewYork
+ 
+User 2
+Name: haRRy
+Email: harry@gmail.com
+PhoneNumber: 9856231478
+Location: NewYork
+ 
+User 1 is same as User 2
+
+
+
+
+
+
+
+
+
+
+every object has
+	.equals method
+
+String str1="hello";
+String str2="hello";
+boolean isSame=str1.equals(str2);
+
+the same ways, to objects of User class can also be checked if they are equal or not
+by overriding "equals" method
+
+class Person
+{
+}
+	what is the super class of this Person class?
+		Object
+
+
+every class is derived from Object
+
+class Person extends Human
+{
+}
+	Person is derived from Human
+	Human is derived from Object
+
+
+Object is the super class for all the classes
+
+Object class has many methods including:
+	toString()
+	equals()
+	hasCode()
+
+etc
+
+so we can override those methods
+
+
+getters and setters:
+--------------------------
+	it is always good practise to make data members as non-public
+	private is good
+
+what is private?
+	private access specifier specifies that
+		this member is accessible only within the same class
+		methods inside the same class, can access this member
+
+	since data members are private,
+		they are not allowed to be accessed from other classes like App
+
+to be able to access the data members,
+we create public getters and setters
+
+my question:
+	you are making a variable as private	(because, you want to restrict access)
+	now, you are providing a public getter and setter 
+WHY?
+
+if we make the variable public,
+	then we are providing unrestricted access
+	but by making it private and
+		allowing access only throught methods (getters and setters)
+		we are able to control the access
+		because, we can write conditions only inside METHODS
+
+a method allows me to use
+	if,
+	switch
+	while
+	for
+	etc etc
+
+
+setter:
+	setter accepts input using arguments and checks
+	if the value can be accepted or rejected
+	only valid data is allowed to be stored in the variable
+
+getter:
+	getter can transform the data into required format
+	ex:
+		it can round off a value
+		change the Date to String and provide in dd-MM-yyyy or any other format also
+
+Demo:
+	the user class now has 4 variables.
+	now, i will create 
+		constructor without argument
+		constructor with all 4 arguments
+		getters and setters for all 4 variables
+
+
+
+
+
+
+constructor without argument
+	public User() {
+		
+	}
+constructor with all 4 arguments
+	public User(String name, String email, String phoneNumber, String location) {
+		super();
+		this.name = name;
+		this.email = email;
+		this.phoneNumber = phoneNumber;
+		this.location = location;
+	}
+getters and setters for all 4 variables
+
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+	
+
+
+create a toString method
+	basically a toString() is already there, which is derived from Object class
+	we are now going to override the toString() method
+
+
+Difference between:
+		System.out.printf("%d",1);
+		System.out.format("%d", 1);
+		String.format("%d", 1);
+
+System.out.printfn
+and
+System.out.format
+	are same
+
+they are going to print the output.
+
+But 
+	String.format
+		is not going to print the output, but the formatted String is returned by String.format
+
+
+that formatted string can be stored in a variable
+
+In our toString method, we are not printing the output.
+we are returning the output.
+
+that returned output can be printed or not, it is upto App main method.
+
+
+@Override
+	public String toString() {		
+		return String.format("Name: %s\n"
+				+ "Email: %s\n"
+				+ "PhoneNumber: %s\n"
+				+ "Location: %s\n"
+				+ "", name, email, phoneNumber, location);
+	}
+
+
+6th step:
+override the equals method
+
+x.equals(y)		checks if x and y are equal or not
+
+if x and y are user defined types like "User"
+then there is already an equals method which does not check based on our logic
+so we override the equals method
+
+
+
+	@Override
+	public boolean equals(Object obj) {
+		User arg=(User) obj;
+		return this.getName().equalsIgnoreCase(arg.getName()) && this.getEmail().equalsIgnoreCase(arg.getEmail());
+	}
