@@ -522,3 +522,200 @@ so we override the equals method
 		User arg=(User) obj;
 		return this.getName().equalsIgnoreCase(arg.getName()) && this.getEmail().equalsIgnoreCase(arg.getEmail());
 	}
+
+
+
+
+Final Solution for Mock 21 Req 1:
+
+import java.util.Objects;
+
+public class User {
+	private String name;
+	private String email;
+	private String phoneNumber;
+	private String location;
+	
+	public User() {
+		
+	}
+
+	public User(String name, String email, String phoneNumber, String location) {
+		super();
+		this.name = name;
+		this.email = email;
+		this.phoneNumber = phoneNumber;
+		this.location = location;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	@Override
+	public String toString() {		
+		return String.format("Name: %s\n"
+				+ "Email: %s\n"
+				+ "PhoneNumber: %s\n"
+				+ "Location: %s\n"
+				+ "", name, email, phoneNumber, location);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		User arg=(User) obj;
+		return this.getName().equalsIgnoreCase(arg.getName()) && this.getEmail().equalsIgnoreCase(arg.getEmail());
+	}
+	
+	
+	
+	
+}
+
+
+
+
+
+
+
+
+
+import java.util.Scanner;
+
+public class App {
+
+	public static void main(String[] args) {
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter user 1 detail:");
+		String detail1=sc.nextLine();
+		
+		System.out.println("Enter user 2 detail:");
+		String detail2=sc.nextLine();
+		
+//		Oliver,oliver@gmail.com,7856124589,SanFrancisco
+//		can we split the above string by ,
+		
+		String[] arr1 = detail1.split(",");	//reg ex. since , is not a symbol, it is fine
+		User user1=new User();
+		user1.setName(arr1[0]);
+		user1.setEmail(arr1[1]);
+		user1.setPhoneNumber(arr1[2]);
+		user1.setLocation(arr1[3]);
+		
+		String[] arr2 = detail2.split(",");
+		User user2=new User(arr2[0], arr2[1], arr2[2], arr2[3]);
+		
+		System.out.println("User 1");
+		System.out.println(user1);
+
+		System.out.println("User 2");
+		System.out.println(user2);
+
+//		if(user1.equals(user2))
+//		{
+//			System.out.println("User 1 is same as User 2");
+//		}else
+//		{
+//			System.out.println("User 1 and User 2 are different");
+//		}
+//		
+		
+		System.out.println((user1.equals(user2))?"User 1 is same as User 2":"User 1 and User 2 are different");
+		
+	}
+
+}
+
+
+-----------------
+When you solve Mock 11 Req 1:
+
+you will have work with Date
+
+How to convert a String into Date?		because, user input is String only
+
+and vice versa
+	Date into String
+
+to be able to do that, we can use 
+	SimpleDateFormat
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Scanner;
+
+public class AppDateExamples {
+
+	public static void main(String[] args) throws ParseException {
+		Scanner sc=new Scanner(System.in);
+		String str=sc.nextLine();
+		SimpleDateFormat sdf=new SimpleDateFormat("dd-MMM-yyyy");
+		//we don't want to accept invalid date
+		sdf.setLenient(false);
+		Date dt=sdf.parse(str);
+		
+//		System.out.println(dt);
+		
+		//now display date is same format. for that convert Date into String
+		System.out.println(sdf.format(dt));
+	}
+
+}
+
+
+---------------------------------------------------
+Polymorphism
+	poly => many
+	morph => faces
+
+an object behaves differently in different context
+for ex:
+	sum(2,3)			=>	5
+	sum("Ram","Kumar")	=>	RamKumar
+
+if Ram+Kumar is RamKumar, then
+2+3 should be 23 right??????
+
+so, the above example of sum method behaved differenly for different arguments
+	when supplied arguments are numbers, it added then
+	when supplied arguments are Strings, they are concatenated
+
+this is an example for polymorphism
+	to be precise, the above example is called as "Method Overloading"
+
+Method overloading
+Operator overloading	(in java, there are operators, which are already overloaded. We can't)
+	+ 	adds numbers and concatenate strings
+constructor overloading
+
+Overriding
+	is an example for dynamic polymorphism		(late binding).

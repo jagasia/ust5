@@ -1,0 +1,749 @@
+a.	Classes and Objects
+b.	Constructors and its types
+c.	Polymorphism
+d.	Inheritance
+e.	Packages			//pending
+f.	Access Modifier		
+------------------------------
+a.	Encapsulation
+b.	Abstraction
+c.	Interfaces
+d.	Adapters			//pending
+e.	Static Keyword		//pending
+
+
+Constructors
+	special methods with same name as the class name
+	do not have return type. Actually they return the instance of the class
+
+Type of constructors
+	default
+		acutally, when we do not create any constructor, only then the compiler creates one.
+		that is what we call it as default constructor. It is a no argument constructor.
+	constructor with arguments
+		we can overload the constructors
+	
+What is constructor chaining?
+	whenever there is inheritance, then if a super class constructor expects arguments,
+		then the sub class constructor must supply those arguments to super class constructor.
+			super(x,y);
+		this super(x,y) must appear as a first executable statement only
+
+	
+class Person
+{
+	public Person(int x)
+	{}
+}
+
+class Employee extends Person
+{
+	//since the super class object can be created only by using constructor with argument,
+	//this sub class is forced to supply that argument.
+	//otherwise, we cannot create an object of Employee also
+
+	public Employee(String name)
+	{
+		super(name);
+	}
+}
+
+
+this means,
+	whenever a super class does not have default constructor, but has constructor with argument(s),
+	then the sub class is forced to have a constructor,
+		that supplies the argument to super class constructor using "super"
+
+
+
+after constructor chaining:
+
+
+public class Employee extends Person {
+	private String employeeId;
+	
+
+	public Employee(String name) {
+		super(name);
+		//some more code here
+	}
+	
+	public Employee(String name, String employeeId)
+	{
+		this(name);	//why?	instead of super(name)
+				//because, it is possible that above constructor may have more 					code
+		this.employeeId=employeeId;
+	}
+
+	public Employee()
+	{
+		super("");
+	}
+}
+
+
+
+
+this is called as constructor chaining because,
+	when we create an object, one constructor, may call another constructor and also super class constructor.
+
+
+
+What is the purpose of a private constructor?
+	by having a private constructor, we are not allowing the object creation.
+	If we use private constructor for an inner class, then we are restricting only the outer class to 
+		create object.	Other classes are not allowed
+
+
+There are 2 situations, where private constructors can be created.
+	i) inside inner class
+	2) to prevent anybody creating an object of our class.
+		ex:	singleton class
+			a singleton class does not allow anybody to create object. But there exists only 1 object of that class in itself.
+
+		example for singleton class is		Runtime
+
+
+import java.io.IOException;
+import java.io.InputStream;
+
+public class App {
+
+	public static void main(String[] args) throws IOException {
+		
+		
+//		Runtime rt=new Runtime();	//not possible
+		//we cannot create an object of Runtime. But there is already an object in itself
+		Runtime rt=Runtime.getRuntime();
+		//getRuntime is a static method, so can call it using classname itself
+//		rt.gc(); 		//we are calling garbage collector.
+		//we can use Runtime for system calls
+//		rt.exec("notepad");
+		//what is DIR in command prompt?
+		Process x = rt.exec("netstat -aon");
+		InputStream is = x.getInputStream();
+		int data=-1;
+		while((data=is.read())!=-1)
+		{
+			System.out.print((char)data);
+		}
+	}
+
+}
+
+
+like above, how
+how can we create a singleton class?
+
+
+public class App2 {
+
+	public static void main(String[] args) {
+//		Sun sun=new Sun();		not possible
+		Sun s = Sun.getInstance();
+		//we got an object
+		s.setName("Sooriyan");
+		
+		Sun s2=Sun.getInstance();
+		s2.setName("Surya");
+		
+		System.out.println(s.getName());
+	}
+
+}
+
+
+this proves that there exists only 1 object of Sun 	(singleton)
+
+Polymorphism
+----------------
+	many faces
+	an object can exist in different forms
+
+Static polymorphism
+	Method overloading
+	
+Dynamic polymorphism
+	late binding
+	implemented using overriding
+
+
+Method overloading
+	multiple methods having same name is called as method overloading
+
+	there must be a difference in the signature between those methods
+
+System.out.println()
+	is itself overloaded
+
+
+Rules for method overloading:
+	number of arguments are different	(or)
+	type of arguments are different	(or)
+	order of type of arguments are different
+
+	return type may be same or different, it does not matter. But 
+	return only different is not allowed
+
+
+public class App3 {
+
+	public void display(int num) {
+		System.out.println(num);
+	}
+	
+	public void display(int num, String name) {
+		display(num);
+		System.out.println(name);
+	}
+	
+	public void display(int num, String name, int age) {
+		display(num, name);
+		System.out.println(age);
+	}
+
+	public static void main(String[] args) {
+		App3 app3=new App3();
+		app3.display(1, "Raja", 22);
+		
+	}
+
+}
+
+Inheritance
+-------------
+	is one of the features of object oriented programming that allows
+	creating a class based on another existing class
+	we do not need to create a class from the scratch.
+
+	a class can inherit another class, if the new class is a "kind-of" existing class
+
+
+ex:
+	a browser, has 
+		AddressBar
+		StatusBar
+		TitleBar
+
+but A browser is not a kind of address bar.
+So Browser does not inherit AddressBar class
+rather,
+	AddressBar is a part of Browser
+
+So
+class Browser
+{
+	AddressBar ab;
+}
+
+
+You need to see the real life how the classes are related
+the relationship between classes can be:
+
+1) Has / Part of			Car has Engine		Engine is a part of Car
+	this can be
+		Aggregation	or
+		Composition
+
+Aggregation
+	Both class can exist independently and still can aggregate with each other
+	ex:
+		Book	and Author		
+		A book has many Authors
+			so a book can exist first and then associate the author in itself
+			similarly, an author can write a book in future also
+
+Composition
+	A has B and 
+	A controls the life time of B
+	and B cannot exist alone		Person has Address		(address cannot exist alone)
+
+2) Kind of		(Inheritance)
+
+	ContractEmployee is a kind of Employee
+
+class Employee{}
+class ContractEmployee extends Employee{}
+
+
+
+Whenever an object is created,
+	the object and the class must have "is a" relationship
+
+ContractEmployee raja=new ContractEmployee();
+now, raja is a contract employee
+and also raja is an employee
+
+for the entire inheritance hierarchy, it must match "is a" relationship
+
+
+
+
+
+
+
+----------------------
+Dynamic polymorphism or Late binding
+---------------------------------------------
+	is also called as runtime polymorphism
+	a polymorphism is exihibited at runtime based on how we assign the child class instance to a parent type ref variable
+
+
+
+
+public class Furniture {
+	private String name;
+	private String color;
+	
+	public Furniture() {}
+
+	public Furniture(String name, String color) {
+		super();
+		this.name = name;
+		this.color = color;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
+
+	@Override
+	public String toString() {
+		return "Furniture [name=" + name + ", color=" + color + "]";
+	}
+	
+}
+
+
+
+
+
+A sub class gets a copy of super class data members and methods, that are
+	public		(yes. always. public means, available)
+	protected		(definitely available. "protected" means, available to sub class for sure)
+	default		(if sub class belongs to same package as super class)
+	private		(never. private members of super class are not at all available to sub class)
+
+
+Access Modifiers:
+	public		accessible anywhere.
+	protected		accessible within same package. And also for sub classes of any package
+	default		accessible within same package only
+	private		accessible within same class only
+
+
+
+
+public class Chair extends Furniture
+{
+
+}
+
+
+
+public class BookShelf extends Furniture
+{
+
+}
+
+
+import java.util.Scanner;
+
+public class App {
+
+	public static void main(String[] args) {
+		Furniture f=null;
+		//do you want chair or bookshelf? lets ask user
+		Scanner sc=new Scanner(System.in);
+		System.out.println("1: Chair\r\n"
+				+ "2: Bookshelf\r\n"
+				+ "3: Exit");
+		
+		int choice=sc.nextInt();
+		
+		switch(choice)
+		{
+		case 1:
+			f=new Chair();
+			f.setName("Office Chair");
+			f.setColor("Black");
+			break;
+		case 2:
+			f=new BookShelf();
+			f.setName("Book rack");
+			f.setColor("Brown");
+			break;
+		case 3:
+			return;
+		}
+		
+		System.out.println(f.getName());
+		System.out.println(f.getColor());
+	}
+
+}
+
+
+Furniture f=new Chair();
+f=new BookShelf();
+	can you see a polymorphism here?
+	this happens are runtime
+	so it is runtime polymorphism or late binding or dynamic polymorphism
+
+
+
+Employee e=new Employee();
+e=new Programmer();
+	e.work();
+e=new SystemAnalyst();
+	e.work();
+e=new ProjectManager();
+	e.work();
+
+in real life, this happens.
+
+now, lets modify the code as:
+
+
+import java.util.Scanner;
+
+public class Furniture {
+	private String name;
+	private String color;
+	
+	public Furniture() {}
+
+	public Furniture(String name, String color) {
+		super();
+		this.name = name;
+		this.color = color;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
+
+	@Override
+	public String toString() {
+		return "Furniture [name=" + name + ", color=" + color + "]";
+	}
+	
+	public void acceptDetails()
+	{
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter the name:");
+		name=sc.nextLine();
+		System.out.println("Enter the color:");
+		color=sc.nextLine();
+	}
+	
+	public void displayDetails()
+	{
+		System.out.println("Name:"+name);
+		System.out.println("Color:"+color);
+	}
+}
+
+
+import java.util.Scanner;
+
+public class Chair extends Furniture
+{
+	private int noOfLegs;
+	
+	public void acceptDetails()
+	{
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Number of legs:");
+		noOfLegs=sc.nextInt();
+	}
+	
+	public void displayDetails()
+	{
+		System.out.println("Number of legs:"+noOfLegs);
+	}
+}
+
+
+
+Chair class has "acceptDetails" methods
+that hides the super class "acceptDetails" method.
+
+earlier, when super class only had that method,
+sub class did not have that method,
+
+sub class object was getting the super class method 
+now that sub class itself has overridden the "acceptDetails" method,
+it is HIDING the super class method
+
+
+so i modify further so that,
+sub class method calls the super class method using super
+
+
+import java.util.Scanner;
+
+public class Chair extends Furniture
+{
+	private int noOfLegs;
+	
+	public void acceptDetails()
+	{
+		super.acceptDetails();
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Number of legs:");
+		noOfLegs=sc.nextInt();
+	}
+	
+	public void displayDetails()
+	{
+		super.displayDetails();
+		System.out.println("Number of legs:"+noOfLegs);
+	}
+}
+
+
+
+
+
+
+now, lets introduce a new method in Chair class:
+import java.util.Scanner;
+
+public class Chair extends Furniture
+{
+	private int noOfLegs;
+	
+	public void acceptDetails()
+	{
+		super.acceptDetails();
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Number of legs:");
+		noOfLegs=sc.nextInt();
+	}
+	
+	public void displayDetails()
+	{
+		super.displayDetails();
+		System.out.println("Number of legs:"+noOfLegs);
+	}
+	
+	public void roll()
+	{
+		System.out.println("Chair is rolling");
+	}
+}
+
+
+But in main method,
+we are not able to call that roll()method	WHY?
+Because, f is basically a "Furniture" and it is confined only to the methods of "Furniture"
+
+Furniture class does not have "roll" method
+
+
+import java.util.Scanner;
+
+public class App {
+
+	public static void main(String[] args) {
+		Furniture f=null;
+		//do you want chair or bookshelf? lets ask user
+		Scanner sc=new Scanner(System.in);
+		System.out.println("1: Chair\r\n"
+				+ "2: Bookshelf\r\n"
+				+ "3: Exit");
+		
+		int choice=sc.nextInt();
+		
+		switch(choice)
+		{
+		case 1:
+			f=new Chair();	
+//			f.rolling();		//not visible. why?
+			break;
+		case 2:
+			f=new BookShelf();
+			break;
+		case 3:
+			return;
+		}
+		f.acceptDetails();		
+		f.displayDetails();
+	}
+
+}
+----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------
+
+public abstract class Shape {
+	public abstract String calculateArea();
+
+}
+public class Triangle extends Shape{
+	public String calculateArea()
+	{
+		return "1/2 * b * h";
+	}
+}
+public class Rectangle extends Shape{
+	public String calculateArea()
+	{
+		return "l * b";
+	}	
+}
+
+Shape s=null;
+
+s=new Triangle();
+System.out.println(s.calculateArea());		//WHAT will happen?	there is no such method in 					//shape
+s=new Rectangle();
+System.out.println(s.calculateArea());		//no such method in Shape
+
+so, we are forced to declare a dummy method in Shape class
+
+
+
+public abstract class Shape {
+	public abstract String calculateArea();
+}
+
+
+What is the need for abstract method?
+	i) if this method is not declared in super class, then the sub class methods are not available
+		during dynamic polymorphism
+	ii) the implementation of this method is provided by the sub classes and hence
+		supporting dynamic polymorphism
+	iii) the sub classes are forced to override any abstract methods found in the super class
+
+What is abstract class?
+	cannot be instantiated.	means, we cannot create an object of abstract class
+	we can create a reference variable of abstract class and instantiate its sub class
+	is meant to be inherited
+	can contain abstract methods and also methods with body (implementation)
+	ex:
+		we can create object of "Chair" or "Bookshelf" but not an object of "Furniture"
+
+OLX	
+	we can buy, we can sell
+	buyer is a consumer
+	seller is a consumer in olx
+
+Consumer
+	can be a super class
+
+Buyer
+	can be a sub class
+
+Seller
+	can be a sub class
+
+Though we are allowed to buy or sell both in olx, 
+in a particular transaction, you can be a Buyer or Seller, but not just a Consumer
+
+Consumer is abstract
+
+
+Final class
+-----------
+in inheritance hierarchy, this class is final. 
+That means, no more sub class in this generation
+
+need not to say, all methods of a final class are deemed to be final methods. Because, no sub class means, no overriding also.
+
+Interfaces
+--------------
+	provides abstraction
+		if an interface provides an abstract method,
+		then its implementation is provided by a class that implements this interface
+
+	can contain CONSTANTS.		but not variables
+	can contain abstract methods		"abstract" keyword is not used but empty methods.
+	can contain only public data members and methods. Even if we do not mention access modifier, it 		is public by default. No other access modifier is allowed inside interface.
+	can contain static or default methods with body (implementation).	From java 8 version 		onwards. Prior to java 8, interfaces contains methods without body only.
+
+Types of interface:
+	Marker interfaces		these interfaces does not contain any abstract methods 
+	Functional interfaces	these interfaces contain only 1 abstract method
+
+Marker interfaces
+	are required to provide compatibility
+	for example "Serializable" is a marker interface. Only those classes that implements this interface are supported to write objects of those classes into streams.
+ex:
+	public void method1(Person p)	//Person is an interface
+	{
+	}
+
+	we can pass argument for this method with any object of any class that implements Person
+	now, that makes, few of my classes compatible with this method
+
+
+
+Functional Interfaces
+	contains only 1 abstract method
+	ex:
+		Comparator		compare
+		Runnable			run
+		Predicate			test
+
+while we need implementation of these interfaces, we can use "lambda" for providing quick implementation
+
+
+import java.util.Arrays;
+
+//class A implements Comparator<Integer>
+//{
+//
+//	@Override
+//	public int compare(Integer o1, Integer o2) {
+//		return 0;
+//	}
+//	
+//}
+
+public class App3 {
+
+	public static void main(String[] args) {
+		Integer arr[]= {5,2,7,1,9,3,8,4};
+		
+		Arrays.sort(arr, (a,b)->b-a);
+		
+		System.out.println(Arrays.toString(arr));
+	}
+
+}
+
+
+1) what is the need for interface?
+2) what is the difference between abstract class and interface?
+3) static, default methods in java 8 onwards interface
+
+a class can implement many interfaces but can extend only one abstract class.
+
+I will ask you in next session 
+	can we implement multiple inheritance in java?
+		
