@@ -1,0 +1,846 @@
+1) what is the need for interface?
+2) what is the difference between abstract class and interface?
+3) static, default methods in java 8 onwards interface
+
+a class can implement many interfaces but can extend only one abstract class.
+
+I will ask you in next session 
+	can we implement multiple inheritance in java?		
+-----------------------------------------------
+
+can we implement multiple inheritance in java?
+	Multiple inheritance is not supported by Java language.
+	So, a class in java, can have only 1 super class.
+	ex:
+		class Employee extends Person
+		{}
+	here, Person is the super class
+
+	class Employee extends Person, Human		//NOT POSSIBLE IN JAVA.
+
+
+Shaik Abdul Raashid asks
+	can't we achive multiple inheritance using interface?
+	let me ask a counter question:
+		How?	inheriting a class is compared with implementing an interface?
+
+extends 
+implements
+	these 2 are never equal.
+
+By extending (inheriting) a super class, i get some benefit
+By implementing an interface, what benefit i get? except being forced to override some methods.
+
+But benefit of multiple inheritance 
+	can be achieved using interface
+
+ex:
+
+interface Person
+{
+	void speak();
+}
+
+class Teacher implements Person
+{
+	public void speak()
+	{
+		System.out.println("Teacher speaks");
+	}
+}
+
+class Student implements Person
+{
+	public void speak()
+	{
+		System.out.println("Student speaks");
+	}
+}
+
+Person raja=null;
+raja=new Teacher();
+raja.speak();
+
+raja=new Student();
+raja.speak();
+
+now, we got the benefit from Student, Teacher classes.
+Can we see that it is a benefit of multiple inheritance.
+
+
+This is how "interface" is used to get the benefit of multiple inheritance.
+It is not "multiple inheritance"
+
+
+before java 8,
+ie., upto java 7			1.1, 1.2, 1.3, 1.4, 5, 6, 7
+
+old versions of java does not allow us to create methods with body inside an interface.
+so till java 7, interfaces can contain only abstract methods (no need to mention as abstract, but they are empty methods only)
+
+from java 8 onwards, including java 8,
+	interfaces can have
+		abstract methods
+		and also following type of methods with body
+			static
+			default
+
+totally, an interface can contains
+	constants
+	abstract methods
+	static methods with body
+	default methods with body
+
+an interface cannot contain variables	(but can contain constants)
+
+ALL MEMBERS OF AN INTERFACE ARE PUBLIC BY DEFAULT EVEN IF YOU DO NOT MENTION
+
+
+interface Person
+{
+	void speak();	//public by default
+}
+
+class Employee implements Person
+{
+	void speak()	//error because, you cannot reduce the visibility during overriding
+	{
+		System.out.println("Employee speaks");
+	}
+}
+
+public class App
+{
+	public static void main(String []args)
+	{
+		Person raja=new Employee();
+		raja.speak();
+	}
+}
+
+//What will be the output of this program
+
+
+
+
+
+
+default methods in interface		(java 8 onwards)
+	they provide the default implementation
+	if the classes that implement an interface, does not override these methods, 
+		then the default behavior defined in the interface is used
+
+
+
+interface Person
+{
+	void speak();	//public by default
+	default void run()
+	{
+		System.out.println("Person runs");
+	}
+}
+
+class Employee implements Person
+{
+	public void speak()	//error because, you cannot reduce the visibility during overriding
+	{
+		System.out.println("Employee speaks");
+	}
+	public void run()
+	{
+		System.out.println("Employee runs");
+	}
+}
+
+public class App
+{
+	public static void main(String []args)
+	{
+		Person raja=new Employee();
+//		raja.speak();
+		raja.run();
+	}
+}
+
+
+
+
+static methods in interface 		from java 8 onwards
+	We can call static methods using typename instead of object name
+	since we cannot create object of interface,
+	we can call static methods using interface name itself
+
+
+-------------------------------------------------
+Adapter
+---------
+	Adapter is a class that provides empty implementation of an interface
+
+interface Person
+{
+	void speak();
+	void listen();
+	void run();
+	void walk();
+}
+
+//now a class that implements the above interface is forced to override all the 4 methods.
+So, that is an inconvenience, because, when we find couple of methods as irrelevant.
+
+So lets create an adapter
+
+class PersonAdapter implements Person
+{
+	public void speak(){}
+	public void listen(){}
+	public void run(){}
+	public void walk(){}
+}
+
+
+//now, any class that extends the adapter, is not forced to override all 4 methods.
+instead, they can override, which method they want.
+
+class Student extends PersonAdapter
+{
+	public void listen()
+	{
+		System.out.println("Student listens");
+	}
+}
+
+
+
+----------------------------
+static
+	data members	
+		only inside class level.	static is not allowed for local variable (that are declared 					inside a method)
+	methods
+	blocks
+
+
+WebSecurityConfigurer		interface
+WebSecurityConfigurerAdapter	class
+
+public abstract class WebSecurityConfigurerAdapter implements WebSecurityConfigurer<WebSecurity>
+
+
+
+javax.swing	used to create JApplet JFrame
+implements WindowListener	(interface)
+
+
+
+Inheritance and overriding	=>	dynamic polymorphism
+types of inheritence
+	single inheritance
+		only 1 super class
+	multiple inheritance
+		multiple super classes
+	multi-level inheritance
+		a sub class becomes super class for another class. So we have multiple levels
+	hybrid
+		combination of any two types of inheritance
+
+
+
+----------------------------------------------------------------------------------
+Collections
+-------------
+first we discuss about the limitations of Arrays
+	arrays are fixed length
+	insertion, deletion in arrays is not scalable
+		deletion does not save any memory
+	memory allocation	-	sometimes, you may not get contiguous memory
+	array elements are stored in continuous memory locations
+
+
+
+
+
+upto java 1.4
+	collections were of Object type only
+	ArrayList list=new ArrayList();
+	list.add(new Integer(20));
+	list.add("India");
+	list.add(new Date());
+the above looked like, we are able to add different type of objects into an arraylist.
+But actually, if you look closer, this ArrayList is 
+	ArrayList<Object> 
+so, whatever we add, are sub classes of Object class, so they are implicitly casted
+so, we are not adding Integer, String and Date,
+we are actually adding Object, Object and Object
+so, it is a collection of Objects	(same type only)
+
+in same way, i can create array also as objects
+	Object []arr=new Object[10];
+	arr[0]=new Integer(20);
+	arr[1]="India";
+	arr[2]=new Date();
+
+
+
+from java 5 onwards
+	collection supported generics
+
+
+to overcome the limitations of arrays, we can use
+	Collections in java
+
+collections are scalable because, 
+	they can grow
+	they can shrink
+
+the size of the collection need not be known when we create it
+it can grow when we add elements. No upper limit. As long as sufficient memory is available, we can add
+
+when we remove elements, the memory is freed
+
+Collection is an interface
+
+List and Set are sub interfaces that extends Collection interface
+
+public interface List<E> extends Collection<E> {}
+
+public interface Set<E> extends Collection<E> {}
+
+
+List and Set are the 2 types of collection interfaces
+
+Map is not a collection, but an application of collection.
+
+List
+-----
+There are some classes that implement List interface.
+Example:
+	Vector
+	Stack
+	ArrayList
+	LinkedList
+
+Set
+----
+There are some classes that implement Set interface.
+Example:
+	HashSet
+	TreeSet
+	LinkedHashSet
+
+
+What is the difference between List and Set?
+
+List
+	is ordered
+	whenever we add elements, it will be added at the end.
+	all lists have index	(even linked list have index. Suprising????)
+	allows duplicates
+	allows sorting 	(after the elements are added also, we can call Collections.sort to sort)
+
+Set
+	rejects duplicate entries
+	does not allow sorting once the elements are added.
+	order of elements, is based on the type of set
+	whenever we add elements, it may not be added at the end. It may use algorithm to decide 	   where to add that element
+		HashSet
+			order is based on hashCode() method
+		TreeSet
+			sorted based on Comparable or Comparator
+		LinkedHashSet
+			order is same as the order in which elements are added 
+			ordered
+
+Map
+	HashMap
+	TreeMap
+	LinkedHashMap
+	Hashtable			look at the "t" in lowercase.	Legacy (old) class
+
+
+import java.util.LinkedList;
+
+public class App {
+
+	public static void main(String[] args) {
+		LinkedList<Integer> list=new LinkedList<>();
+		list.add(20);
+		list.add(50);
+		list.add(40);
+		list.add(10);
+		list.add(30);
+		list.add(90);
+		list.add(70);
+		
+		System.out.println(list.get(3));
+	}
+
+}
+
+
+
+
+Let me list out legacy classes:
+	Vector
+	Stack
+	Hashtable
+
+all these legacy classes are synchronized	(means, no 2 threads allowed to access at a time)
+					thread safe
+
+HashMap vs Hashtable
+	Hashtable is synchronized		(legacy class)
+
+
+
+import java.util.Stack;
+
+public class AppStack {
+
+	public static void main(String[] args) {
+		Stack<Integer> numbers=new Stack<>();
+		numbers.push(1);
+		numbers.push(2);
+		numbers.push(3);
+		numbers.push(4);
+		numbers.push(5);
+		
+		System.out.println(numbers.pop());
+		System.out.println(numbers.pop());
+		System.out.println(numbers.pop());
+		System.out.println(numbers.pop());
+		System.out.println(numbers.pop());
+		
+	}
+
+}
+
+
+------------------------------------------------
+Comparable/ Comparator
+
+
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class AppEmpList {
+
+	public static void main(String[] args) throws ParseException {
+		List<Employee> empList=new ArrayList<>();
+		SimpleDateFormat sdf=new SimpleDateFormat("dd-MMM-yyyy");
+		empList.add(new Employee(7, "Babu", sdf.parse("08-Jan-2002")));
+		empList.add(new Employee(3, "Alexander", sdf.parse("01-Jun-2011")));
+		empList.add(new Employee(5, "Zaheer", sdf.parse("08-Sep-2012")));
+		empList.add(new Employee(2, "Suresh", sdf.parse("18-Apr-2007")));
+		empList.add(new Employee(4, "Raja", sdf.parse("11-Feb-2005")));
+		
+		//how to sort this empList?
+		Collections.sort(empList);
+		
+		for(Employee e:empList)
+		{
+			System.out.println(e);
+		}
+	}
+
+}
+
+
+
+The above code gives error in 
+	Collections.sort(empList);
+because, employee objects are not comparable
+
+if you cannot compare to objects, how can we sort such collection?
+
+Solution:
+	Employee class shall implement Comparable interface
+
+
+
+
+i have used following methods of SimpleDateFormat
+	parse		converts String into java.util.Date
+	format		converts java.util.Date to String
+
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class Employee implements Comparable<Employee>
+{
+	private Integer id;
+	private String name;
+	private Date dateOfJoing;
+	
+	public Employee() {}
+
+	public Employee(Integer id, String name, Date dateOfJoing) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.dateOfJoing = dateOfJoing;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Date getDateOfJoing() {
+		return dateOfJoing;
+	}
+
+	public void setDateOfJoing(Date dateOfJoing) {
+		this.dateOfJoing = dateOfJoing;
+	}
+
+	@Override
+	public String toString() {
+		SimpleDateFormat sdf=new SimpleDateFormat("dd-MMM-yyyy");
+		return "Employee [id=" + id + ", name=" + name + ", dateOfJoing=" + sdf.format(dateOfJoing) + "]";
+	}
+
+	@Override
+	public int compareTo(Employee o) {
+		//a.compareTo(b)		this.compareTo(argument)
+//		return this.getDateOfJoing().compareTo(o.getDateOfJoing());
+//		return this.getId().compareTo(o.getId());
+		return this.getId()-o.getId();
+		//because, Date class already implements Comparable so it has compareTo method
+	}
+	
+}
+
+
+
+
+We used Comparable for the above example.
+
+
+What is Comparator?
+	we can use Comparator interface to provide the comparison logic for a class, without modifying that class
+	ex:
+		Employee class need not be modified, but we create an external class that will provide the logic to compare 2 employees based on their properties
+
+
+
+Employee class comparable compares 2 employees by their id
+EmployeeNameComparator class will compare 2 employees by their names
+EmployeeDateComparator will compare 2 employees by their dateOfJoining
+
+
+1: Sort by id
+2: Sort by name
+3: Sort by date of joining
+x: Exit
+
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class Employee implements Comparable<Employee>
+{
+	private Integer id;
+	private String name;
+	private Date dateOfJoining;
+	
+	public Employee() {}
+
+	public Employee(Integer id, String name, Date dateOfJoing) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.dateOfJoining = dateOfJoing;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Date getDateOfJoining() {
+		return dateOfJoining;
+	}
+
+	public void setDateOfJoining(Date dateOfJoing) {
+		this.dateOfJoining = dateOfJoing;
+	}
+
+	@Override
+	public String toString() {
+		SimpleDateFormat sdf=new SimpleDateFormat("dd-MMM-yyyy");
+		return "Employee [id=" + id + ", name=" + name + ", dateOfJoining=" + sdf.format(dateOfJoining) + "]";
+	}
+
+	@Override
+	public int compareTo(Employee o) {
+		//a.compareTo(b)		this.compareTo(argument)
+//		return this.getDateOfJoing().compareTo(o.getDateOfJoing());
+//		return this.getId().compareTo(o.getId());
+		return this.getId()-o.getId();
+		//because, Date class already implements Comparable so it has compareTo method
+	}
+	
+}
+
+
+
+
+import java.util.Comparator;
+
+public class EmployeeNameComparator implements Comparator<Employee>
+{
+
+	@Override
+	public int compare(Employee o1, Employee o2) {
+		return o1.getName().compareTo(o2.getName());
+	}
+
+}
+
+
+
+
+import java.util.Comparator;
+
+public class EmployeeDateComparator implements Comparator<Employee>
+{
+
+	@Override
+	public int compare(Employee o1, Employee o2) {
+		return o1.getDateOfJoining().compareTo(o2.getDateOfJoining());
+	}
+
+}
+
+
+
+
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
+
+public class App2 {
+
+	public static void main(String[] args) throws ParseException {
+		List<Employee> empList=new ArrayList<>();
+		SimpleDateFormat sdf=new SimpleDateFormat("dd-MMM-yyyy");
+		empList.add(new Employee(7, "Babu", sdf.parse("08-Jan-2002")));
+		empList.add(new Employee(3, "Alexander", sdf.parse("01-Jun-2011")));
+		empList.add(new Employee(5, "Zaheer", sdf.parse("08-Sep-2012")));
+		empList.add(new Employee(2, "Suresh", sdf.parse("18-Apr-2007")));
+		empList.add(new Employee(4, "Raja", sdf.parse("11-Feb-2005")));
+
+		Scanner sc=new Scanner(System.in);
+		
+		int choice=0;
+		do
+		{
+			System.out.println("1: Sort by id\r\n"
+					+ "2: Sort by name\r\n"
+					+ "3: Sort by date of joining\r\n"
+					+ "x: Exit");
+			choice=sc.nextInt();
+			switch(choice)
+			{
+			case 1:	//by id
+				Collections.sort(empList);
+				break;
+			case 2:	//by name
+				Collections.sort(empList, new EmployeeNameComparator());
+				break;
+			case 3:	//by date of joining
+				Collections.sort(empList, new EmployeeDateComparator());
+				break;
+			default:
+				return;
+			}
+			for(Employee e:empList)
+				System.out.println(e);
+		}while(choice<=3);
+		
+	}
+
+}
+
+
+
+
+
+
+Note:
+How to sort in descending order?
+	a.compareTo(b)		is ascending order means,
+	b.compareTo(a)		is descending order
+
+a-b	is -1	a is < b
+b-a	is 1	
+
+
+
+		return o.getId()-this.getId();		//descending order
+
+
+
+
+Home work:
+University - Requirement 5
+
+
+----------------------------------------------------
+HashSet
+----------
+import java.util.HashSet;
+import java.util.Set;
+
+public class App {
+
+	public static void main(String[] args) {
+		Set<String> countries=new HashSet<>();
+		countries.add("China");
+		countries.add("Japan");
+		countries.add("India");
+		countries.add("China");			//this entry is rejected
+		countries.add("Australia");
+		
+		System.out.println(countries.size()); 	//what will be output?
+		
+	}
+
+}
+
+
+What happens, if we create a HashSet<Employee>
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
+public class AppEmpList {
+
+	public static void main(String[] args) throws ParseException {
+		Set<Employee> empSet=new HashSet<>();
+		SimpleDateFormat sdf=new SimpleDateFormat("dd-MMM-yyyy");
+		empSet.add(new Employee(7, "Babu", sdf.parse("08-Jan-2002")));
+		empSet.add(new Employee(3, "Alexander", sdf.parse("01-Jun-2011")));
+		empSet.add(new Employee(3, "Alexander", sdf.parse("01-Jun-2011")));
+		empSet.add(new Employee(5, "Zaheer", sdf.parse("08-Sep-2012")));
+		empSet.add(new Employee(2, "Suresh", sdf.parse("18-Apr-2007")));
+		empSet.add(new Employee(4, "Raja", sdf.parse("11-Feb-2005")));
+		
+		//Collections.sort cannot be used for Set
+		//how many elements are added to empSet
+		for(Employee e:empSet)
+		{
+			System.out.println(e);
+		}
+	}
+
+}
+
+
+In the above example, we expect the Set to reject duplicate entry of Alexander
+
+but since, HashSet identify duplicates and decide the order based on 
+	hashCode()
+	equals()
+
+we have to override these methods to help HashSet understand the duplicates, and decide the order
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Objects;
+
+public class Employee
+{
+	private Integer id;
+	private String name;
+	private Date dateOfJoining;
+	
+	public Employee() {}
+
+	public Employee(Integer id, String name, Date dateOfJoing) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.dateOfJoining = dateOfJoing;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Date getDateOfJoining() {
+		return dateOfJoining;
+	}
+
+	public void setDateOfJoining(Date dateOfJoing) {
+		this.dateOfJoining = dateOfJoing;
+	}
+
+	@Override
+	public String toString() {
+		SimpleDateFormat sdf=new SimpleDateFormat("dd-MMM-yyyy");
+		return "Employee [id=" + id + ", name=" + name + ", dateOfJoining=" + sdf.format(dateOfJoining) + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		Employee arg=(Employee) obj;
+		return this.getId().equals(arg.getId());
+	}
+	
+}
+
+
+----------------------------------
+TreeSet
