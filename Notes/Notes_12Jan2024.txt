@@ -1,0 +1,73 @@
+Exceptions
+	we thrown exception object from couple of setter methods, after validating the data we found that the data input is not correct.
+	but what exception we have thrown, is not precise.
+	so, instead of throwing object of NumberFormatException, we are now going to create and 
+		throw our own meaning exceptions
+
+How to create user defined exception?	
+	decide if we want to create
+		Check exception	or
+		Unchecked exception
+
+Choose checked exception, when you do not want to allow the user to proceed by ignoring the exception
+Checked exceptions cannot be ignored. 
+	throws
+	try-catch
+
+Choose unchecked exception, if you consider them to either handle or leave it as unhandled
+no compulsion on handling or usinig throws for unchecked exception
+
+Lets create the following:
+	InvalidEmployeeIdException
+	InvalidNameException
+	InvalidDateOfJoiningException
+
+
+
+public class InvalidEmployeeIdException extends Exception	//checked exception
+{
+	
+	public InvalidEmployeeIdException(String message)
+	{
+		super(message);
+	}
+}
+
+
+
+
+
+public class InvalidNameException extends RuntimeException
+{
+
+	public InvalidNameException(String message) {
+		super(message);
+	}
+	
+}
+
+
+
+
+throws
+	informs the compiler that these exceptions are thrown inside this method
+	but this method does not handle them
+	the calling method is expected to handle them
+
+
+throw
+	is used to throw an object of exception class
+	
+
+difference:
+	throws never throw anything, but informs compiler that this method throws these exceptions
+	throws can specify multiple exceptions that are thrown by the method. It does not mean, throws is throwing them. No.		throw only does
+
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+IO
+	Input Output
+
+java.io
+	this package contains lot of classes to work with input and output.
+

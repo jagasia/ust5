@@ -1,0 +1,757 @@
+Exception Handling
+Pending topics:
+------------------
+Collections - TreeSet
+Maps
+Lambda
+Annotation
+Object
+
+
+
+What is Map?
+	Map is a interface
+	is a collection of key - value pair entries
+
+legacy class Hashtable		is also key-value pair
+moder class HashMap		is also key-value pair
+
+we are not adding elements to a map, rather,
+we are adding entries to the map.
+
+What is an Entry?
+	is one key-value pair
+
+To add an entry to a map,
+	we use "put" method
+	ex:
+		map.put(k,v);
+
+To get the value based on a key,
+	we use "get" method
+	ex:
+		v=map.get(k);
+
+NOTE that there is no add() method in map.
+
+
+Demo:
+--------
+Suggest me the algorithm for the below problem.
+
+User enters a sentence in english as input.
+example input:
+	The most populated country in this world in china
+
+we need to display the occcurrence of each character in this sentence
+
+example output:
+
+T	1
+h	3
+e	2
+ 	8
+m	1
+o	4
+s	2
+t	4
+p	2
+u	2
+
+
+
+
+Some of you have suggested HashMap, but i suggest, "LinkedHashMap" because,
+your output should match the sample ouput.	The order should be same as input order
+
+Ordered 
+
+
+
+HashMap
+TreeMap
+LinkedHashMap
+	these are modern maps
+	legacy map is Hashtable	(synchronized)
+
+
+
+
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Scanner;
+
+public class AppCharCount {
+
+	public static void main(String[] args) {
+		Scanner sc=new Scanner(System.in);
+		String input=sc.nextLine();
+		Map<Character, Integer> map=new LinkedHashMap<>();
+		for(char c : input.toCharArray())
+		{
+			//check if this char is found in map
+			//not found?	1st occurrence, so count=1
+			//found?		existing count +1
+			Integer value=0;
+//			if(map.containsKey(c))
+//			{
+//				value=map.get(c)+1;
+//			}else
+//			{
+//				value=1;
+//			}
+//			map.put(c, value);
+			
+
+			//the above can be simplified as :-
+//			value=map.get(c);		//you get null if key not found
+//			if(value==null)
+//				value=0;
+//			value++;
+//			map.put(c, value);
+
+			
+			//the above can further be simplified as :-
+			map.put(c, map.getOrDefault(c, 0)+1);
+		}
+		
+		//lets display the map
+		//how to iterate a map?
+		//map is not iterable like an array, list, set
+		//so, we need to obtain the keys as a set and then iterate that set
+		//or, we can obtain the entries as a set and then iterate that set
+		// in both above cases, we can also use for each loop
+		
+//		for(Character key:map.keySet())
+//		{
+//			System.out.println(key+"\t"+map.get(key));
+//		}
+		
+		for(Entry<Character, Integer> entry: map.entrySet())
+		{
+			System.out.println(entry.getKey()+"\t"+entry.getValue());
+		}
+		
+		
+		
+		
+		
+		
+		
+	}
+
+}
+
+
+
+
+//char[] carr = input.toCharArray();
+//for(char c : carr)
+//{}
+
+
+//for(int i=0;i<input.length();i++)
+//{
+//	char c = input.charAt(i);
+//	System.out.println(c);
+//}
+
+
+What is the difference between Iterator and ListIterator?
+	Iterator is forward only
+	ListIterator can navigate in both directions. But ListIterator works only for List (not for Set)
+
+Iterator methods:
+	hasNext()		returns true if any more elements are available to iterate
+	next()		returns the next element	
+	remove()		removes the current element 
+
+ListIterator methods:
+	hasNext()
+	next()
+	remove()
+	hashPrevious()	returns true if any more elements available to move backwards
+	previous()	returns the previous element
+
+
+
+Hackerrank challenge to display elements from last to first using ListIterator
+
+if you do like this:
+	it=list.listIterator()
+	while(it.hasPrevious())
+	{
+		System.out.println(list.previous());
+	}
+
+this will not give any output because, initially, iterator points to a position before the first element
+
+so, people tried the below:
+
+	it=list.listIterator();
+	while(it.hasNext()))
+	{
+		it.next();
+	}
+
+	while(it.hasNext())
+	{
+		System.out.println(it.previous());
+	}
+
+But hackerrank rejected the solution stating the time complexity is high.
+because of unnecessary iteration from 1st to last 
+
+	it=list.listIterator(list.size());		//this will position the iterator after last element initially
+
+this solved the problem
+
+
+
+How to sort a hash set?
+	idea 1:	convert to list, then we can use Collections.sort method
+	idea 2:	convert the hash set into tree set?
+
+none of you said, use Collections.sort for HashSet. 
+	TRUE.... Collections.sort works only for list (NOT for set)
+
+
+
+Lambda
+---------
+	what is lambda?
+		is used to provide a quick implementation of a functional interface
+
+
+what is a functional interface?
+
+
+
+public interface Person {
+	void speak();	//implementation is missing
+}
+
+//Person is a functional interface because, there is only one
+//abstract method
+
+
+
+public class App2 {
+
+	public static void main(String[] args) {
+//		Person raja=new Student();		//traditional way. creating a class that 						//implements interface
+//		raja.speak();
+
+		
+		Person suresh=new Person() {	//anonymous inner type
+			
+			@Override
+			public void speak() {
+				System.out.println("Suresh speaks");
+			}
+		};
+		
+		suresh.speak();
+		
+		Person raja=()->{			//lambda
+			System.out.println("Raja speaks");
+		};
+		
+		raja.speak();
+	}
+
+}
+
+-----------------------------
+Java 8 introduced "method reference"
+	A functional interface has only 1 abstract method,
+	and we can reference an existing method as implementation of that functional interface
+
+in lambda, we only provide the implementation
+
+
+
+public interface Person {
+	void speak();
+}
+
+//Person is a functional interface because, there is only one
+//abstract method
+
+
+
+public class Employee {
+	public void work()
+	{
+		System.out.println("Employee works");
+	}
+}
+
+
+
+public class App3 {
+
+	public static void main(String[] args) {
+		Employee e=new Employee();
+//		Person p=()->{};		//here only we provide impl code
+		Person p=e::work;		//we make use of existing method
+		
+		p.speak();
+	}
+
+}
+
+
+
+
+
+Stream API
+-------------
+	is similar to select query in SQL
+	select query is used on table(s) in db
+	Stream API is used on collections in java
+	select query does not affect original records in the table(s)
+	but, we get a modified copy of data		ex:	UPPER(firstname)
+
+it is called as stream because, every operation of stream results in another stream
+but terminal operators can 
+	iterate (or)
+	collect the result
+
+intermediate operation
+	filter
+	sorted
+	map
+
+
+
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
+public class AppEmpList {
+
+	public static void main(String[] args) throws ParseException {
+		Set<Employee> empSet=new HashSet<>();
+		SimpleDateFormat sdf=new SimpleDateFormat("dd-MMM-yyyy");
+		empSet.add(new Employee(7, "Babu", sdf.parse("08-Jan-2002")));
+		empSet.add(new Employee(3, "Alexander", sdf.parse("01-Jun-2011")));
+		empSet.add(new Employee(3, "Alexander", sdf.parse("01-Jun-2011")));
+		empSet.add(new Employee(5, "Zaheer", sdf.parse("08-Sep-2012")));
+		empSet.add(new Employee(2, "Suresh", sdf.parse("18-Apr-2007")));
+		empSet.add(new Employee(4, "Raja", sdf.parse("11-Feb-2005")));
+		
+		//filter employees by name length
+		empSet.stream()
+		.filter((t)->t.getName().length()<5)
+		.sorted((a,b)->a.getId().compareTo(b.getId()))
+		.forEach(System.out::println);
+		
+	}
+
+}
+
+
+
+
+
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.IntSummaryStatistics;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+public class AppEmpList {
+
+	public static void main(String[] args) throws ParseException {
+		Set<Employee> empSet=new HashSet<>();
+		SimpleDateFormat sdf=new SimpleDateFormat("dd-MMM-yyyy");
+		empSet.add(new Employee(7, "Babu", sdf.parse("08-Jan-2002"), "CSE",100000));
+		empSet.add(new Employee(3, "Alexander", sdf.parse("01-Jun-2011"), "IT",100000));
+		empSet.add(new Employee(3, "Alexander", sdf.parse("01-Jun-2011"), "CSE",100000));
+		empSet.add(new Employee(5, "Zaheer", sdf.parse("08-Sep-2012"), "CSE",100000));
+		empSet.add(new Employee(2, "Suresh", sdf.parse("18-Apr-2007"), "IT",100000));
+		empSet.add(new Employee(4, "Raja", sdf.parse("11-Feb-2005"), "ECE",100000));
+		
+		//display dept wise sum of salary
+		Map<String, IntSummaryStatistics> map = empSet.stream()
+		.collect(Collectors.groupingBy(Employee::getDepartment, Collectors.summarizingInt(Employee::getSalary)));
+		
+		for(Entry<String, IntSummaryStatistics> e:map.entrySet())
+		{
+			//			System.out.println(e.getKey()+"\t"+e.getValue().getSum());
+			System.out.println(e);
+		}
+	}
+
+}
+
+
+
+-----------------------------------------------------------
+Annotations
+-------------
+	What is annotation?
+		annotations are comments.	
+		How they are different from comments?
+			comments are ignored by the compiler.
+			But annotations may be present in the compiled code also.
+			why i say may?	
+				based on the retention type of the annotation, 
+					they can be present in 
+						SOURCE
+						CLASS
+						RUN TIME
+
+A program can read the annotation of a program
+
+normally, human can understand the comments
+program can understand annotations
+
+@Deprecated
+	means, out of fashion
+	out dated	
+	not in use
+
+@Override
+	check if overriding rules are followed or not
+	normally, if you use same method names in super and sun classes, then 
+		overriding rules are verified
+	but sometimes, we assume of overriding, but mention method name wrongly, 
+	then it becomes another method (not overridden method)	so for safety, use this annotation
+
+
+How to create our own annotation?
+	using
+		@Interface
+
+
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface Purpose {
+
+}
+
+
+
+
+@Purpose
+public class Product {
+
+//	@Purpose		not allowed here based on target type
+	public void display()
+	{
+		System.out.println("Product display");
+	}
+}
+
+
+
+Annotations are used for reflection.
+What is reflection?
+	reading meta data.
+
+What is meta data?
+	annotations are a means of meta data
+	meta data means, self explanation
+
+
+Lets see how a program can read meta data?
+---------------------------------------------------------------
+
+
+@Purpose
+public class Product {
+
+//	@Purpose		not allowed here based on target type
+	
+	
+	
+	public void display()
+	{
+		System.out.println("Product display");
+	}
+
+	@Override
+	@Deprecated
+	public String toString() {
+		return "Product [toString()=" + super.toString() + "]";
+	}
+}
+
+
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+
+public class App {
+
+	public static void main(String[] args) {
+		Annotation[] arr = Product.class.getAnnotations();
+		
+		for(Annotation a:arr)
+			System.out.println(a);
+		
+		//now for method level
+		Method[] methods = Product.class.getMethods();
+		for(Method m:methods)
+		{
+			if(m.getName().equals("toString"))
+			{
+				Annotation[] ans = m.getAnnotations();
+				for(Annotation a:ans)
+					System.out.println(a);
+			}
+		}
+	}
+
+}
+
+
+
+
+
+
+-----------------------------------
+Exception class hierarchy
+
+Object
+	Throwable
+		Error
+		Exception
+
+
+Error
+	cannot be handled
+	program will terminate abruptly
+
+Exception
+	can be handled
+
+What is exception?
+	is any abnormal event that occurs during the execution of the program
+
+we are not discussing
+	syntax errors
+
+Why exceptions are created?
+	to ensure that the program does not continue in such situations.
+	to communicate us that something is wrong
+	if program knows how to react in such cases, it will not throw exception
+
+so, any exception that is throws, is informing us
+	that something is wrong, but you need to decide how to respond.
+
+ex:
+	divide by zero is universally wrong
+	in such case, what to do?	java does not know. So it thows an exception and hence
+	allowing us to handle
+
+For every exception or error that occurs, 
+	there are classes defined for that
+
+example for exception classes:
+	IOException
+	ParseException
+	SQLException
+	FileNotFoundException
+	InterruptedException
+	ClassNotFoundException
+	ArrayIndexOutOfBoundsException
+	ArithmeticException
+	NumberFormatException
+
+
+Exception classes are categorized into:
+	CheckedException
+	UncheckedException
+
+
+CheckedExceptions
+	are checked by the compiler
+	either this exception must be
+		handled using try-catch (or)
+		declared using throws clause
+	are derived from Exception class	or its sub classes other than RuntimeException
+
+UncheckedExceptions
+	are not checked by the compiler
+	they occur at runtime and we are not forced to handle it or declared using throws clause
+	are derived from RuntimeException class or its sub classes
+
+	
+
+
+Demo:
+--------
+Employee
+	id		starts with E and followed by 3 digits
+	name		must be atleast 3 characters and first should be captial letter. No numbers
+	dateOfBirth	must not be future date
+
+
+
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Scanner;
+
+public class App {
+
+	public static void main(String[] args)  {
+		Scanner sc=new Scanner(System.in);
+		Employee employee=null;
+		do {
+			System.out.println("Id:");
+			String id=sc.next();
+			System.out.println("Name:");
+			String name=sc.nextLine();
+			if(name.equals(""))
+				name=sc.nextLine();
+			System.out.println("Date Of Birth(dd-MMM-yyyy):");
+			String str=sc.nextLine();
+			try
+			{
+			SimpleDateFormat sdf=new SimpleDateFormat("dd-MMM-yyyy");
+			Date dateOfBirth=sdf.parse(str);
+			
+			employee=new Employee();
+			
+				employee.setId(id);
+				employee.setName(name);
+				employee.setDateOfBirth(dateOfBirth);
+				System.out.println(employee);
+			}catch(NumberFormatException ex)
+			{
+				System.out.println("Error: "+ex.getMessage());
+				System.out.println("Please enter the details again");
+			}catch(ParseException ex)
+			{
+				System.out.println("Error: "+ex.getMessage());
+				System.out.println("Please enter the details again");
+			}
+			
+			
+		}while(true);
+		
+	}
+
+}
+
+
+
+
+
+can a try block exist without catch block?
+	Yes. A try block can exist without catch, when it is try-finally
+
+try-finally
+try-catch
+try-catch-finally
+try-catch-catch-.....-finally
+
+
+try method
+	try(FileInputStream fis=new FileInputStream("abc.txt"))
+	{
+	}
+
+in the above try method, there is no catch or finally, and it works
+
+
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Scanner;
+
+public class App {
+
+	public static void main(String[] args)  {
+		try(FileInputStream fis=new FileInputStream("abc.txt"))
+		{
+		}	//catch can be there or not, fine	
+		catch(FileNotFoundException fnfe)
+		{
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+		Scanner sc=new Scanner(System.in);
+		Employee employee=null;
+		do {
+			System.out.println("Id:");
+			String id=sc.next();
+			System.out.println("Name:");
+			String name=sc.nextLine();
+			if(name.equals(""))
+				name=sc.nextLine();
+			System.out.println("Date Of Birth(dd-MMM-yyyy):");
+			String str=sc.nextLine();
+			try
+			{
+			SimpleDateFormat sdf=new SimpleDateFormat("dd-MMM-yyyy");
+			Date dateOfBirth=sdf.parse(str);
+			
+			employee=new Employee();
+			
+				employee.setId(id);
+				employee.setName(name);
+				employee.setDateOfBirth(dateOfBirth);
+				System.out.println(employee);
+			}catch(NumberFormatException ex)
+			{
+				System.out.println("Error: "+ex.getMessage());
+				System.out.println("Please enter the details again");
+			}catch(ParseException ex)
+			{
+				System.out.println("Error: "+ex.getMessage());
+				System.out.println("Please enter the details again");
+			}catch(Exception ex)
+			{
+				//Exception is the super class for all exception classes including checked/ unchecked
+				//so it can handle any exception
+				//this catch must be the last catch because it can handle any exceptioin
+				//any other catch block below this would be dead code or unreachable code
+			}
+			finally
+			{
+				//what is the purpose of finally block?
+				//finally block is always executed whenever the program enters the try block
+				//no matter the excepton occured or not
+				//no matter the exception is handled or not, finally is executed
+				System.out.println("This is finally block");
+			}
+			
+			
+		}while(true);
+	
+	}
+
+}
+
+
