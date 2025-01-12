@@ -71,3 +71,652 @@ IO
 java.io
 	this package contains lot of classes to work with input and output.
 
+
+
+
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+public class AppScanner {
+	public static void main(String[] args) throws FileNotFoundException {
+		File f=new File("ayush.txt");
+		Scanner sc=new Scanner(f);			//
+		System.out.println(sc.nextLine());
+	}
+}
+
+
+
+So far, you have used Scanner to get input only from System.in
+look at the above program, where the Scanner gets input from a file
+
+
+If you can represent anything as a object in memory, 
+then you can access that
+	for example,
+		if you can represent a printer as an object in java,
+		then using that object, you can do 
+			print
+			scan
+			turn off
+		etc using your java program.
+
+Same way, if you can represent the "file" as an object in java program,
+	then you can access the file properties
+		length of the file
+		last modified date and time
+		is it read only
+		
+even you can
+	read
+	write
+
+the file
+
+If you can represent a file as an object in memory,
+object is created only if there is a class.
+	File is the class for file object
+
+
+Basically there are 2 categories of any stream			
+	Character stream
+	Binary/ Byte stream
+
+
+all classes related to character streams ends with 	
+	Reader			or
+	Writer
+ex:
+	FileReader
+	FileWriter
+	BufferedReader
+	BufferedWriter
+	
+
+
+All classes related to binary streams ends with
+	InputStream		or
+	OutputStream
+
+ex:
+	FileInputStream
+	FileOutputStream
+	DataInputStream
+	DataOutputStream
+	BufferedInputStream
+	BufferedOutputStream
+	ObjectInputStream
+	ObjectOutputStream
+
+
+
+Qn1:
+	which class can be used to read characters from a file?
+		FileReader
+Qn2:
+	which class can be used to read bytes to buffer?
+		BufferedInputStream
+
+Qn3:
+	which class can be used to write primitive data to a stream?
+		DataOutputStream
+
+	if you want to write primitive type data into a file
+		File class does not offer such methods
+		FileOutputStream can only write bytes to the file
+		DataOutputStream can write primitive data on FileOutputStream
+
+
+DataOutputStream
+BufferedOutputStream
+ObjectOutputStream
+	they work on other streams	(node streams)		FileOutputStream
+	so they are called as Filtered Streams
+
+Demo:
+	how to read bytes from a file?
+	and then write those bytes to another file
+
+lets take a picture file
+	C:\Users\rjaga\Pictures\briyani1.jfif
+
+we will read all bytes from this file and keep it in a byte array
+
+then we will write all those bytes to a new file
+	D:\Jag\UST\Wave4\Wave4_Batch5\Java\12-jan-io\shyam.jfif
+
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+public class AppFileReadWrite {
+
+	public static void main(String[] args) throws IOException {
+		//read bytes from a file
+		File f=new File("C:\\Users\\rjaga\\Pictures\\briyani1.jfif");
+		int len=(int) f.length();
+		byte []data=new byte[len];
+		
+		//File class does not offer methods to read
+		FileInputStream fis=new FileInputStream(f);
+		fis.read(data);
+		
+		//now, lets write these bytes to a new file
+		File f2=new File("shyam.jfif");
+		FileOutputStream fos=new FileOutputStream(f2);
+		fos.write(data);
+		fos.flush();	//flush and close are automatically called when program ends gracefully
+		fos.close();
+		System.out.println("Done. Pls check: "+f2.getAbsolutePath());
+		
+	}
+
+}
+
+
+You need to know the difference between 
+	memory
+	storage
+
+objects, variables are created in memory
+files, folders are created in storage
+
+you cannot work like
+	read, write on storage directly
+	first you need to load them in memory as objects 
+		and work on the objects
+		then reflect the changes to the storage 		flush
+
+The above program follows unscalable approach because,
+	if the file size is bigger than main memory		(RAM + virtual memory)
+	the entire file cannot be loaded into memory array because of no enough space
+
+so, ideally we should read 1 byte and write 1 byte and continue in a loop
+
+so, let do the same read and write in different approach:
+
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+public class AppReadWrite1By1 {
+
+	public static void main(String[] args) throws IOException //, InterruptedException 
+	{
+		File f1=new File("C:\\Users\\rjaga\\Pictures\\friedrice.jpg");
+		File f2=new File("abdul.jpg");
+		
+		FileInputStream fis=new FileInputStream(f1);
+		FileOutputStream fos=new FileOutputStream(f2);
+		
+		int data=-1;
+		while((data=fis.read())!=-1)
+		{
+			fos.write(data);
+			fos.flush();
+//			Thread.sleep(100);
+		}
+		fos.close();
+		System.out.println("Write completed: "+f2.getAbsolutePath());
+	}
+
+}
+
+
+Before java 5
+ie., 	1.1 to 1.4 versions of java did not have Scanner class
+
+
+so, to get input from user, we used
+	System.in				but in is an object of InputStream
+there are no methods to read from the keyboard
+we borrow that functionality from 
+	BufferedInputStream
+	BufferedReader
+
+
+
+
+BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+
+
+
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class AppBufferedReader {
+
+	public static void main(String[] args) throws IOException {
+//		BufferedInputStream bis=new BufferedInputStream(System.in);
+//		int x=bis.read();
+//		System.out.println("Your input was "+x);
+		
+		BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+		String str=br.readLine();
+		System.out.println("Your input is "+str);
+	}
+
+}
+
+
+
+To write and read primitives to and fro the file:
+
+import java.io.DataOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+public class AppDataOutput {
+
+	public static void main(String[] args) throws IOException {
+		int i=20;
+		float f=1.2f;
+		
+		DataOutputStream dos=new DataOutputStream(new FileOutputStream("thakur.dat"));
+		dos.writeInt(i);
+		dos.writeFloat(f);
+		
+		dos.flush();
+		dos.close();
+		System.out.println("Data written into thakur.dat");
+	}
+
+}
+
+
+
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+public class AppDataInput {
+
+	public static void main(String[] args) throws IOException {
+		DataInputStream dis=new DataInputStream(new FileInputStream("thakur.dat"));
+		System.out.println(dis.readInt());
+		System.out.println(dis.readFloat());
+		
+	}
+
+}
+
+
+
+
+-----------------------------------------------
+Writing structured data
+	for example
+		employee 
+			id
+			name
+			date of birth
+			salary
+
+we use
+	ObjectOutputStream
+	ObjectInputStream
+
+this is called as serialization
+
+Serialization
+	is a process of converting an object into a series of bytes
+
+Deserialization
+	is a process of converting series of bytes into an object
+
+
+
+1
+Raja Siva Kumar
+01/12/2000
+123456
+Exception in thread "main" java.io.NotSerializableException: Employee
+	at java.base/java.io.ObjectOutputStream.writeObject0(ObjectOutputStream.java:1187)
+	at java.base/java.io.ObjectOutputStream.writeObject(ObjectOutputStream.java:350)
+	at AppObjectOutput.main(AppObjectOutput.java:27)
+
+
+
+
+only serializable objects are allowed to write into streams
+
+Employee should implement Serializable
+
+
+Serializable is a marker interface
+
+
+
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Scanner;
+
+public class AppObjectOutput {
+
+	public static void main(String[] args) throws ParseException, IOException 
+	{
+		Scanner sc=new Scanner(System.in);
+		Integer id=sc.nextInt();
+		String name=sc.nextLine();
+		if(name.equals(""))
+			name=sc.nextLine();
+		String strDob=sc.nextLine();
+		SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy");
+		Date dob=sdf.parse(strDob);
+		Double salary=sc.nextDouble();
+		
+		Employee emp=new Employee(id, name, dob, salary);
+		//to write this object into stream
+		
+		ObjectOutputStream oos=new ObjectOutputStream(new FileOutputStream("manoj.dat"));
+		oos.writeObject(emp);
+		oos.flush();
+		oos.close();
+		System.out.println("Written");
+	}
+
+}
+
+
+
+
+
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
+public class AppObjectInput {
+
+	public static void main(String[] args) throws IOException, ClassNotFoundException
+	{
+		ObjectInputStream ois=new ObjectInputStream(new FileInputStream("manoj.dat"));
+		Employee e = (Employee) ois.readObject();
+		System.out.println(e);
+	}
+
+}
+
+
+
+-----------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------
+
+
+Multi-threading
+------------------
+What is multi-threading?
+	running multiple threads in a single process
+	multiple operations at same time
+	
+
+Multi-tasking
+	is an ability to perform multiple tasks simultaneously
+	
+	process based mult-tasking
+		using multiple processes to do multiple tasks at a time
+	thread based mult-tasking
+		using multiple threads to do multiple tasks at a time 
+
+
+Process contains threads
+Threads are part of Process
+
+What is a process?
+	A running instance of a program
+	in task manager, you can see all processes running in your computer
+	ex:	If i open 5 notepad
+		Notepad.exe is a program, 			
+			those 5 instances of notepad are 5 processes to the processor
+
+
+Microprocessor allocates resources to each and every process.
+	time			CPU time
+	memory
+
+
+CPU utilization
+CPU usage
+
+What is performance?
+	effective utilization of resources
+
+ex:
+
+single threaded process
+	if it is waiting for user input
+		CPU utilization is 0 %
+2 threaded process
+	1 thread is waiting
+	another thread work is performed by cpu
+		50%
+3 threaded process
+		66%
+4 threaded process
+		75%
+
+
+Performance tuning
+
+Advantages of multi-threading:
+	effective utilization of resources
+	performance
+	paraller/ simultaneous execution of multiple tasks
+
+So far, you have done lot of java programs,
+	how many threads were present?
+		have your created any 0 threaded process?????
+		NO.	Any program that is executed, (that becomes process) contains atleast 1 			thread
+
+A program that does not have main method, will not be executed.
+so it is not even a process
+
+if it is executed, then there is a main method
+	any process contains atleast 1 thread called "main" thread
+
+so far you created single threaded process
+
+by creating another thread (child to main), the process becomes multi-threaded process
+
+When a computer has multi-core processor, then multi-threading will use different core of the processor to handle each thread parallely.
+
+
+Concurrency vs Parallelism
+
+Concurrency 
+	multiple threads run simultaneously by single core of the processor
+Parallelism
+	multiple threds run simultaneously by multiple core of the processor
+
+How to create threads?
+	by creating an object of Thread class
+	but, the work of the thread is to be mentioned in the "run" method
+
+Thread class contains run method, which is the work of the thread
+	the thread is alive only until the work is going on. Once work is completed, then the thread dies.
+	
+so, in order to override the "run" method, we can create a subclass of thread
+
+	extends Thread
+
+we can also override the "run" method, by implementing a Runnable interface
+	implements Runnable
+
+but a class that implements Runnable is not a thread class, it is a work of the thread.
+So any how, we need to create an object of Thread class
+
+
+
+public class One extends Thread
+{
+
+	@Override
+	public void run() {
+		for(int i=2;i<20;i+=2)
+		{
+			System.out.println(getName()+"\t"+i);
+			try {
+				Thread.sleep(1000);		//1000 millisecond
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+}
+
+
+
+
+
+public class Two extends Thread
+{
+
+	@Override
+	public void run() {
+		for(int i=101;i<120;i+=2)
+		{
+			System.out.println(getName()+"\t"+i);
+			try {
+				Thread.sleep(1000);		//1000 millisecond
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+}
+
+
+
+
+
+
+public class App {		//multi-threaded process
+
+	public static void main(String[] args) {		//1st main thread
+		One t1=new One();			//a child thread
+		Two t2=new Two();			//another child thread
+				
+		t1.setName("Even");
+		t2.setName("Odd");
+		
+		t1.start();
+		t2.start();
+		
+	}
+
+}
+
+
+---------------------now, using Runnable interface-----------
+
+public class One implements Runnable
+{
+
+	@Override
+	public void run() {
+		for(int i=2;i<20;i+=2)
+		{
+			System.out.println(Thread.currentThread().getName()+"\t"+i);
+			try {
+				Thread.sleep(1000);		//1000 millisecond
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+}
+
+
+
+
+
+
+public class Two implements Runnable
+{
+
+	@Override
+	public void run() {
+		for(int i=101;i<120;i+=2)
+		{
+			System.out.println(Thread.currentThread().getName()+"\t"+i);
+			try {
+				Thread.sleep(1000);		//1000 millisecond
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+}
+
+
+
+
+
+
+
+public class App {
+
+	public static void main(String[] args) {
+		One r1=new One();
+		Two r2=new Two();
+		
+		Thread t1=new Thread(r1);
+		Thread t2=new Thread(r2);
+		
+		t1.setName("Even");
+		t2.setName("Odd");
+		
+		t1.start();
+		t2.start();
+		
+	}
+
+}
+
+
+--------------------------------------------------------------------
+Life cycle of a thread
+	once created, it will be a "new thread"
+	once started, it will be in "Runnable" state
+	when sleeping or blocked, it will be "Not Runnable" state
+	once work is over or process is terminated or thread is assigned to null then "Dead" state
+
+only runnable state thread are performed by the process
+so, however higher the priority of a thread, if its waiting or sleeping, it will not be performed by the process
+
+to set priority
+	t1.setPriority(x);		//x can be between 1 to 10		inclusive
+	t2.setPriority(Thread.MAX_PRIORITY);
+
+
+Thread.MAX_PRIORITY
+Thread.NORM_PRIORITY
+Thread.MIN_PRIORITY
+
+Thread synchronization	(pending)
+-----------------------------
+Basically, threads are asynchronous programming. Then why need to synchronize threads?
+how?
