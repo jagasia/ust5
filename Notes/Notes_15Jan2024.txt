@@ -1,0 +1,536 @@
+Thread synchronization
+--------------------------
+Basically a program runs in synchronous mode. ie., one by one
+for ex, i call 2 method
+	method1();
+	method2();
+
+as long as the method1 is executing, the method2 will not be called. ie., one by one.
+
+But when we call these 2 methods, using 2 threads,
+	we can expect both method1 and method2 execute parallely or concurrently.
+
+Now, we are discussing about how to synchronize the threads? Doesn't it look strange?
+both threads are running in asynchronous mode. then why synchronization? and how?
+
+we want the multiple threads to run simultaneously, but when they enter a sensitive portion of the code (say synchronized block or method), we do not want multiple threads to run at a time.
+
+Synchronization 
+	is a process of ensuring that a shared object is accessed by threads, one by one
+	no 2 threads can access the shared resource at a time
+
+it can be a shared object or method or a block of code. 
+
+synchronized block
+synchronized method
+
+apart from these,
+join() method can also do synchronization like
+	join informs all threads which have not yet started to wait
+	until the started threads shall complete first
+
+
+
+
+class YourThread extends Thread
+{
+	public void run()
+	{
+		int x=10;
+		if(Thread.currentThread().getName().equals("First"))
+			x=15;
+		for(int i=0;i<x;i++)
+		{
+			System.out.println(Thread.currentThread().getName()+" : "+i);
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+}
+
+public class App2
+{
+	public static void main(String[] args) throws InterruptedException {
+		YourThread t1=new YourThread();
+		YourThread t2=new YourThread();
+		YourThread t3=new YourThread();
+		
+		t1.setName("First");
+		t2.setName("Second");
+		t3.setName("Third");
+		
+		
+		t1.start();
+		t2.start();
+		t1.join();	//t1 says, until i complete, whoever has not yet started shall wait
+		t3.start();
+		
+	}
+}
+
+
+
+A synchronized method is issuing lock for other threads. so other threads are actually waiting for the lock to be released by the thread who entered the sync block.
+
+What happends, if thread t1 is waiting for t2 to release the lock,
+but t2 is actually waitinig for t1 to realse a lock
+
+this causes a deadlock because, both t1 and t2 are going to be waiting forever.
+solutions:
+	priority
+	timeout
+
+yield
+------
+	among the runnable threads, one thread is chosen as owner of monitor.
+	the cpu will perform the work of the monitor thread.
+	then it will push another thread to become owner of the monitor
+	yield method causes the current thread who is monitor to give up the monitor and chose another 
+
+wait, notify, notifyAll
+wait makes another thread to wait
+how it is different from join?
+	a thread uses join, without knowing which are all threads are yet to start
+	wait is issued by a thread for a specific thread to wait
+
+how wait is different from sleep?
+	sleep is for a duration in milli seconds
+	wait is until, notify or notifyAll is called
+
+------------------------------------------------------------------------
+Generics
+----------
+What do you think is Generics?
+Like Abdul says, 
+	List<Integer>
+this List is created in java.util such that, it can be used with different types like String, Float, Employee etc.
+So, it is generic	
+it is general purpose
+
+
+Earlier before, java 5,
+java 1.1 to 1.4, List means		List of Objects only
+
+all collections were of Object type
+
+
+How to create a generic type?
+
+
+public class Element<T> {
+	private T value;
+	
+	public Element() {}
+
+	public Element(T value) {
+		super();
+		this.value = value;
+	}
+
+	public T getValue() {
+		return value;
+	}
+
+	public void setValue(T value) {
+		this.value = value;
+	}
+	
+}
+
+
+
+
+public class App {
+
+	public static void main(String[] args) {
+		Element<Integer> e1=new Element<>();
+		e1.setValue(100);
+//		e1.setValue("Raja");	Error
+		//so, generics provide type safety
+	}
+
+}
+
+
+---------------------------------------------------------------------------------------
+
+public class Element<T> {
+	private T value;
+	
+	public Element() {}
+
+	public Element(T value) {
+		super();
+		this.value = value;
+	}
+
+	public T getValue() {
+		return value;
+	}
+
+	public void setValue(T value) {
+		this.value = value;
+	}
+	
+	public T add(T t1, T t2)
+	{
+		if(t1 instanceof String)
+		{
+			String x=(String) t1;
+			String y=(String) t2;
+			return (T) (x+y);
+		}else if(t1 instanceof Integer)
+		{
+			Integer x=(Integer) t1;
+			Integer y=(Integer) t2;
+			return (T)((Integer)(x+y));
+		}
+		return t1;
+	}
+	
+}
+
+
+
+
+
+
+
+public class App {
+
+	public static void main(String[] args) {
+		Element<Integer> e1=new Element<>();
+		e1.setValue(100);
+//		e1.setValue("Raja");	Error
+		//so, generics provide type safety
+		
+		System.out.println(e1.getValue());
+		
+		Element<String> e2=new Element<>();
+		e2.setValue("Australia");
+		
+		System.out.println(e2.getValue());
+		System.out.println(e1.add(2, 3));
+		System.out.println(e2.add("Raja", "Sivakumar"));
+	}
+
+}
+
+
+
+
+
+Wild cards in Generics
+--------------------------
+Unbounded Wildcards: List<?> – represents a list of any type
+
+Upper Bounded Wildcards: List<? extends Number> – represents a list of Number or its subtypes (for instance, Double or Integer).
+
+Lower Bounded Wildcards: List<? super Integer> – represents a list of Integer or its supertypes, Number, and Object
+
+
+
+https://www.baeldung.com/java-generics-type-parameter-vs-wildcard
+
+
+Lets create a linked list of generic type:
+
+
+
+
+1		cur=1		prev=1
+2		prev=curr ie., 1	cur=cur.next	ie., 2
+3		prev=curr ie., 2	cur=cur.next	ie., 3	prev.next=cur.next
+4
+5
+6
+
+so, we should not only find the node to be deleted. But also its predecessor whose next also updated
+
+
+
+
+
+
+public class Node<T> {
+	private T data;
+	private Node<T> next;
+	
+	public Node() {
+		this.data=null;
+		this.next=null;
+	}
+
+	public Node(T data, Node<T> next) {
+		super();
+		this.data = data;
+		this.next = next;
+	}
+
+	public T getData() {
+		return data;
+	}
+
+	public void setData(T data) {
+		this.data = data;
+	}
+
+	public Node<T> getNext() {
+		return next;
+	}
+
+	public void setNext(Node<T> next) {
+		this.next = next;
+	}
+
+	@Override
+	public String toString() {
+		return "Node [data=" + data + ", next=" + next + "]";
+	}
+	
+}
+
+
+
+
+
+
+public class JLinkedList<T> {
+	Node<T> start;
+	Node<T> end;
+
+	public JLinkedList()
+	{
+		start=null;
+		end=null;
+	}
+	
+	public void addNode(T value)
+	{
+		//assumption: Always add at the end
+		Node<T> node=new Node<T>();
+		node.setData(value);
+		
+		if(start==null)
+		{
+			//first node to add
+			start=node;
+			end=node;
+		}else
+		{
+			//already nodes are there. so append to end
+			end.setNext(node);
+			end=node;
+		}
+	}
+	
+	public void deleteNode(T data)
+	{
+		//find the node, whose value matches data and remove
+		//check if you are removing one and only node
+		if(start==end)
+		{
+			Node<T> temp = start;			
+			start=null;
+			end=null;
+			temp=null;
+			System.out.println("Deleted the only node that was present");
+			return;
+		}
+
+
+		boolean isFound=false;
+		for(Node<T> cur=start, prev=start;cur!=null;prev=cur,cur=cur.getNext())
+		{
+			
+			if(cur.getData().equals(data))
+			{
+				if(cur==start)
+				{
+					//first node
+					start=cur.getNext();
+				}
+				if(cur==end)
+				{
+					//last node
+					end=prev;
+				}
+				isFound=true;
+				Node<T> temp = cur;
+				prev.setNext(cur.getNext());
+				cur=cur.getNext();
+				temp=null;		//deleted
+				break;
+
+			}
+		}
+		System.out.println((isFound)?"Deleted":"Not found to delete");
+		
+	}
+	
+	public void display()
+	{
+		//display all node values
+		for(Node<T> cur=start;cur!=null;cur=cur.getNext())
+		{
+			System.out.println(cur.getData());
+		}
+	}
+}
+
+
+
+
+
+
+public class AppLinkedList {
+
+	public static void main(String[] args) {
+		JLinkedList<Integer> list=new JLinkedList<>();
+		list.addNode(11);
+		list.addNode(1);
+		list.addNode(20);
+		list.addNode(14);
+		list.addNode(7);
+		
+		list.deleteNode(14);
+		
+		list.display();
+	}
+
+}
+
+
+
+
+public class AppLinkedList2 {
+
+	public static void main(String[] args) {
+		JLinkedList<String> list=new JLinkedList<>();
+		list.addNode("India");
+		list.addNode("Australia");
+		list.addNode("Srilanka");
+		list.addNode("Japan");
+		list.addNode("China");
+		
+		list.deleteNode("Srilanka");
+		
+		list.display();
+	}
+
+}
+
+
+
+
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Objects;
+
+public class Employee
+{
+	private Integer id;
+	private String name;
+	private Date dateOfJoining;
+	
+	public Employee() {}
+
+	public Employee(Integer id, String name, Date dateOfJoing) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.dateOfJoining = dateOfJoing;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Date getDateOfJoining() {
+		return dateOfJoining;
+	}
+
+	public void setDateOfJoining(Date dateOfJoing) {
+		this.dateOfJoining = dateOfJoing;
+	}
+
+	@Override
+	public String toString() {
+		SimpleDateFormat sdf=new SimpleDateFormat("dd-MMM-yyyy");
+		return "Employee [id=" + id + ", name=" + name + ", dateOfJoining=" + sdf.format(dateOfJoining) + "]";
+	}
+
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Employee other = (Employee) obj;
+		return Objects.equals(id, other.id);
+	}
+
+	
+	
+}
+
+
+
+
+
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
+public class AppLinkedListEmp {
+
+	public static void main(String[] args) throws ParseException {
+//		JLinkedList<String> list=new JLinkedList<>();
+//		list.addNode("India");
+//		list.addNode("Australia");
+//		list.addNode("Srilanka");
+//		list.addNode("Japan");
+//		list.addNode("China");
+//		
+//		list.deleteNode("Srilanka");
+//		
+//		list.display();
+		SimpleDateFormat sdf=new SimpleDateFormat("dd-MMM-yyyy");
+		JLinkedList<Employee> list=new JLinkedList<>();
+		list.addNode(new Employee(12, "Jag", sdf.parse("11-Jun-2000")));
+		list.addNode(new Employee(1, "Raja", sdf.parse("04-Jun-2000")));
+		list.addNode(new Employee(3, "Siva", sdf.parse("07-Jun-2000")));
+		list.addNode(new Employee(4, "Kumar", sdf.parse("12-Jun-2000")));
+		list.addNode(new Employee(2, "Abdul", sdf.parse("09-Jun-2000")));
+		
+		list.deleteNode(new Employee(13, "Siva", sdf.parse("07-Jun-2000")));
+		
+		list.display();
+		
+		
+	}
+
+}
+
+
+
