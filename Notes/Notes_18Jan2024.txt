@@ -1,0 +1,811 @@
+Pending in 6.2:
+-----------------
+Part 2: Maps(1 hour 20  minutes)(
+a.	Introduction to Hashing and when to use hashing
+b.	HashMaps and it’s types
+c.	HashSets and it’s types
+d.	Sample problems on hashes(1 easy and 2 mediums)
+
+Hashing and when to use hashing:
+----------------------------------------
+Hashing is a process of finding the offset (location from first element) using the key
+suppose, if Employee is a class
+	id
+	name
+	department
+	salary
+
+if you consider id as a key (unique element to find an employee)
+hashing can be a formula to convert the id into an offset
+	to store the element in the location obtained by hashing function
+	to retrieve the element using the same function
+
+formula for hasing can be anything. For example:
+Division Method.		or Modulo method
+Mid Square Method
+Truncation Method
+Folding Method.
+Multiplication Method
+
+but when you choose the formula, you need to find
+that the formula produces unique values as much as possible
+
+for ex:
+i use div and mod by 10 to find the location of a candidate
+if i use truncate method also
+
+key=3212
+after truncation=12
+after /10		=1
+after %10	=2
+
+ask the candidate to sit in 1st row, 2nd column
+
+key=5412
+this candidate also gets 1st row, 2nd column
+	this is called as collision
+	what is collision?
+		if 2 keys, get same hash value, then it is called as collision
+
+
+we will consider all the keys, that produces same hashvalue as 
+	same bucket
+
+each bucket can be considered as a linked list.
+so, searching the offset of a key involves
+	finding the bucket
+	finding the element in the linked list
+this is collision handling approach
+
+Lets see another appraoch - rehashing
+
+every class has 
+	hashCode method
+because, this method is defined in Object class
+since all the classes are derived from Object class, hasChode method is always there, that can be overridden
+
+Lets see, in java, how we are able to find an element in hashset and hash map
+
+HashSet types
+	HashSet
+	LinkedHashSet
+
+Basically, set does not have index.
+How do we check if an element is present or not?
+	set or any collection class, provides "contains" method
+
+
+
+
+
+
+import java.util.HashSet;
+
+public class App3 {
+
+	public static void main(String[] args) {
+		HashSet<Employee> set=new HashSet<>();
+		set.add(new Employee(25, "Raja", "IT"));
+		set.add(new Employee(15, "Zaheer", "CSE"));
+		set.add(new Employee(11, "Raja", "CSE"));
+		set.add(new Employee(28, "Abdul", "IT"));
+		set.add(new Employee(11, "Raja", "CSE"));
+		set.add(new Employee(18, "Rajesh", "IT"));
+		
+		System.out.println(set.size());
+		
+		System.out.println(set.contains(new Employee(11, "Raja","CSE")));
+	}
+
+}
+
+
+
+Look at the above code.
+Employee 11, is added twice. So the size of the set is 6		!!!!!!!
+Duplicate is added??????
+
+Set identifies duplicates with the help of some methods
+	HashSet or LinkedHashSet identifies duplicates using
+		hashCode
+		equals
+
+	TreeSet identifes duplicates using
+		Comparable (compareTo) or
+		Comparator (compare)
+
+
+
+when i used, HashSet<Integer>,
+	the Integer class provides hashCode and equals method to identify duplicates and also specifying the order
+when i used HashSet<Employee>,
+	the Employee class does not override the equals and hashCode method
+	so the default, Object class hashCode and equals methods are used, which does not know that
+	employee id should be the key
+
+
+Solution:
+	override the hashCode and equals method in the Employee class
+
+
+import java.util.Objects;
+
+public class Employee {
+	private Integer id;
+	private String name;
+	private String department;
+	
+	public Employee() {}
+
+	public Employee(Integer id, String name, String department) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.department = department;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(String department) {
+		this.department = department;
+	}
+
+	@Override
+	public String toString() {
+		return "Employee [id=" + id + ", name=" + name + ", department=" + department + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Employee other = (Employee) obj;
+		return Objects.equals(id, other.id);
+	}
+	
+}
+
+
+
+
+
+import java.util.HashSet;
+
+public class App3 {
+
+	public static void main(String[] args) {
+		HashSet<Employee> set=new HashSet<>();
+		set.add(new Employee(25, "Raja", "IT"));
+		set.add(new Employee(15, "Zaheer", "CSE"));
+		set.add(new Employee(11, "Raja", "CSE"));
+		set.add(new Employee(28, "Abdul", "IT"));
+		set.add(new Employee(11, "Raja", "CSE"));
+		set.add(new Employee(18, "Rajesh", "IT"));
+		
+		System.out.println(set.size());
+		
+		System.out.println(set.contains(new Employee(11, "Raja","CSE")));
+	}
+
+}
+
+
+
+now, the hash set is able to identify duplicates and also contains returns true based on the id as key
+
+import java.util.Objects;
+
+public class Employee {
+	private Integer id;
+	private String name;
+	private String department;
+	
+	public Employee() {}
+
+	public Employee(Integer id, String name, String department) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.department = department;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(String department) {
+		this.department = department;
+	}
+
+	@Override
+	public String toString() {
+		return "Employee [id=" + id + ", name=" + name + ", department=" + department + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		return id;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		Employee arg=(Employee) obj;
+		return this.getId().equals(arg.getId());
+	}
+	
+}
+
+
+
+
+
+import java.util.HashSet;
+
+public class App3 {
+
+	public static void main(String[] args) {
+		HashSet<Employee> set=new HashSet<>();
+		set.add(new Employee(25, "Raja", "IT"));
+		set.add(new Employee(15, "Zaheer", "CSE"));
+		set.add(new Employee(11, "Raja", "CSE"));
+		set.add(new Employee(28, "Abdul", "IT"));
+		set.add(new Employee(11, "Raja", "CSE"));
+		set.add(new Employee(18, "Rajesh", "IT"));
+
+		for(Employee e:set)
+			System.out.println(e);
+		
+		System.out.println(set.size());
+		
+		System.out.println(set.contains(new Employee(11, "","")));
+	}
+
+}
+
+
+
+Types of hash set?
+	HashSet
+	LinkedHashSet		use this type when you want the order of elements same as the order we add elements
+				ordered set
+
+----------------------------------------------------------------
+HashMap types
+	HashMap
+	LinkedHashMap
+	
+
+
+
+Demo: for map
+https://github.com/jagasia/ust5/blob/jag/Java/Java_Mock_30.docx
+
+static Map<String,UserScore> getTopPerformer(List<UserScore> scoreList)
+
+To find the top performer course wise
+
+result map 
+	key = course name
+	value = user score
+
+
+User to UserScore	is One To Many
+Course to UserScore is One To Many
+
+
+
+
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class User {
+	private String name, emailId, contactNumber;
+	private List<UserScore> userScoreList;
+	
+	public User() {
+		
+	}
+
+	public User(String name, String emailId, String contactNumber, List<UserScore> userScoreList) {
+		super();
+		this.name = name;
+		this.emailId = emailId;
+		this.contactNumber = contactNumber;
+		this.userScoreList = userScoreList;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getEmailId() {
+		return emailId;
+	}
+
+	public void setEmailId(String emailId) {
+		this.emailId = emailId;
+	}
+
+	public String getContactNumber() {
+		return contactNumber;
+	}
+
+	public void setContactNumber(String contactNumber) {
+		this.contactNumber = contactNumber;
+	}
+
+	public List<UserScore> getUserScoreList() {
+		return userScoreList;
+	}
+
+	public void setUserScoreList(List<UserScore> userScoreList) {
+		this.userScoreList = userScoreList;
+	}
+	
+	public static List<User> prefill(){
+        List<User> list = new ArrayList<>();
+        list.add(new User("Harry","harry@gmail.com","9874585258",new ArrayList<UserScore>()));
+        list.add(new User("Oliver","oliver@gmail.com","9515951263",new ArrayList<UserScore>()));
+        list.add(new User("Danny","danny@gmail.com","8745874585",new ArrayList<UserScore>()));
+        list.add(new User("Matt","matt@gmail.com","9636925686",new ArrayList<UserScore>()));
+        list.add(new User("James","james@gmail.com","8454585263",new ArrayList<UserScore>()));
+        list.add(new User("Rob","rob@gmail.com","8475216953",new ArrayList<UserScore>()));
+        list.add(new User("Brandon","brandon@gmail.com","8457548965",new ArrayList<UserScore>()));
+        list.add(new User("Winn","winn@gmail.com","9231252136",new ArrayList<UserScore>()));
+        list.add(new User("Barry","barry@gmail.com","9568956235",new ArrayList<UserScore>()));
+        list.add(new User("Joe","joe@gmail.com","8525623568",new ArrayList<UserScore>()));
+        list.add(new User("John","john@gmail.com","8454575412",new ArrayList<UserScore>()));
+        list.add(new User("Slade","slade@gmail.com","9584758652",new ArrayList<UserScore>()));
+        return list;
+    }
+
+}
+
+
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Course {
+	private String name, category;
+	private Double price;
+	private List<UserScore> userScoreList;
+	
+	public Course() {}
+
+	public Course(String name, String category, Double price, List<UserScore> userScoreList) {
+		super();
+		this.name = name;
+		this.category = category;
+		this.price = price;
+		this.userScoreList = userScoreList;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+
+	public List<UserScore> getUserScoreList() {
+		return userScoreList;
+	}
+
+	public void setUserScoreList(List<UserScore> userScoreList) {
+		this.userScoreList = userScoreList;
+	}
+	
+	public static List<Course> prefill(){
+        List<Course> list = new ArrayList<>();
+        list.add(new Course("ANGULAR","Web Development",Double.parseDouble("9360"),new ArrayList<UserScore>()));
+        list.add(new Course("Web Developer","Web Development",Double.parseDouble("9600"),new ArrayList<UserScore>()));
+        list.add(new Course("JavaScript","Web Development",Double.parseDouble("9699"),new ArrayList<UserScore>()));
+        list.add(new Course("HTML CSS","Web Development",Double.parseDouble("9000"),new ArrayList<UserScore>()));
+        list.add(new Course("MEAN Stack","Web Development",Double.parseDouble("9599"),new ArrayList<UserScore>()));
+        list.add(new Course("C","Programming",Double.parseDouble("5000"),new ArrayList<UserScore>()));
+        list.add(new Course("Java","Programming",Double.parseDouble("4999"),new ArrayList<UserScore>()));
+        list.add(new Course("Python","Programming",Double.parseDouble("5299"),new ArrayList<UserScore>()));
+        list.add(new Course("C Sharp","Programming",Double.parseDouble("4900"),new ArrayList<UserScore>()));
+        list.add(new Course("AWS Developer","IT Software",Double.parseDouble("10000"),new ArrayList<UserScore>()));
+        list.add(new Course("Ethical Hacking","IT Software",Double.parseDouble("9300"),new ArrayList<UserScore>()));
+        list.add(new Course("PhotoShop CS","Design",Double.parseDouble("9299"),new ArrayList<UserScore>()));
+        list.add(new Course("TShirt Design","Design",Double.parseDouble("8999"),new ArrayList<UserScore>()));
+        list.add(new Course("3D Modelling","Design",Double.parseDouble("11999"),new ArrayList<UserScore>()));
+        list.add(new Course("Music Theory","Music",Double.parseDouble("9499"),new ArrayList<UserScore>()));
+        list.add(new Course("Learn Guitar","Music",Double.parseDouble("9999"),new ArrayList<UserScore>()));
+        list.add(new Course("Become a Singer","Music",Double.parseDouble("7500"),new ArrayList<UserScore>()));
+        return list;
+    }
+
+}
+
+
+
+
+
+
+
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+public class UserScore {
+	private Double completionPercentage;
+	private User user;
+	private Course course;
+	
+	public UserScore() {}
+
+	public UserScore(Double completionPercentage, User user, Course course) {
+		super();
+		this.completionPercentage = completionPercentage;
+		this.user = user;
+		this.course = course;
+	}
+
+	public Double getCompletionPercentage() {
+		return completionPercentage;
+	}
+
+	public void setCompletionPercentage(Double completionPercentage) {
+		this.completionPercentage = completionPercentage;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Course getCourse() {
+		return course;
+	}
+
+	public void setCourse(Course course) {
+		this.course = course;
+	}
+	
+	static Map<String,UserScore> getTopPerformer(List<UserScore> scoreList)
+	{
+		Map<String,UserScore> map=new TreeMap<>();
+		for(UserScore us:scoreList)
+		{
+			//get course from this user score
+			String courseName=us.getCourse().getName();		//key
+			UserScore exUserScore = map.get(courseName);
+			if(exUserScore==null)
+			{
+				//this score is found first time. so whatever completion percentage is there is best only
+				map.put(courseName, us);
+			}else
+			if(us.getCompletionPercentage()>exUserScore.getCompletionPercentage())
+			{
+				map.put(courseName, us);
+			}
+			
+		}
+		return map;
+	}
+}
+
+
+
+
+
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Scanner;
+
+public class App {
+
+	public static void main(String[] args) {
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter the number of user scores:");
+		int n=sc.nextInt();
+		List<UserScore> userScoreList=new ArrayList<>();
+		List<User> userList = User.prefill();
+		List<Course> courseList = Course.prefill();
+		for(int i=0;i<n;i++)
+		{
+			String detail=sc.nextLine();
+			if(detail.equals(""))
+				detail=sc.nextLine();
+			String[] arr = detail.split(",");
+//			95.2,Harry,JavaScript
+			//Harry is name of the user. But we need user object
+			User user=null;
+			for(User u:userList)
+			{
+				if(u.getName().equals(arr[1]))
+				{
+					user=u;
+					break;
+				}
+			}
+			Course course=null;
+			for(Course c : courseList)
+			{
+				if(c.getName().equals(arr[2]))
+				{
+					course=c;
+					break;
+				}
+			}
+			UserScore us=new UserScore(Double.valueOf(arr[0]), user, course);
+			userScoreList.add(us);
+		}
+		Map<String, UserScore> map = UserScore.getTopPerformer(userScoreList);
+		System.out.format("%-15s %s\n","Course","Top performer");
+		for(Entry<String, UserScore> e:map.entrySet())
+			System.out.format("%-15s %s\n",e.getKey(),e.getValue().getUser().getName());
+	}
+
+}
+
+
+
+----------------------------------------------
+https://github.com/jagasia/ust5/blob/jag/Java/Java_Mock_29.docx
+
+Java Mock 29 Req 6
+--------------------------
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+public class Mobile {
+	private String referenceid, modelName;
+	private Double displaySize, price;
+	private Date launchedDate;
+	
+	public Mobile() {}
+
+	public Mobile(String referenceid, String modelName, Double displaySize, Double price, Date launchedDate) {
+		super();
+		this.referenceid = referenceid;
+		this.modelName = modelName;
+		this.displaySize = displaySize;
+		this.price = price;
+		this.launchedDate = launchedDate;
+	}
+
+	public String getReferenceid() {
+		return referenceid;
+	}
+
+	public void setReferenceid(String referenceid) {
+		this.referenceid = referenceid;
+	}
+
+	public String getModelName() {
+		return modelName;
+	}
+
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
+	}
+
+	public Double getDisplaySize() {
+		return displaySize;
+	}
+
+	public void setDisplaySize(Double displaySize) {
+		this.displaySize = displaySize;
+	}
+
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+
+	public Date getLaunchedDate() {
+		return launchedDate;
+	}
+
+	public void setLaunchedDate(Date launchedDate) {
+		this.launchedDate = launchedDate;
+	}
+	
+	static Mobile createMobile(String detail) throws ParseException
+	{
+		String[] arr = detail.split(",");
+//		referenceId, modelName, displaySize, price, launchedDate
+		Mobile mobile=new Mobile();
+		mobile.setReferenceid(arr[0]);
+		mobile.setModelName(arr[1]);
+		mobile.setDisplaySize(Double.valueOf(arr[2]));
+		mobile.setPrice(Double.valueOf(arr[3]));
+		SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
+		mobile.setLaunchedDate(sdf.parse(arr[4]));
+		return mobile;		
+	}
+	
+	public static Map<Date,Integer> yearWiseCount(List<Mobile> mobileList) throws ParseException
+	{
+//		key=year		value=noOfMobiles
+		Map<Date, Integer> map=new TreeMap<>();
+		for(Mobile mobile:mobileList)
+		{
+//			mobile.getLaunchedDate()	how to get year?
+			//the dt.getYear() returns 125 means, 1900+125=2025
+			//dt.getMonth returns 0 means, january
+			SimpleDateFormat sdf=new SimpleDateFormat("yyyy");
+			String year=sdf.format(mobile.getLaunchedDate());
+			Date key=sdf.parse(year);
+			map.put(key, map.getOrDefault(key, 0)+1);			
+		}
+		return map;
+	}
+}
+
+
+
+
+
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Scanner;
+
+public class App {
+
+	public static void main(String[] args) throws ParseException {
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter the number of mobiles");
+		int n=sc.nextInt();
+		List<Mobile> mobileList=new ArrayList<>();
+		for(int i=0;i<n;i++)
+		{
+			String detail=sc.nextLine();
+			if(detail.equals(""))
+				detail=sc.nextLine();
+			Mobile mobile = Mobile.createMobile(detail);
+			mobileList.add(mobile);
+		}
+		Map<Date, Integer> result = Mobile.yearWiseCount(mobileList);
+		System.out.format("%-15s %s\n","Year","No. of Mobiles");
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy");
+		for(Entry<Date, Integer> e:result.entrySet())
+			System.out.format("%-15s %s\n",sdf.format(e.getKey()),e.getValue());
+	}
+
+}
+
+
+
+-------------------------------------------------------------------------------
+Stack
+	What is stack?
+		is a disciplined linked list or array that allows adding elements at top and removing elements at top
+		LIFO		Last In First Out
+		push	refers to adding element at top
+		pop	refers to removing element at top
+		peek	returns the element at the top without consuming it
+
+
+Stack is derived Vector, Vector implements List
+So stack is a list, it is a modified list
+
+
+Lets see how Stack class in java.util package works
+and we should be able to create a stack class by ourselves
+
+
+
+
+import java.util.Stack;
+
+public class App {
+
+	public static void main(String[] args) {
+		Stack<Integer> stack=new Stack<>();
+		stack.push(1);
+		stack.push(2);
+		stack.push(3);
+		stack.push(4);
+		stack.push(5);
+		stack.push(6);
+		stack.push(7);
+		stack.push(8);
+		stack.push(9);
+		stack.push(10);
+		
+		while(stack.size()>0)
+		{
+			System.out.println(stack.pop());
+		}
+	}
+
+}
+
+
+
+Stack has index
+we can get the element at index using
+	get method
+
+	stack.get(0);		returns the first element without consuming it
+

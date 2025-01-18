@@ -1,0 +1,1021 @@
+Only 6 participants present in the meeting at 07:05 pm !
+
+Part Lists (1 hour 10minutes)
+a.	Introduction to Lists
+b.	Usage of Lists including a user defined class lists as a must
+c.	Sample problems on lists( 1 easy and 2 mediums)
+
+
+Part 2: Maps(1 hour 20  minutes)(
+a.	Introduction to Hashing and when to use hashing
+b.	HashMaps and it’s types
+c.	HashSets and it’s types
+d.	Sample problems on hashes(1 easy and 2 mediums)
+
+------------------------------------------------------
+We have already discussed about collections in java.
+we take List for discussion now with practical demos.
+
+What are the characteristics of List?
+	allows duplicates to be added
+	we can access any element directly using index
+	like any collection, list is also dynamic and hence need not specify the size.
+	allows null, any number of null to be added
+	list is ordered. ie., it remembers the sequence in which we add elements
+
+
+we can 
+	sort a list
+	search from the list
+	add, update, delete elements of the list	
+
+Requirement #5:
+--------------------
+https://github.com/jagasia/ust5/blob/jag/Java/Java_Mock_11.docx
+
+solution:
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class College implements Comparable<College>
+{
+	private String name;
+	private String website;
+	private String mobile;
+	private String founder;
+	private Integer numberOfDept;
+	private String location;
+	private Date startingDate;
+
+	public College() {}
+
+	public College(String name, String website, String mobile, String founder, Integer numberOfDept, String location,
+			Date startingDate) {
+		super();
+		this.name = name;
+		this.website = website;
+		this.mobile = mobile;
+		this.founder = founder;
+		this.numberOfDept = numberOfDept;
+		this.location = location;
+		this.startingDate = startingDate;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getWebsite() {
+		return website;
+	}
+
+	public void setWebsite(String website) {
+		this.website = website;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getFounder() {
+		return founder;
+	}
+
+	public void setFounder(String founder) {
+		this.founder = founder;
+	}
+
+	public Integer getNumberOfDept() {
+		return numberOfDept;
+	}
+
+	public void setNumberOfDept(Integer numberOfDept) {
+		this.numberOfDept = numberOfDept;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public Date getStartingDate() {
+		return startingDate;
+	}
+
+	public void setStartingDate(Date startingDate) {
+		this.startingDate = startingDate;
+	}
+	static College createCollege(String detail) throws ParseException
+	{
+//		IIT Guwahati,www.iitg.ac.in/,9876543214,Govt of India,10,Guwahati,17-05-1994
+		String[] arr = detail.split(",");		//if , is a regex symbol, then use [,]	or \\,
+		College college=new College();
+		college.setName(arr[0]);
+		college.setWebsite(arr[1]);
+		college.setMobile(arr[2]);
+		college.setFounder(arr[3]);
+		college.setNumberOfDept(Integer.valueOf(arr[4])); //Integer.parseInt returns int and not Integer. So i use valueOf
+		college.setLocation(arr[5]);
+		//how to convert String into java.util.Date?
+		SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
+		Date startingDate=sdf.parse(arr[6]);
+		college.setStartingDate(startingDate);
+		
+		
+		return college;	
+	}
+
+	@Override
+	public int compareTo(College o) {
+		return this.getName().compareTo(o.getName());
+	}
+}
+
+
+
+
+
+
+import java.util.Comparator;
+
+public class StartingDateComparator implements Comparator<College>
+{
+
+	@Override
+	public int compare(College o1, College o2) {
+		return o1.getStartingDate().compareTo(o2.getStartingDate());
+	}
+
+}
+
+
+
+
+
+
+
+
+import java.util.Comparator;
+
+public class DepartmentComparator implements Comparator<College>
+{
+
+	@Override
+	public int compare(College o1, College o2) {
+		return o1.getNumberOfDept().compareTo(o2.getNumberOfDept());
+	}
+
+}
+
+
+
+
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
+
+public class App {
+
+	public static void main(String[] args) throws ParseException {
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter the number of the colleges:");
+		int noOfColleges=sc.nextInt();
+		
+		List<College> collegeList=new ArrayList<>();
+		for(int i=0;i<noOfColleges;i++)
+		{
+			String detail=sc.nextLine();
+			if(detail.equals(""))
+				detail=sc.nextLine();
+			College college = College.createCollege(detail);
+			collegeList.add(college);
+		}
+		//at the end of for loop, collegeList will contain n college objects
+		System.out.println("Enter a type to sort:\r\n"
+				+ "1.Sort by name\r\n"
+				+ "2.Sort by number of departments\r\n"
+				+ "3.Sort by starting date\r\n");
+		int choice=sc.nextInt();
+		switch(choice)
+		{
+		case 1:		//by name
+			Collections.sort(collegeList);
+			break;
+		case 2:		//by noOfDept
+			Collections.sort(collegeList, new DepartmentComparator());
+			break;
+		case 3:		//by st date
+			Collections.sort(collegeList, new StartingDateComparator());
+			break;
+		}
+		System.out.format("%-15s %-20s %-15s %-15s %-20s %-15s %s\n", "Name","Website","Mobile","Founder","No of departments","Location","Starting date");
+		//to display all elements of the collegeList, I can use any of the following:
+		//for each loop
+		//for loop with index
+		//iterator
+		SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
+
+		for(College c:collegeList)
+		{
+			System.out.format("%-15s %-20s %-15s %-15s %-20s %-15s %s\n", c.getName(),c.getWebsite(),c.getMobile(),c.getFounder(),c.getNumberOfDept(),c.getLocation(),sdf.format(c.getStartingDate()));
+		}
+	}
+
+}
+
+
+
+-----------------------------------------------------------------
+List based medium level problem 1:
+
+https://github.com/jagasia/ust5/blob/jag/Java/Java_Mock_21.docx
+
+
+Java Mock 21 Requirement #5
+------------------------------------
+solution:
+
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Item {
+	private String name;
+	private Double price;
+	private String type;
+	
+	public Item() {}
+
+	public Item(String name, Double price, String type) {
+		super();
+		this.name = name;
+		this.price = price;
+		this.type = type;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+	
+	public static List<Item> prefill(){
+		List<Item> list = new ArrayList<>();
+		list.add(new Item("Paneer Fried Rice",Double.parseDouble("150"),"Veg"));
+		list.add(new Item("Chicken Fried Rice",Double.parseDouble("210"),"NonVeg"));
+		list.add(new Item("Bucket Chicken",Double.parseDouble("479"),"Veg"));
+		list.add(new Item("Ghee Roast",Double.parseDouble("75"),"Veg"));
+		list.add(new Item("Masal Roast",Double.parseDouble("65"),"Veg"));
+		list.add(new Item("Grill",Double.parseDouble("250"),"NonVeg"));
+		list.add(new Item("Tomato Soup",Double.parseDouble("100"),"Veg"));
+		list.add(new Item("Prawn Fry",Double.parseDouble("185"),"NonVeg"));
+		list.add(new Item("Mushroom Briyani",Double.parseDouble("140"),"Veg"));
+		list.add(new Item("Baby Corn Chilli",Double.parseDouble("80"),"Veg"));
+		list.add(new Item("Barbeque Chicken",Double.parseDouble("400"),"NonVeg"));
+		list.add(new Item("Veg Extravaganza",Double.parseDouble("99"),"Veg"));
+		list.add(new Item("Margherita",Double.parseDouble("399"),"Veg"));
+		list.add(new Item("Tandoori Chicken",Double.parseDouble("500"),"NonVeg"));
+		list.add(new Item("Mutton Balls",Double.parseDouble("90"),"NonVeg"));
+		return list;
+		}
+
+}
+
+
+
+
+
+
+public class Order {
+	private Integer quantity;
+	private Item item;
+	
+	public Order() {}
+
+	public Order(Integer quantity, Item item) {
+		super();
+		this.quantity = quantity;
+		this.item = item;
+	}
+
+	public Integer getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
+	}
+
+	public Item getItem() {
+		return item;
+	}
+
+	public void setItem(Item item) {
+		this.item = item;
+	}
+	
+}
+
+
+
+
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+public class Purchase {
+	private Integer id;
+	private Double price;
+	private String couponCode;
+	private Date purchaseDate;
+	private List<Order> orderList;
+	
+	public Purchase() {
+		orderList=new ArrayList<>();
+	}
+
+	public Purchase(Integer id, Double price, String couponCode, Date purchaseDate, List<Order> orderList) {
+		super();
+		this.id = id;
+		this.price = price;
+		this.couponCode = couponCode;
+		this.purchaseDate = purchaseDate;
+		this.orderList = orderList;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+
+	public String getCouponCode() {
+		return couponCode;
+	}
+
+	public void setCouponCode(String couponCode) {
+		this.couponCode = couponCode;
+	}
+
+	public Date getPurchaseDate() {
+		return purchaseDate;
+	}
+
+	public void setPurchaseDate(Date purchaseDate) {
+		this.purchaseDate = purchaseDate;
+	}
+
+	public List<Order> getOrderList() {
+		return orderList;
+	}
+
+	public void setOrderList(List<Order> orderList) {
+		this.orderList = orderList;
+	}
+	
+	public static void computePrice(List<Purchase> list)
+	{
+		for(Purchase purchase: list)
+		{
+			Double purchasePrice=0.0;
+			for(Order order:purchase.getOrderList())
+			{
+				//find the order value	quantity * item.price
+				Double orderValue=order.getQuantity()*order.getItem().getPrice();
+				purchasePrice+=orderValue;
+			}
+			
+//			FIRST	Rs.100 discount
+//			BUYFIVE	Rs.500 discount
+//			ORDER50	50% discount
+//			ORDER75	75% discount
+//			DEAL25	25% discount
+//			CHICKEN70	70% discount
+
+			switch(purchase.getCouponCode())
+			{
+			case "FIRST":		//100 rs discount
+				purchasePrice-=100;
+				break;
+			case "BUYFIVE":		//500 rs discount
+				purchasePrice-=500;
+				break;
+			case "ORDER50":		//50% discount
+				purchasePrice-=purchasePrice*.5;
+				break;
+			case "ORDER75":		//75% discount
+				purchasePrice-=purchasePrice*.75;
+				break;
+			case "DEAL25":		//25% discount
+				purchasePrice-=purchasePrice*.25;
+				break;
+			case "CHICKEN70":	//70% discount
+				purchasePrice-=purchasePrice*.70;
+				break;
+			}
+			
+			purchase.setPrice(purchasePrice);
+		}
+	}
+}
+
+
+
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class App {
+
+	public static void main(String[] args) throws ParseException {
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter the number of Purchase");
+		int n=sc.nextInt();
+		List<Purchase> purchaseList=new ArrayList<>();
+		List<Item> itemList = Item.prefill();
+		SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
+		for(int i=1;i<=n;i++)
+		{
+			System.out.println("Enter purchase detail "+i);
+			String purchaseDetail=sc.nextLine();
+			if(purchaseDetail.equals(""))
+				purchaseDetail=sc.nextLine();
+			String[] arr = purchaseDetail.split(",");
+//			1,FIRST,12-02-2018
+			Purchase purchase=new Purchase();
+			purchase.setId(Integer.valueOf(arr[0]));
+			purchase.setCouponCode(arr[1]);
+			
+			purchase.setPurchaseDate(sdf.parse(arr[2]));
+			System.out.println("Enter the number of Orders");
+			int noOfOrders=sc.nextInt();
+			for(int j=0;j<noOfOrders;j++)
+			{
+				String orderDetail=sc.nextLine();
+				if(orderDetail.equals(""))
+					orderDetail=sc.nextLine();
+				arr=orderDetail.split(",");
+//				2,Grill
+				Order order=new Order();
+				order.setQuantity(Integer.valueOf(arr[0]));
+				//arr[1] is the name of item. Using that name, find the item object from itemList
+				for(Item item:itemList)
+				{
+					if(item.getName().equals(arr[1]))
+					{
+						order.setItem(item);
+						break;
+					}
+				}
+				purchase.getOrderList().add(order);
+			}
+			
+			purchaseList.add(purchase);
+		}
+		Purchase.computePrice(purchaseList);
+		
+		System.out.format("%-5s %-10s %-12s %s\n","Id","Price","Coupon Code","Purchase Date");
+		for(Purchase p:purchaseList)
+			System.out.format("%-5s %-10s %-12s %s\n",p.getId(),p.getPrice(),p.getCouponCode(),sdf.format(p.getPurchaseDate()));
+	}
+
+}
+
+
+
+--------------------------------------------------------------------------------------------
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class App {
+
+	public static void main(String[] args) throws ParseException {
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter the number of Purchase");
+		int n=sc.nextInt();
+		List<Purchase> purchaseList=new ArrayList<>();
+		List<Item> itemList = Item.prefill();
+		SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
+		for(int i=1;i<=n;i++)
+		{
+			System.out.println("Enter purchase detail "+i);
+			String purchaseDetail=sc.nextLine();
+			if(purchaseDetail.equals(""))
+				purchaseDetail=sc.nextLine();
+			String[] arr = purchaseDetail.split(",");
+//			1,FIRST,12-02-2018
+			Purchase purchase=new Purchase();
+			purchase.setId(Integer.valueOf(arr[0]));
+			purchase.setCouponCode(arr[1]);
+			
+			purchase.setPurchaseDate(sdf.parse(arr[2]));
+			System.out.println("Enter the number of Orders");
+			int noOfOrders=sc.nextInt();
+			for(int j=0;j<noOfOrders;j++)
+			{
+				String orderDetail=sc.nextLine();
+				if(orderDetail.equals(""))
+					orderDetail=sc.nextLine();
+				arr=orderDetail.split(",");
+//				2,Grill
+				Order order=new Order();
+				order.setQuantity(Integer.valueOf(arr[0]));
+				//arr[1] is the name of item. Using that name, find the item object from itemList
+				for(Item item:itemList)
+				{
+					if(item.getName().equals(arr[1]))
+					{
+						order.setItem(item);
+						break;
+					}
+				}
+				purchase.getOrderList().add(order);
+			}
+			
+			purchaseList.add(purchase);
+		}
+		Purchase.computePrice(purchaseList);
+		
+		System.out.format("%-5s %-10s %-12s %s\n","Id","Price","Coupon Code","Purchase Date");
+		for(Purchase p:purchaseList)
+			System.out.format("%-5s %-10s %-12s %s\n",p.getId(),p.getPrice(),p.getCouponCode(),sdf.format(p.getPurchaseDate()));
+	}
+
+}
+
+
+
+-----------------------------------
+https://github.com/jagasia/ust5/blob/jag/Java/Java_Mock_11.docx
+
+Java Mock 21 Req 6
+------------------------
+most valuable customer
+
+
+User 	to	Purchase
+One	to	Many
+
+one user make many purchases
+one purchase belongs to one user
+
+
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+public class User {
+	private String name;
+	private String email;
+	private String phoneNumber;
+	private String location;
+	private List<Purchase> purchaseList;
+	
+	public User() {}
+
+	public User(String name, String email, String phoneNumber, String location, List<Purchase> purchaseList) {
+		super();
+		this.name = name;
+		this.email = email;
+		this.phoneNumber = phoneNumber;
+		this.location = location;
+		this.purchaseList = purchaseList;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public List<Purchase> getPurchaseList() {
+		return purchaseList;
+	}
+
+	public void setPurchaseList(List<Purchase> purchaseList) {
+		this.purchaseList = purchaseList;
+	}
+	public static List<User> prefill(){
+		List<User> userList=new ArrayList<>();
+		userList.add(new User("Harry","harry@gmail.com","9856231478","NewYork", new ArrayList<Purchase>()));
+		userList.add(new User("Joe","joe@gmail.com","8956231548","Chicago", new ArrayList<Purchase>()));
+		userList.add(new User("Oliver","oliver@gmail.com","7856124589","SanFrancisco", new ArrayList<Purchase>()));
+		userList.add(new User("Danny","danny@gmail.com","9382714568","Los Angeles", new ArrayList<Purchase>()));
+		userList.add(new User("Brandon","brandon@gmail.com","98596215488","Boston", new ArrayList<Purchase>()));
+		userList.add(new User("Rob","rob@gmail.com","9584596662","NewYork", new ArrayList<Purchase>()));
+		return userList;
+		}
+
+	static User getValuableUser(List<User> userList,String month)
+	{
+		User valuableUser=null;
+		Double highestValue=0.0;
+		for(User user:userList)
+		{
+			Double userValue=0.0;
+			for(Purchase p:user.getPurchaseList())
+			{
+				SimpleDateFormat sdf=new SimpleDateFormat("MMMM");	//EEEE will give you weekday like Friday
+				String mnth = sdf.format(p.getPurchaseDate());	//find the month (full name) from date?
+				if(mnth.equals(month))
+				{
+					userValue+=p.getPrice();
+				}
+			}
+			if(userValue>highestValue)
+			{
+				highestValue=userValue;
+				valuableUser=user;
+			}
+		}
+		return valuableUser;		
+	}
+}
+
+
+
+
+import java.util.Date;
+
+public class Purchase {
+	private Integer id;
+	private Double price;
+	private String couponCode;
+	private Date purchaseDate;
+	private User user;
+	
+	public Purchase() {}
+
+	public Purchase(Integer id, Double price, String couponCode, Date purchaseDate, User user) {
+		super();
+		this.id = id;
+		this.price = price;
+		this.couponCode = couponCode;
+		this.purchaseDate = purchaseDate;
+		this.user = user;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+
+	public String getCouponCode() {
+		return couponCode;
+	}
+
+	public void setCouponCode(String couponCode) {
+		this.couponCode = couponCode;
+	}
+
+	public Date getPurchaseDate() {
+		return purchaseDate;
+	}
+
+	public void setPurchaseDate(Date purchaseDate) {
+		this.purchaseDate = purchaseDate;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	
+}
+
+
+
+
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Scanner;
+
+public class App {
+
+	public static void main(String[] args) throws ParseException {
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter the number of purchases:");
+		int n=sc.nextInt();
+		List<User> userList = User.prefill();
+		for(int i=0;i<n;i++)
+		{
+			String detail=sc.nextLine();
+			if(detail.equals(""))
+				detail=sc.nextLine();
+			Purchase purchase=new Purchase();
+			String[] arr = detail.split(",");
+//			1,750,FIRST,05-06-2018,Rob
+			purchase.setId(Integer.valueOf(arr[0]));
+			purchase.setPrice(Double.valueOf(arr[1]));
+			purchase.setCouponCode(arr[2]);
+			SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
+			purchase.setPurchaseDate(sdf.parse(arr[3]));
+			for(User user:userList)
+			{
+				if(user.getName().equals(arr[4]))
+				{
+					purchase.setUser(user);
+					user.getPurchaseList().add(purchase);
+					break;
+				}
+			}
+			
+		}
+		System.out.println("Enter the month:");
+		String month=sc.next();
+		User u = User.getValuableUser(userList, month);
+		System.out.println("The valuable user of the month June is "+u.getName());
+	}
+
+}
+
+
+
+-------------------------------------------------------------------
+Java Mock 11 Req 6
+----------------------
+https://github.com/jagasia/ust5/blob/jag/Java/Java_Mock_11.docx
+
+
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+public class College {
+	private String name;
+	private String website;
+	private String mobile;
+	private String founder;
+	private Integer numberOfDept;
+	private String location;
+	private Date createdDate;
+
+	public College() {}
+
+	public College(String name, String website, String mobile, String founder, Integer numberOfDept, String location,
+			Date createdDate) {
+		super();
+		this.name = name;
+		this.website = website;
+		this.mobile = mobile;
+		this.founder = founder;
+		this.numberOfDept = numberOfDept;
+		this.location = location;
+		this.createdDate = createdDate;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getWebsite() {
+		return website;
+	}
+
+	public void setWebsite(String website) {
+		this.website = website;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getFounder() {
+		return founder;
+	}
+
+	public void setFounder(String founder) {
+		this.founder = founder;
+	}
+
+	public Integer getNumberOfDept() {
+		return numberOfDept;
+	}
+
+	public void setNumberOfDept(Integer numberOfDept) {
+		this.numberOfDept = numberOfDept;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+	
+	static Map<String,Integer> calculateLocationCount(List<College> list)
+	{
+		Map<String,Integer> map=new TreeMap<>();
+		for(College c:list)
+		{
+			String key = c.getLocation();
+			//if this key is found in the map, then increment the count
+			//not found? then count is 1
+			map.put(key, map.getOrDefault(key, 0)+1);
+		}
+		return map;		//pending
+	}
+}
+
+
+
+
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Scanner;
+
+public class App {
+
+	public static void main(String[] args) throws ParseException {
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter the number of colleges:");
+		int n=sc.nextInt();
+		List<College> collegeList=new ArrayList<>();
+		for(int i=0;i<n;i++)
+		{
+			String detail=sc.nextLine();
+			if(detail.equals(""))
+				detail=sc.nextLine();
+//			IIT Madras,www.iitm.ac.in/,9876543210,Govt of India,15,Chennai,30-05-1959
+			String[] arr = detail.split(",");
+			College college=new College();
+			college.setName(arr[0]);
+			college.setWebsite(arr[1]);
+			college.setMobile(arr[2]);
+			college.setFounder(arr[3]);
+			college.setNumberOfDept(Integer.valueOf(arr[4]));
+			college.setLocation(arr[5]);
+			SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
+			college.setCreatedDate(sdf.parse(arr[6]));
+			
+			collegeList.add(college);
+		}
+		Map<String, Integer> result = College.calculateLocationCount(collegeList);
+		
+		System.out.format("%-15s %s\n","Location","Count");
+		for(Entry<String, Integer> e:result.entrySet())
+			System.out.format("%-15s %s\n",e.getKey(),e.getValue());
+	}
+
+}
+
+
+
+-----------------------------------------
+Hashing
+---------
+	what is hashing in algorithms?
+
+what are the searching algorithms you know?
+	sequential / linear searching
+	binary searching
+	hashing
+
+
+Hashing is faster than other 2 searching algorithms.
+for ex:
+	your roll number is 25
+		you sit down at 2nd row, 5th column
+
+	43	4th row, 3rd column
+
+if you want to find where is 71?
+	7th row, 1st column
+
+this is an example for placing elements in a location, obtained by a hashing function / formula
+	and again searching elements using same formula
+
+
+it can be
+	divide by a number
+	modulo by a number
+	truncate a portion
+	or any formula used to find the hash value for a given key
+
+
+in above example,
+	the roll number is the key
+	and that key is used to find the offset where the element can be stored
+
+
+Hashing is a process of converting a key into offset
