@@ -1,0 +1,455 @@
+Part 1: Stacks(1 hour 10 minutes)(
+a. Introduction to Stacks with practical usage examples
+b. Basic Stack operations demo: Push, pop, peek(without standard library functions)
+c. Stack Collection in Java with relevant examples
+d. Demo question on stack(1 easy and 1 medium for elite batch or 2 easy for regular batch )
+
+Doubts Pause: 5 minutes
+
+Part 2: Queues(1 hour 10 minutes)(
+a. Introduction to Queues with practical usage examples
+b. Queue operations for DeQueue Interface (both LinkedList and ArrayQueue)
+c. Queue operations for PriorityQueue class 
+d. Demo question on Queue(1 easy & 1 medium for elite batch or 2 easy for regular batch )
+
+Yesterday we have completed Stack by our own code
+push		to add element at top
+pop		to remove element at top
+peek		to get the top element without removing/consuming
+
+you can visualize Stack as a vertical cylinder 
+
+
+
+
+What is queue?
+	FIFO
+	first in first out
+	Queue allows us to 
+		enter from the rear and 
+		exit from the front
+
+We can create a Queue class in java.
+but what do you know about the library classes related to Queue in java?
+	Queue is an interface in java.util package
+		public interface Queue<E> extends Collection<E>
+
+that means, we cannot create an object of Queue
+so what will we do?
+	there are some implementation classes available for Queue
+		PriorityQueue
+
+
+PriorityQueue extends AbstractQueue
+AbstractQueue implements Queue
+
+hence, PriorityQueue		
+
+Do anyone know what is  PriorityQueue?
+
+Raashid says
+	elements are processed based on their priority rather than the order they arrive
+ 
+
+Basically, why we need a queue?
+	wherever you have seen queue, there is a need for queue, when
+		the frequency of receiving requests, is higher than the speed of processing the requests
+
+
+
+queue is like a horizontal cylinder
+
+lets understand the important methods of PriorityQueue
+
+	add
+	poll		is like pop in stack
+	peek		
+
+
+
+
+import java.util.PriorityQueue;
+
+public class App1 {
+
+	public static void main(String[] args) {
+		PriorityQueue<Integer> q=new PriorityQueue<>();
+		q.add(5);
+		q.add(1);
+		q.add(3);
+		q.add(2);
+		q.add(4);
+		
+		while(!q.isEmpty())
+			System.out.println(q.poll());
+		
+	}
+
+}
+
+add method of PriorityQueue may not add the element always at REAR. Rather, it adds elements based on their priority.
+poll is removing the element at the FRONT
+
+
+In the above example, PriorityQueue<Integer> is used.
+	Integer already implements Comparable
+	and hence, PriorityQueue knows where to add an integer
+
+
+
+
+
+
+
+public class Employee {
+	private Integer id;
+	private String name;
+	private String department;
+	
+	public Employee() {
+		
+	}
+
+	public Employee(Integer id, String name, String department) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.department = department;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(String department) {
+		this.department = department;
+	}
+
+	@Override
+	public String toString() {
+		return "Employee [id=" + id + ", name=" + name + ", department=" + department + "]";
+	}
+	
+}
+
+
+
+
+import java.util.PriorityQueue;
+
+public class App2 {
+
+	public static void main(String[] args) {
+		PriorityQueue<Employee> q=new PriorityQueue<>();
+		q.add(new Employee(15, "Raja", "CSE"));
+		q.add(new Employee(1, "Zaheer", "IT"));
+		q.add(new Employee(10, "Abdul", "CSE"));
+		q.add(new Employee(16, "Ravi", "IT"));
+		q.add(new Employee(8, "Babu", "IT"));
+	
+		while(!q.isEmpty())
+			System.out.println(q.poll()); //guess the order?
+		
+	}
+
+}
+
+
+ERROR.....
+	Employee is not comparable. So, we cannot add elements of Employee into a PriorityQueue
+Solution:
+	either Employee class can implements Comparable interface and override the compareTo method to 
+	specify how 2 employees are compared. Then PriorityQueue<Employee> can add elements
+	or
+	use a comparator. A class that implements Comparator
+	or
+	lambda implementation of Comparator
+
+
+
+so, we use lambda implementation of Comparator:
+
+import java.util.PriorityQueue;
+
+public class App2 {
+
+	public static void main(String[] args) {
+		PriorityQueue<Employee> q=new PriorityQueue<>((x,y)->x.getName().compareTo(y.getName()));
+		q.add(new Employee(15, "Raja", "CSE"));
+		q.add(new Employee(1, "Zaheer", "IT"));
+		q.add(new Employee(10, "Abdul", "CSE"));
+		q.add(new Employee(16, "Ravi", "IT"));
+		q.add(new Employee(8, "Babu", "IT"));
+	
+		while(!q.isEmpty())
+			System.out.println(q.poll()); //guess the order?
+		
+	}
+
+}
+
+
+the lambda is provided to the constructor of PriorityQueue
+
+-----------------------------------------------------------------
+b. Queue operations for DeQueue Interface (both LinkedList and ArrayDequeue)
+
+What is DeQueue?
+	Double ended Queue
+	is an interface. So we cannot create an object of interface. But the implementing classes
+		LinkedList
+		
+import java.util.LinkedList;
+
+public class App1 {
+
+	public static void main(String[] args) {
+		LinkedList<Integer> llist=new LinkedList<>();
+		llist.add(20);
+		llist.add(30);
+		llist.add(40);
+		llist.add(50);
+		llist.add(60);
+		llist.add(70);
+		llist.add(80);
+		llist.add(90);
+		llist.add(110);
+		
+		llist.addFirst(100);
+		
+		while(!llist.isEmpty())
+			System.out.println(llist.pollLast());
+	}
+
+}
+
+
+
+
+
+add method adds at the rear
+but by using addFirst method, we are able to add at front also.
+poll method removes at front
+by using pollLast, we are able to remove at last also.
+
+Hence, LinkedList is an implementation of Double eneded queue	-	Dequeue
+
+
+ArrayQueue
+	is faster than LinkedList
+	because it has index, but linkedlist as has index	
+	but arrays are contiguous in memory. 
+
+
+import java.util.ArrayDeque;
+
+public class App2 {
+
+	public static void main(String[] args) {
+		ArrayDeque<Integer> q=new ArrayDeque<>();
+		q.add(42);
+		q.add(10);
+		q.add(5);
+		q.add(50);
+		q.add(12);
+		
+		while(!q.isEmpty())
+			System.out.println(q.poll());
+		
+	}
+
+}
+
+
+
+
+
+
+import java.util.ArrayDeque;
+
+public class App3 {
+
+	public static void main(String[] args) {
+		ArrayDeque<Employee> q=new ArrayDeque<>();
+		q.add(new Employee(11, "Ram", "IT"));
+		q.add(new Employee(5, "Ram", "IT"));
+//		q.add(null);
+		q.add(new Employee(10, "Ram", "IT"));
+//		q.add(null);
+		q.add(new Employee(3, "Ram", "IT"));
+		q.add(new Employee(9, "Ram", "IT"));
+		//can we add null to array dequeue? is it allowed?
+		
+		
+		while(!q.isEmpty())
+			System.out.println(q.poll());
+	}
+
+}
+
+
+
+null cannot be added to Dequeue
+
+Where do you see priority queue?
+-------------------------------------------------------
+
+Part 1: Trees(1 hour)(
+a. Introduction to Trees with practical usage examples
+b. Binary Trees and N-Ary trees
+d. Demo question on Trees(1 easy and 2 medium for elite batch or 2 easy and 1 medium for regular batch )
+
+Doubts Pause: 5 minutes
+
+Part 2: Searching(1 hour )(
+a.	Linear Search with an example. Include Time complexity
+b.	Binary Search with an example. Include Time complexity
+c.	Practice problem on searching(2 easy and 1 medium for regular batches, or 1 easy and 2 mediums for elite batch)
+
+
+
+
+
+
+What is tree?
+	is a hierarchical data structure where elements can have parent child relationship
+	there will be a root node that contains all other nodes
+	if root node is null, then there are no nodes in the tree. Tree is empty
+	
+
+Types of Tree?
+	Binary Tree
+	Binary Search Tree
+	AVL Tree
+	N-ary tree
+
+
+Binary Tree:
+	Every node in the Binary tree can have 0 or 1 or 2 child elements
+	No other  option.
+	a node in binary tree can only hve max 2 child element
+
+Binary Search Tree:
+	is basically a binary tree
+	where every node has its left child smaller than the node
+	every right child is smaller than the node
+
+
+A binarysearch tree will look like linear, when we add elements in ascendingorder
+so, 
+1						
+	2					
+		15				
+			45			
+				46		
+					90	
+						105
+
+
+to find 105 in the BST, 
+	7 comparisons are done
+
+So, it is now similar to sequential search.
+The binary search tree will be at its best when  the height of the tree is lowered as much as possible
+because, the max number of comparisons in a BST is equal to the height of the tree
+
+so the same data you see above can be arranged as follows:
+
+
+heigh balanced tree will be the best of BST
+
+BST vs N-ary Tree
+---------------------
+N means many
+	N-ary tree means, any number of child elements.
+	Why n-ary is not binary search tree?
+		bi means 2
+		n means many
+
+	we cannot use binary search for n-ary tree
+
+What is binary search?
+	How do you search a word in an english dictionary?
+	will you search from 1st page to last page?	linear/ sequential??????/ No
+	definitely no.
+	
+let me explaint Binary search algorithm.
+	there is a search element	X
+
+	there is a sorted list/ set from which we search
+		
+1) Find the mid of the list
+2) check if mid == X
+	if yes, we have found
+3) else, mid !=X then
+	decide to search towards left or right based on comparing mid vs X
+	
+4) if X is lesser than mid, then go towards left
+2) if X is greater than mid, then go towards right
+
+after each comparison, either the search element X is found
+or the list is divided into half
+
+this search algorithm will ignore half of the search list every time
+
+Traversing a binary search tree:
+	means, visiting each and every node atleast once.
+
+types of binary search tree traversal:
+	in order
+	pre order
+	post order
+
+
+
+In order
+	left
+	root
+	right
+
+pre order
+	root
+	left
+	right
+
+post order
+	left
+	right
+	root
+
+
+
+
+
+	public void inOrderTraversal(Node root) {
+		if (root != null) {
+			inOrderTraversal(root.getLeft());
+			System.out.println(root.getData());
+			inOrderTraversal(root.getRight());
+		}
+
+	}
+
+
+the above code is inorder traversal
+now, i want you to write the code for
+	pre-order
+	post-order
+traversal
+

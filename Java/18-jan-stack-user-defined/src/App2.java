@@ -1,8 +1,7 @@
-
 public class App2 {
 
 	public static void main(String[] args) {
-		JStack<String> stack=new JStack();
+		JStack<String> stack=new JStack<>();
 		stack.push("A");
 		stack.push("B");
 		stack.push("C");
