@@ -64,4 +64,42 @@ public class JBSTree {
 		}
 	}
 	
+	public String search(Integer value)
+	{
+		String status="Not Found";
+		if(root==null)
+		{
+			//tree is empty
+			status="Tree is empty!";			
+		}else {
+			status=searchTree(value, root);
+		}
+		return status;
+	}
+	
+	private String searchTree(Integer value, Node root)
+	{
+		String st="Not Found";
+
+		if(root==null)
+		{
+			return "Not Found";
+		}
+		Integer rootValue=root.getData();
+		if(value.equals(root.getData()))
+		{
+			//matching. Found
+			st="Found";
+			return "Found";
+		}else if(value.compareTo(root.getData())==-1)
+		{
+			st=searchTree(value, root.getLeft());
+		}else
+		{
+			st=searchTree(value, root.getRight());
+		}
+		return st;
+	}
+	
+	
 }

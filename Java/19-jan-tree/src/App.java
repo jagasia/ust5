@@ -14,7 +14,7 @@ public class App {
 		tree.addNode(14);
 		tree.addNode(12);
 		
-		tree.postOrder();
+		tree.inOrder();
 		
 	}
 

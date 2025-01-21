@@ -1,0 +1,397 @@
+We have created binary search tree in our last session.
+the same program can be modified to ask the user to do either of the following in a loop:
+1) Adding a node
+2) In order traversal
+3) Pre order traversal
+4) Post order traversal
+5) Delete a node
+6) Search (check if a node exist or not)
+any other) Exit
+
+
+how can we search and decide whether a value is found in the binary search tree or not?
+	a simple answer is, any traversal, is used to visit all nodes of a tree. So, using any traversal, we can find if a value is present or not.
+	But, in such case, the number of comparisons is almost similar to a linear search.
+so, lets take the advantage of a binary search tree.
+	each node has left node lesser and right node greater than the parent
+
+
+lets start the search algorithm:
+	check if root is empty
+		yes?	not found/ tree is empty
+		no?
+then
+	compare search value with root
+		1) equal			FOUND	stop the search and declare
+		2) lesser than root		continue the same considering left as root
+		3) greather then root	continue the same considering right as root
+
+either the root ref will become null		NOT FOUND
+or equal to root ref				FOUND
+or move left or right	
+	
+this is what will happen recursively.
+
+
+
+test case
+
+1
+55
+1
+5
+1
+100
+1
+25
+1
+30
+1
+45
+1
+52
+
+
+				55
+	5
+		25
+			30
+				45		
+
+3 cases handled differently:
+1) deleting a leaf node
+2) deleting a node which has one child
+3) deleting a node which has both children
+
+------------------------------------------
+So far we have discussed datastructures.
+Now, we are moving towards algorithms:
+	searching
+	sorting
+Search algorithms:
+--------------------------
+linear
+binary
+
+
+for(int i=0;i<n;i++)
+	should i i<n? or i<=n?	or anything else
+
+We are going to use Arrays for these algorithms.
+
+
+
+import java.util.Scanner;
+
+public class App {
+
+	public static void main(String[] args) {
+		Integer []arr= {5,9,2,11,22,8,4,3,15,10};
+		Scanner sc=new Scanner(System.in);
+		System.out.print("Enter the item to search:");
+		int item=sc.nextInt();
+		//linear search
+		for(int i=0;i<arr.length;i++)
+		{
+			if(item==arr[i])
+			{
+				System.out.printf("Found at index: %d",i);
+				return;
+			}
+		}
+		System.out.println("Not found");
+	}
+
+}
+
+
+
+Time complexity of linear search?
+	best case scenario:		1 comparison
+	worst case scenario:	n comparison
+	average case:		(n+1)/2
+
+
+Binary search:
+-----------------
+	is possible only if the data is SORTED
+	is better than linear search in an average scenario
+	best case scenario for Binary Search is when the element is found in the middle
+		1 comparison
+	worst case scenario is when the element is not found
+
+
+item==mid
+	found
+item<mid
+	leftside
+		left is not changed
+		right = mid-1
+else
+	right
+		right is not changed
+		left = mid+1
+
+
+ex:
+
+	left =0
+	right = n-1
+
+moving left
+	left = 0
+	righ = mid - 1
+
+
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class AppBinarySearch {
+	
+	public static void binarySearch(Integer []arr,int searchValue, int left, int right)
+	{
+		if(left>right)
+		{
+			System.out.println("Not Found");
+			return;
+		}
+		int mid=(left+right)/2;
+		int element=arr[mid];
+		
+		//check if element at mid index matches searchValue
+		System.out.println("Comparing "+searchValue+" with mid "+element);
+		if(searchValue==element)
+		{
+			System.out.println("Found");
+			return;
+		}else if(searchValue<element)
+		{
+			System.out.printf("Moving left: x=%d and y=%d\n", left, mid-1);
+			binarySearch(arr, searchValue, left, mid-1);
+		}else
+		{
+			System.out.printf("Moving right: x=%d and y=%d\n", mid+1, right);
+			binarySearch(arr, searchValue, mid+1, right);
+		}
+	}
+
+	public static void main(String[] args) {
+		Integer []arr= {5,9,2,11,22,8,4,3,15,10};
+		Scanner sc=new Scanner(System.in);
+		//in order to do binary search, we sort the array
+		Arrays.sort(arr);
+		System.out.println(Arrays.toString(arr));
+		System.out.print("Enter the item to search:");
+		int item=sc.nextInt();
+		
+		binarySearch(arr,item, 0, arr.length-1);
+		
+	}
+}
+
+
+
+Task:
+Write a java program that searches an employee from an array of Employees
+Note:
+
+the above example, is an array of Integers.
+Now, for an Array of Employee type, how do you search?
+
+sorting Employees array, using Arrays.sort will expect either
+	Employee class to implement Comparable or
+	Arrays.sort to use Comparator
+
+If 2 Employees are not Comparable, then how can we do binary search?
+	it is not possible because, how do you decide to move left or right?
+
+
+	public static void binarySearch(Employee []arr,Employee searchValue, int left, int right, Comparator<Employee> c)
+	{
+		if(left>right)
+		{
+			System.out.println("Not Found");
+			return;
+		}
+		int mid=(left+right)/2;
+		Employee element=arr[mid];
+		
+		//check if element at mid index matches searchValue
+		System.out.println("Comparing "+searchValue+" with mid "+element);
+		if(c.compare(searchValue, element)==0)		//equal
+		{
+			System.out.println("Found");
+			return;
+		}else if(c.compare(searchValue, element)<0)								//else if(searchValue<element)
+		{
+			System.out.printf("Moving left: x=%d and y=%d\n", left, mid-1);
+			binarySearch(arr, searchValue, left, mid-1);
+		}else
+		{
+			System.out.printf("Moving right: x=%d and y=%d\n", mid+1, right);
+			binarySearch(arr, searchValue, mid+1, right);
+		}
+	}
+
+-------------------------------------------------------------
+Sorting
+---------
+Sorting is a process of arranging elements in an array or a collection based on Comparable or Comparator
+
+if 2 objects cannot be compared, then we cannot sort the list or array of such objects.
+
+Types of sorting:
+-------------------
+Bubble sort
+Selection sort
+Insertion sort
+Merge sort
+Quick sort
+Heap sort
+Radix sort
+Shell sort
+
+
+
+
+
+
+Shaik Abdul Raashid (Unverified)
+8:45 pm
+int n = arr.length;
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+    public static void bubbleSort(Integer[]... 
+
+by Devika Lekshmy S (Unverified)
+Devika Lekshmy S (Unverified)
+8:46 pm
+    public static void bubbleSort(Integer[] arr) {
+        int n = arr.length;
+        for (int i = 0; i < n - 1; i++) { 
+            for (int j = 0; j < n - i - 1; j++) { 
+                if (arr[j] > arr[j + 1]) { 
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                }
+            }
+        }
+    }
+public static void bubbleSort(Integer[] arr... by Ansal E S (Unverified)
+Ansal E S (Unverified)
+8:46 pm
+public static void bubbleSort(Integer[] arr) {
+        for (int i = 0; i < arr.length - 1; i++) {
+            for (int j = 0; j < arr.length - i - 1; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                }
+            }
+        }
+    }
+import java.util.Arrays; public class A... by Jyothsna J (Unverified)
+Jyothsna J (Unverified)
+8:46 pm
+
+import java.util.Arrays;
+public class AppBubble {
+	public static void bubbleSort(Integer []arr)
+	{
+		//write your code here
+ 
+		for(int i=0; i<arr.length-1 ;i++) {
+	for(int j=0;j<arr.length -1 ;i++) {
+	if(arr[j] > arr[j+1]) {
+		int temp = arr[j];
+		arr[j] = arr[j+1];
+		arr[j+1] = temp;
+	}
+}
+public static void bubbleSort(Integer[] arr... by Abhiraj b (Unverified)
+Abhiraj b (Unverified)
+8:46 pm
+public static void bubbleSort(Integer[] arr){
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 0; j < arr.length; j++) {
+                if(arr[i] < arr[j]){
+                    int temp = arr[i];
+                    arr[i] = arr[j];
+                    arr[j] = temp;
+                }
+            }
+        }
+    }
+
+public static void bubbleSort(Integer []arr)
+	{
+		//write your code here
+		int n=arr.length;
+		for(int i=0;i<n;i++)
+		{
+			for(int j=0;j<n-1;j++) {
+				if(arr[j]>arr[j+1])
+				{
+					//swap
+					int temp=arr[j];
+					arr[j]=arr[j+1];
+					arr[j+1]=temp;
+				}
+			}
+		}
+	}
+
+
+has context menu
+
+
+
+
+Nested for loop is used
+	if you compare
+		first and second
+		second and third
+		like this till n-2 and n-1
+	then that is called as 1st pass
+	at the end of 1st pass, the largest element is pushed to end
+
+	at the end of 2nd pass, the second largest element is pushed to end -1 position
+	at the end of nth pass, nth largest, ie., smallest element is pushed to first position
+
+this looks like blind looping. Even if the list is already sorted, the defined number of iterations will happen blindly.
+
+bubble sorts time complexity is fixed.
+
+
+
+Selection sort:
+1st pass
+	1st element swap with 1st smaller element.	If required
+2nd pass
+	2nd element swap with 2nd smaller element
+3rd pass
+	3rd element swap with 3rd smaller element
+
+
+
+how to find 2nd smaller, 3rd elements????
+
+smallest is found and pushed to 1st.
+
+ignoring 1st in our algorithm, if you find smallest element, 
+	then it is 2nd smallest element
+
+ignoring 1st, 2nd elements, 
+	search for smallest element, then it is 3rd smallest element
+
+
+
+https://www.slideshare.net/slideshow/sorting-algorithms-63123512/63123512#2
+
