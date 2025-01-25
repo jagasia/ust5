@@ -1,0 +1,774 @@
+6.5 & 7.1
+Insertion sort
+Merge sort
+Quick sort
+
+Insertion sort
+	inserts element in correct positions
+Merge sort
+	divide and conquer approach
+	divide the elements into smaller groups. for this, we divide the array into equal group
+	and continue to divide until each group has only 1 element. 
+	Sort them in each group
+	Merge them back	in such a way, it becomes, 2 element group, then 4 element group ....
+Quick sort
+	choose a pivot such that, all elements in left side is already sorted
+	add the elements from right side to the left side at correct location
+
+
+Java program for Merge sort:-
+
+/* Function to merge the subarrays of a[] */  
+void merge(int a[], int beg, int mid, int end)    
+{    
+    int i, j, k;  
+    int n1 = mid - beg + 1;    
+    int n2 = end - mid;    
+      
+    int LeftArray[n1], RightArray[n2]; //temporary arrays  
+      
+    /* copy data to temp arrays */  
+    for (int i = 0; i < n1; i++)    
+    LeftArray[i] = a[beg + i];    
+    for (int j = 0; j < n2; j++)    
+    RightArray[j] = a[mid + 1 + j];    
+      
+    i = 0, /* initial index of first sub-array */  
+    j = 0; /* initial index of second sub-array */   
+    k = beg;  /* initial index of merged sub-array */  
+      
+    while (i < n1 && j < n2)    
+    {    
+        if(LeftArray[i] <= RightArray[j])    
+        {    
+            a[k] = LeftArray[i];    
+            i++;    
+        }    
+        else    
+        {    
+            a[k] = RightArray[j];    
+            j++;    
+        }    
+        k++;    
+    }    
+    while (i<n1)    
+    {    
+        a[k] = LeftArray[i];    
+        i++;    
+        k++;    
+    }    
+      
+    while (j<n2)    
+    {    
+        a[k] = RightArray[j];    
+        j++;    
+        k++;    
+    }    
+}    
+
+
+In quick sort, choose a random pivot
+and swap  the elements such that finally all elements lesser than pivot are placed in left of pivot
+and all elements greater then pivot are placed in right of pivot
+
+then sort both left and then right
+
+
+
+11	5	28	9	20
+
+
+pivot=11
+since pivot is in left end. We should start from right
+
+11 vs 20		no swap
+
+11 vs 9		swap
+
+9	5	28	11	20
+
+now, pivot is at right. After swap, direction change
+
+9 vs 11		no swap
+5 vs 11		no  swap
+28 vs 9		swap
+
+11	5	9	28	20
+
+direction is now from right
+
+11 vs 9		swap
+
+9	5	11	28	20
+
+PIVOT NOW HAS arrived at correct position such that
+all left elements are lesser than pivot
+and all right elements are greater than pivot
+
+sort left side
+	5	9
+
+sort right side
+	20	28
+
+merge them with pivot
+
+
+5	9	11	20	28
+
+
+
+
+
+
+
+
+
+
+
+
+public class Quick  
+{  
+    /* function that consider last element as pivot,  
+place the pivot at its exact position, and place  
+smaller elements to left of pivot and greater  
+elements to right of pivot.  */  
+int partition (int a[], int start, int end)  
+{  
+    int pivot = a[end]; // pivot element  
+    int i = (start - 1);  
+  
+    for (int j = start; j <= end - 1; j++)  
+    {  
+        // If current element is smaller than the pivot  
+        if (a[j] < pivot)  
+        {  
+            i++; // increment index of smaller element  
+            int t = a[i];  
+            a[i] = a[j];  
+            a[j] = t;  
+        }  
+    }  
+    int t = a[i+1];  
+    a[i+1] = a[end];  
+    a[end] = t;  
+    return (i + 1);  
+}  
+  
+/* function to implement quick sort */  
+void quick(int a[], int start, int end) /* a[] = array to be sorted, start = Starting index, end = Ending index */  
+{  
+    if (start < end)  
+    {  
+        int p = partition(a, start, end);  //p is partitioning index  
+        quick(a, start, p - 1);  
+        quick(a, p + 1, end);  
+    }  
+}  
+  
+/* function to print an array */  
+void printArr(int a[], int n)  
+{  
+    int i;  
+    for (i = 0; i < n; i++)  
+        System.out.print(a[i] + " ");  
+}  
+    public static void main(String[] args) {  
+    int a[] = { 13, 18, 27, 2, 19, 25 };  
+    int n = a.length;  
+    System.out.println("\nBefore sorting array elements are - ");  
+    Quick q1 = new Quick();  
+    q1.printArr(a, n);  
+    q1.quick(a, 0, n - 1);  
+    System.out.println("\nAfter sorting array elements are - ");  
+    q1.printArr(a, n);  
+    System.out.println();  
+    }  
+}  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+insertion sort java program taken from java open source:
+
+private static void insertionSort(int[] a, int low, int high) {
+        for (int i, k = low; ++k < high; ) {
+            int ai = a[i = k];
+
+            if (ai < a[i - 1]) {
+                while (--i >= low && ai < a[i]) {
+                    a[i + 1] = a[i];
+                }
+                a[i + 1] = ai;
+            }
+        }
+    }
+
+
+--------------------------------------------
+Quality Engineering:-
+-----------------------
+What is quality?
+	conformance to the specifications
+	for example, if a pendrive says it is 1 GB, then actually how much space it contains? is the conformance to the specification
+	you say that you are going to provide something.
+	what you provide exactly, that is where quality is measured.
+
+For example,
+	If you are doing a project, and come to presentation, then what i will verify?
+	Good? or bad?	There is no way, good or bad can be a metrics.
+	In your document, you mentioned 5 features that you are going to implement.
+	If you have implemented 10 features, but those 10 are not found in document. Then quality is 0
+
+
+in s/w development, the quality is measured as:
+	quality of the product that comes as outcome of the development process.
+	quality of the processes followed to develop the product
+	quality of the quality process itself
+		quality assurance process
+		quality control process
+
+
+Quality Assurance
+	ensures that the PROCESS we follow will produce quality product
+	Effectiveness
+	Efficiency
+
+
+Quality Control
+	Testing
+
+
+Testing
+---------
+Testers role begins even before the coding starts
+
+
+
+Requirements Analysis		-	Acceptability Testing
+System Design			-	System Testing
+Architecuture Design		- 	Integration Testing
+Module Design			-	Unit Testing
+
+
+
+JUnit for unit testing in java
+-------------------------------
+Lets create a Java class 
+	Mathematics.java
+		add
+		subtract
+
+how can we test this?
+
+BDD
+	Behavior Driven Development
+	is based on TDD
+	TDD
+		Test Driven Development
+		write the code to fail
+		modify the code to pass
+		refactor the code
+
+We test Mathematics.java, so this is the Class Under Test
+
+
+
+public class Mathematics {
+	int no1;
+	int no2;
+	
+	public Mathematics() {}
+
+	public Mathematics(int no1, int no2) {
+		super();
+		this.no1 = no1;
+		this.no2 = no2;
+	}
+
+	public int getNo1() {
+		return no1;
+	}
+
+	public void setNo1(int no1) {
+		this.no1 = no1;
+	}
+
+	public int getNo2() {
+		return no2;
+	}
+
+	public void setNo2(int no2) {
+		this.no2 = no2;
+	}
+	
+	public int sum()
+	{
+		return no1+no2+20;		//to fail
+	}
+	
+	public int difference()
+	{
+		return Math.abs(no1-no2)+20;		//to fail
+	}
+}
+
+
+
+
+
+right click project
+	New
+		JUnit test case
+
+
+
+@Before
+	is executed before every @Test method
+	non static method
+
+@BeforeClass
+	is executed only once before the first @Test method
+	is used on a static method method
+
+
+@After
+
+@AfterClass
+
+
+/**
+ * 
+ */
+
+import static org.junit.Assert.*;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+/**
+ * 
+ */
+public class MathematicsTest {
+	//CUT is Mathematics
+	Mathematics maths=new Mathematics();
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+	}
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
+	}
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@Before
+	public void setUp() throws Exception {
+		maths.setNo1(2);
+		maths.setNo2(3);
+	}
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@After
+	public void tearDown() throws Exception {
+	}
+
+	/**
+	 * Test method for {@link Mathematics#sum()}.
+	 */
+	@Test
+	public void testSum() {
+		assertEquals(maths.sum(), 5);
+	}
+
+	/**
+	 * Test method for {@link Mathematics#difference()}.
+	 */
+	@Test
+	public void testDifference() {
+		int actual = maths.difference();
+		assertEquals(maths.difference(), actual);
+	}
+
+}
+
+
+-------------------------------------------------------
+Test Suite
+	is a collection of test cases
+
+in  our project, there are 3 test classes with 6 total test cases
+how to choose only first and third test classes to run?
+	create a test suite and include only requiired test classes and then
+		run the suite
+
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
+
+@RunWith(Suite.class)
+@SuiteClasses({ MathematicsTest.class, MathematicsTest3.class })
+public class OneAndThree {
+
+}
+
+
+
+we can type this in a simple class.
+Or we can right click, New -> Other -> Test Suite
+
+Now, in the chosen test classes, how to ignore one or more test methods?
+	use @Ignore annotation near @Test annotation
+
+
+@RunWith(Suite.class)		is used for basic test suite.
+There are other types of test suites in junit.
+
+Category Test Suite Runner:
+-------------------------------
+you want to test the project as an admin
+and test all admin related methods
+
+then user related methods
+
+admin, user, there are all examples for category
+
+how to categorize the test methods
+and run a specific category only
+
+For each category, create an interface
+
+
+public interface User {
+
+}
+
+
+public interface Admin {
+
+}
+
+
+
+//@RunWith(Suite.class)
+@RunWith(Categories.class)
+@SuiteClasses({ MathematicsTest.class, MathematicsTest3.class, MathematicsTest2.class })
+@IncludeCategory({User.class})
+public class OneAndThree {
+
+}
+
+
+
+
+
+
+
+in each test method, you can specify the category
+
+@Test
+	@Category(User.class)
+	public void testDifference() {
+		int actual = maths.difference();
+		assertEquals(maths.difference(), actual);
+	}
+
+
+
+
+-----------------------------------
+Parameterized testing
+-------------------------
+	having lot test cases, it is not good idea to have lot of test classes.
+	Instead, can we use 1 test class that can be called for n number times with n test cases
+	and if the test cases are provided as a list/ collection of values
+
+
+
+
+public class Mathematics {
+	public int sum(int i, int j)
+	{
+		return i+j;
+	}
+}
+
+
+
+
+
+import static org.junit.Assert.assertEquals;
+
+import java.util.Arrays;
+import java.util.Collection;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
+@RunWith(Parameterized.class)
+public class MathematicsTest {
+	private int no1;
+	private int no2;
+	private int expectedValue;
+	
+	Mathematics maths=new Mathematics();
+	
+	public MathematicsTest(int no1, int no2, int expectedValue)
+	{
+		this.no1=no1;
+		this.no2=no2;
+		this.expectedValue=expectedValue;
+	}
+	
+	@Parameterized.Parameters
+	public static Collection populateValues()
+	{
+		 return Arrays.asList(new Object[][] {
+	         { 2, 3, 5 },
+	         { 6, 3, 9 },
+	         { 19, 1, 20 },
+	         { 2, 1, 3 },
+	         { 23, 1, 24 }
+	      });
+	}
+	
+	@Test
+	public void testSum()
+	{
+		assertEquals(expectedValue, maths.sum(no1, no2));
+	}
+	
+	
+}
+
+
+--------------------------------------------------
+What is Mockito?
+
+Suppose, our MVC application calls a web service (rest api),
+we are testing our mvc application (not the rest api)
+Assuming that rest api is already tested.
+we just need to test our methods without consuming the service.
+
+there are many reasons, to mock a service	(creating a dummy of service/ proxy/ duplicate)
+	1) you are calling a service, which is under construction.
+		So you do not need to wait for that team member to finish that service
+		you can mock that service and proceed with your testing process
+	2) you are calling a service, which is already tested
+		so do not actually call the service, while testing your code
+		(because, your code is calling the service. so testing our code should not call the service (mock it))
+	
+
+Steps for mockito:
+--------------------
+normally, we do mvc using spring boot maven)
+so, we can add mockito jars using 
+	dependency entry in pom.xml
+
+<dependency>
+  <groupId>org.mockito</groupId>
+  <artifactId>mockito-inline</artifactId>
+  <version>{mockitoversion}</version>
+</dependency>
+<dependency>
+    <groupId>org.mockito</groupId>
+    <artifactId>mockito-junit-jupiter</artifactId>
+    <version>{mockitoversion}</version>
+    <scope>test</scope>
+</dependency>
+
+Use 3.12.4 or 4.0.0 as mockitoversion.
+
+
+
+REMEMBER, spring boot 3 already included mockito in their starter dependencies, so we do not need to add this.
+
+Demo:
+
+create a spring boot application
+	group:	com.ust.demo
+	artifact:	25-jan-mockito-demo
+	package:	com.ust.demo
+		maven
+		jar
+
+	dependencies:	spring web
+
+in application.properties
+	server.port=5000
+
+
+now lets create a service class
+
+package com.ust.demo.service;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class MathematicsService {
+	public int sum(int no1, int no2)
+	{
+		return no1+no2+100;
+	}
+}
+
+
+
+
+package com.ust.demo;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.mockito.junit.MockitoJUnitRunner;
+
+import com.ust.demo.service.MathematicsService;
+
+@RunWith(MockitoJUnitRunner.class)
+public class MathsServiceTest {
+
+	
+	@Test
+	public void test1()
+	{
+		MathematicsService proxy = mock(MathematicsService.class,RETURNS_DEEP_STUBS);
+		when(proxy.sum(2, 3)).thenReturn(5);
+		when(proxy.difference(2, 3)).thenReturn(1);
+		
+		
+		int sum = proxy.sum(2, 3);
+		System.out.println(sum);
+		assertEquals(5, sum);
+		
+		int diff=proxy.difference(2, 3);
+		assertEquals(1, diff);
+		
+	}
+}
+
+
+
+
+
+
+- Unit testing:
+•	Service , controller and repository layer
+•	Mock MVC framework & Mockito
+•	Junit for controller 
+•	Junit for service layer
+
+
+
+
+
+Services can be mocked and tested using Mockito JUnit Runner
+Controller?
+	how to test controllers?
+		because, we call the controller methods using the URL
+		easier way of testing the controller methods is to use 
+			Postman	or
+			Swagger
+		But for Junit?
+			we can create @Test methods that can call controller methods URLS using
+				RestTemplate	(in case if it is spring boot)
+				Feign Client	(Spring cloud)
+
+
+
+-------------------------------------
+- Debugger
+•	Introduction and purpose
+•	Java debugger demo
+•	IDE debugger and commands
+•	Advantages of using IDE debugger
+
+
+
+What is debugging?
+	finding and fixing bugs
+	bugs are logical errors
+
+if a test case fails, it is because of logical error.
+
+syntax error (program does not run)
+runtime error/exception	(exception handling is different)
+
+debugging
+	is done by the programmer to find the logical errors.
+
+How to do debugging?
+	we can trace the logical errors using
+		System.out.println		or
+		Loggers	
+	IDE debugging tools
+		break point			
+		step into			enters inside every method and proceed line by line
+		step over			line by line. Completes methods and move next line
+		step return		/ step out		completes current method and return
+		local variables		current method variables values
+		call stack windows		stack of method class from main method
+
+
+
+
+
+
+
+package com.ust.demo;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class Example {
+
+	 Logger lf=LoggerFactory.getLogger(Example.class);
+	public void display()
+	{
+		lf.warn("This is my warning");
+		for(int i=0;i<20;i++)
+		{
+			System.out.println(i);
+		}
+	}
+}
+
+
+
+Logging is highly recommended
+and System.out.println is highly discouraged.
+
+
+
+Code Quality
+	we will discuss tommorrow
+	SonarQube
+
