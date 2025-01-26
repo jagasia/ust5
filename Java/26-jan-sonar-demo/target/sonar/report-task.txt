@@ -1,0 +1,6 @@
+projectKey=26-jan-sonar-demo
+serverUrl=http://localhost:9000
+serverVersion=8.8.0.42792
+dashboardUrl=http://localhost:9000/dashboard?id=26-jan-sonar-demo
+ceTaskId=AZShPniYCZPFiB4vK-kg
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AZShPniYCZPFiB4vK-kg

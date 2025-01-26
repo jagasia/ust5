@@ -1,0 +1,408 @@
+Part 1: Testing Details(1 hour 20 minutes)
+- Headless testing
+•	Headless browsers
+•	Automation Framework and tools
+
+- Shift Left approach
+•	Continuous Testing
+•	Static Code Analysis
+
+- Whitebox testing 
+•	Code coverage
+•	Control flow testing
+
+- Blackbox testing and its usage
+•	Equivalence Partitioning and Boundary Value Analysis
+•	State Transition Testing
+
+Part 2: Code Quality(1 hour 5 minutes)
+- What is SonarQube
+- Code quality and code grades(A-D)
+-Code coverage and it’s significance
+-Efficient code refactoring
+
+
+---------------------------
+- Headless testing
+•	Headless browsers
+•	Automation Framework and tools
+
+
+
+A headless browser is a browser without UI
+obviously, it is accessed using cmd prompt
+
+how to access a website from a command prompt?
+	curl 
+
+EX:
+curl GET https://www.browserstack.com/guide/what-is-headless-browser-testing
+
+
+curl --header "Content-Type: application/json" \
+  --request POST \
+  --data '{"username":"xyz","password":"xyz"}' \
+  http://localhost:3000/api/login
+
+
+1) i can open the browser and fill the data and submit the form
+or
+2) send the same post request from cmd prompt:
+curl --header "Content-Type: application/json" \
+  --request POST \
+  --data '{"username":"xyz","password":"xyz"}' \
+  http://localhost:3000/api/login
+
+
+
+
+can you run a js program in cmd prompt?
+if you have installed node js in your computer, then you can run js programs in command prompt.
+
+What is AJAX?
+	Asynchronous Javascript And XML
+	is used to access server side scripts(PHP, ASP, JSP) from a javascript program, without reloading the page
+
+before ajax, a server is accessed by submitting a form
+and submitting a form, reloads the browser and that creates problems like, the previously filled form data are lost
+
+for ex:
+	if is select country in a <select> then
+	next select should show me states in that country
+
+	if i select state in a <select> then
+	next select should show me cities in that state
+
+but, selecting an option in <select> does not submit the form
+and hence, it cannot access a server side script
+
+So, the select option can trigger only a client side event, which can be handled by a javascript program.
+AJAX is nothing but, calling a server side script from a javascript.
+ex:
+	js to call a servlet
+	js to call a restful webservice
+
+
+AJAX runs in background, in asynchronous mode
+so that, browser still showing the same form for
+the user to continue working even when
+ajax is in progress of accessing the server
+
+
+
+
+
+
+
+FirefoxOptions options = new FirefoxOptions();
+options.setHeadless(true);
+WebDriver driver = new FirefoxDriver(options);
+driver.get("https://demoqa.com/");
+System.out.println("Title of the page is -> " + driver.getTitle());
+driver.close();
+}
+}
+
+
+
+Puppeteer
+
+const puppeteer = require('puppeteer')
+;(async () => {
+const browser = await puppeteer.launch()
+const page = await browser.newPage()
+await page.goto('https://bstackdemo.com/')
+await browser.close()
+})()
+
+
+-------------------------------------------------------------------
+
+- Shift Left approach
+•	Continuous Testing
+•	Static Code Analysis
+
+Static code analysis is white box testing.
+testing a code, without running it
+
+then what is a black box testing?
+	run the code against test cases	
+	without seeing the code
+
+white box testing
+	you check the branches inside the code
+	
+
+What is continuous testing?
+	whenever a code is modified, it is tested again
+	it is continuous because, CI is implemented
+	
+	what is CI?
+		Continuous Integeration
+		this is a part of CI/CD
+		
+		What is CI/CD?
+			Continuous Integration, Continuous Deployment
+we are developing the code.
+After that, we push the code to git
+the code from git is pulled by the tester to test
+
+so everytime, when the code is modified, 
+we push the changes to git
+
+we notify the tester to re-test the code, because it has changed.
+
+But this involves communication between us.
+To make it automated, we are introducing CI
+
+tools that support CI/CD
+	jenkins
+	AWS code pipeline		
+
+these are capable of notifying us whenever a change happens in git
+
+--------------------------------------------------------------
+SonarQube
+
+what is code quality?
+	Code quality is a measurement of how high or low the value of a specific set of code, program or software is. Typically, a code is high quality if the lines of code are easy to interpret and if the developer documented the code. High-quality code often meets these common parameters:
+
+Comments		for well documented
+	if a code is commented out, then it is poor comment.
+		ideally, that code needs to be removed.
+		why, we are not removing the code? because, we are trying something by
+			commenting the code, later we may uncomment it.
+			that means, you have not concluded whether it is required or to be removed
+		so a code, which is commented is poor practise
+	if you write a comment to explain the code,
+		then it is a good comment
+declarations
+	all declarations must be initialized
+		int i;		//is poor
+		int i=0;		//is good
+
+unused variables
+	must be removed from the code.
+
+
+SonarQube 
+	gives us a report on our code
+	we can find
+		bugs
+		code smells
+		code coverage
+		debt
+			time required to correct these issues
+
+
+
+Lab setup for sonar qube:
+in google, search
+	download sonarqube for windows
+		https://www.sonarsource.com/products/sonarqube/downloads/
+
+download, unzip to your softwares folder
+
+	D:\Softwares\sonarqube-8.8.0.42792\bin\windows-x86-64
+
+go to cmd in this location, and run the following:
+	StartSonar.bat
+
+
+
+in sonarqube 8, the credentials to login
+	admin
+	admin
+
+in sonarqube 10, the password is displayed in the console.
+	admin
+	<<paste the password copied from console>>
+
+Now, that we have logged into sonarqube admin console.
+
+Lets create a java maven project and test the code quality of that program using sonarqube.
+
+Done.
+
+Now, our project is ready to be tested with sonarqube for code quality.
+
+Steps:
+1) in sonarqube admin console page, create a project
+	click "Add project" button
+		-> Manually
+
+2) Project key
+	give the project name
+	click setup
+
+3) Provide a token
+	you can give any secret key here
+	i give project name itself
+	and generate
+4) continue
+5) choose maven
+	copy the command
+
+mvn sonar:sonar \
+  -Dsonar.projectKey=26-jan-sonar-demo \
+  -Dsonar.host.url=http://localhost:9000 \
+  -Dsonar.login=1e6b5b77f44632b69404c4063e0f796edf3e3fd6
+
+
+
+
+mvn sonar:sonar -Dsonar.projectKey=26-jan-sonar-demo -Dsonar.host.url=http://localhost:9000 -Dsonar.login=1e6b5b77f44632b69404c4063e0f796edf3e3fd6
+
+
+in eclipse, 
+	right click the project
+		Run As
+			Maven build
+
+				goals: remove that "mvn" from the above command
+
+because, if you run this command from cmd prompt where pom.xml is present, then use mvn .....
+
+but if you run in eclipse, then remove "mvn" from the command
+
+
+----------------------------------------
+Jenkins
+---------
+we are going to run our java program using jenkins
+then
+we are going to run our java program by pulling it from github
+
+
+lab setup for jenkins:
+	download jenkins.war
+
+https://www.jenkins.io/download/
+
+choose .war file to download
+
+
+to run any .jar or .war, we use
+	java -jar <<jar/war file name) in cmd prompt
+
+jenkins runs in 8080 port
+
+in my computer, 8080 is used by oracle tns lisener
+
+you can find which process runs in which port using
+	netstat -aon
+in cmd prompt
+
+now, we have identified the PID of the process which runs in 8080
+and in test manager, we have ended the task
+
+now go to cmd in a location where jenkins.jar is present and
+	java -jar jenkins.jar
+
+login to jenkins admin console in
+	http://localhost:8080
+
+lets create a java program:
+
+public class Hello
+{
+	public static void main(String []args)
+	{
+		System.out.println("Hello this is UST Wave 4 batch...");
+	}
+}
+
+lets run this in jenkins:
+
+1) New Item
+	item name: Hello-App
+
+	free style project
+		Ok
+
+
+2) Build steps:
+	choose "execute windows batch command"
+
+	d:
+	cd D:\Jag\UST\Wave4\Wave4_Batch5\Java
+	javac Hello.java
+	java Hello
+
+3) now submit
+
+How to run?
+
+click "Build now"
+see Build history shows build number #1
+in green tick when successful
+in red x when failed
+
+click the #1 and then
+
+click console output
+
+in console output, we are able to see the output of the program run by jenkins.
+
+-----------------------------------------------------------------------------
+To be able to do CI, 
+we should do the same using git
+
+1) lets create a git hub repository
+
+https://github.com/jagasia/hello.git
+
+2) now create Hello.java in "hello" folder
+public class Hello
+{
+	public static void main(String []args)
+	{
+		System.out.println("Hello this is UST Wave 4 batch...");
+	}
+}
+
+3) in hello folder
+
+git init
+git remote add origin https://github.com/jagasia/hello.git
+git add .
+git commit -m "first"
+git branch -M jag
+git push -u origin jag
+
+4) in jenkins
+	create an item
+
+choose git scm
+and provide the url
+correct branch name
+
+5) build steps
+
+git pull https://github.com/jagasia/hello.git
+javac Hello.java
+java Hello
+
+6) build now
+
+click the build no and check console output
+
+you can find the steps 
+	git pull
+	javac
+	java
+
+and the output of the program.
+
+
+Now, change the program
+push to git
+
+just build now in jenkins
+
+build #2 console shows the changes reflect from git
+
+if you are running a spring boot maven project, you can run using
+
+mvn spring-boot:run
+
