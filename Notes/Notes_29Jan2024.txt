@@ -1,0 +1,1058 @@
+Part 1: Java Concepts(1 hour 30 minutes)
+-Java Versions:
+1. Overview of major Java versions (Java 8, 11, 17, etc.) and their key features
+2. Highlighting the latest version (at the time of the session) and its improvements
+
+-LTS (Long-Term Support):
+1. Explanation of the LTS concept and its importance for enterprise applications
+2. Discussion of the current LTS version and its support timeline
+
+-Release Cycles:
+1. Understanding the release cadence (e.g., every 6 months) and the rationale behind it
+2. Exploring the features and improvements introduced in the latest
+
+-Functional Interfaces
+-Stream API
+	1 What is Stream API and its purpose 
+2  Benefits of using Stream API (functional-style operations, parallelism, etc.) 
+3  Basic stream operations (map, filter, collect, etc.)
+-Iterators and loops
+
+Break: 5 minutes
+
+Part 2: SOLID Principals( 30 minutes)
+- Explanation of the SOLID acronym (Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion) 
+- Importance of SOLID principles in object-oriented design and development 
+-  Benefits of adhering to SOLID principles (maintainable, extensible, and testable code)
+
+
+Part 3: Design Patterns
+-Definition of design patterns 
+-Benefits of using design patterns (reusable solutions, code maintainability, common language among developers) 
+
+
+
+---------------------------------
+Java versions:-
+
+i learned java 
+1.1
+1.2
+1.3
+1.4
+5	(major)
+6
+7
+8	(major)
+11	(major)
+17	(major)
+21
+23
+
+What are the versions of java, you have used?
+
+Earlier, the java versions evloved very slowly.
+
+Major versions, had lot of new features, performance, security etc and of couse new syntax
+
+What is LTS?
+	Long term support
+this model is introduced in java language versions.
+instead of release major versions once in 3 to 4 years, 
+non-LTS model provides supports only 6 months.
+
+
+
+
+
+for ex:
+Java 5 introduced 
+	Scanner class	to get inputs
+	Generics		type safety
+	for -each/ enhanced for loop
+
+package old;
+
+public class App {
+
+	public static void main(String[] args) {
+		int arr[]= {5,1,8,2,9,4,3,10,7};
+		for(int x : arr)
+		{
+			System.out.println(x);
+		}
+	}
+
+}
+
+The above program does not run in java 1.1 to 1.4 versions
+
+Error:
+Syntax error, 'for each' statements are only available if source level is 1.5 or greater
+
+From java 8 to 11, 17 
+we are going to observe few new features introduced
+
+
+What was new in java
+	8
+	11
+	17
+
+
+java 8
+	lambda
+	stream api
+	method reference
+	Optional class
+	default methods
+
+Lambda
+	what is lambda?
+
+
+
+in javascript:
+
+	var fn1=()=>{}
+	
+i can create any function using arrow
+
+but in java,
+	we cannot use lambda like that for any method.
+	Only to provide quick implementation of a functional interface, we can use lambda.
+
+
+
+ex:
+
+public interface Mathematics {
+	public int calculate(int i, int j);
+}
+
+
+
+
+public class Addition implements Mathematics
+{
+
+	@Override
+	public int calculate(int i, int j) {
+		// TODO Auto-generated method stub
+		return i+j;
+	}
+
+}
+
+
+
+public class Multiplication implements Mathematics
+{
+
+	@Override
+	public int calculate(int i, int j) {
+		// TODO Auto-generated method stub
+		return i*j;
+	}
+
+}
+
+
+
+
+
+public class Subtraction implements Mathematics
+{
+
+	@Override
+	public int calculate(int i, int j) {
+		// TODO Auto-generated method stub
+		return i-j;
+	}
+
+}
+
+
+
+
+The above classes
+	Addition
+	Subtraction
+	Multiplication
+implements Mathematics interface.
+But without creating additional type (class), we can provide implementation (for example division) 
+using lambda 
+as follows:-
+
+
+public class App {
+
+	public static void main(String[] args) {
+		Mathematics m=null;
+		m=new Addition();
+		System.out.println(m.calculate(12, 3));
+		m=new Subtraction();
+		System.out.println(m.calculate(12, 3));
+		m=new Multiplication();
+		System.out.println(m.calculate(12, 3));
+		
+		m=(x,y)->x/y;
+		System.out.println(m.calculate(12, 3));
+	}
+
+}
+
+
+
+----------------
+another example:
+import java.util.Arrays;
+import java.util.Comparator;
+
+
+class LengthComparator implements Comparator<String>
+{
+
+	@Override
+	public int compare(String o1, String o2) {
+		return o1.length()-o2.length();
+	}
+	
+}
+
+public class App2 {
+
+	public static void main(String[] args) {
+		//they ask you to sort the countries by their length
+		String arr[]= {"India","China","Australia","Japan","Bangladesh","England"};
+		//how do you sort these countries? by their length of string
+//		Arrays.sort(arr, new LengthComparator());
+		Arrays.sort(arr, (x,y)->x.length()-y.length());
+		for(String x : arr)
+			System.out.println(x);
+	}
+
+}
+
+
+instead of creating a LengthComparator class,
+we can use lambda to provide implementation wherever Comparator instance is required.
+
+
+In above observations,
+	Mathematics
+	Comparator
+
+these are functional interfaces. So lambda is allowed.
+
+
+Only for functional interface implementation, lambda can be used.
+
+
+What is a functional interface?
+	an interface that contains only 1 abstract method, i a functional interface.
+
+if you use lambda where the implementation of a non functional interface is required, then
+error:		The target type of this expression must be a functional interface
+
+
+use 
+	@FunctionalInterface annotation on the interface where you want to ensure that you are following the rules of functional interface.
+
+
+Example for functional interface
+	Runnable			run()
+	Comparator		compare()
+	Predicate			test()
+
+
+
+
+public class App3 {
+
+	private static void method1(String message)
+	{
+		for(int i=0;i<10;i++)
+		{
+			System.out.println(Thread.currentThread().getName()+message);
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public static void main(String[] args) 
+	{
+		Thread t1=new Thread(()->{
+			method1("Hello");
+		});
+		Thread t2=new Thread(()->{
+			method1("Hi");
+		});
+		
+		t1.start();
+		t2.start();
+	}
+
+}
+
+
+
+------------------------
+What is method reference?
+	again, method reference is also related to functional interface.
+	But, it is different from lambda in a very big way.
+
+	in case of lambda, we are providing the implementation 
+	in case of method reference, we are referring to an existing method as implementation
+
+
+
+
+class Counter
+{
+	public static void count() 
+	{
+		for(int i=0;i<10;i++)
+		{
+			System.out.println(i);
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+}
+
+public class App {
+
+	public static void main(String[] args) {
+		Thread t1=new Thread(Counter::count);
+		t1.start();
+	}
+
+}
+
+
+
+the above is an example for static method reference. Why? because, count is a static method
+to refer a static method, we use <<classname>>.staticmethodname
+
+if it is an instance method, then <<objectname>>.methodname
+
+
+class Counter
+{
+	public void count() 
+	{
+		for(int i=0;i<10;i++)
+		{
+			System.out.println(i);
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+}
+
+public class App {
+
+	public static void main(String[] args) {
+		Counter c=new Counter();
+		Thread t1=new Thread(c::count);
+		t1.start();
+	}
+
+}
+
+
+----------------------------------------
+class Counter
+{
+	String message;
+	public Counter() {}
+	
+	public Counter(String message) {
+		super();
+		this.message = message;
+	}
+
+	public void count() 
+	{
+		for(int i=0;i<10;i++)
+		{
+			System.out.println(message+" "+i);
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+}
+
+public class App {
+
+	public static void main(String[] args) {
+		Counter c1=new Counter("Good Morning");
+		Thread t1=new Thread(c1::count);
+		Counter c2=new Counter("Good Evening");
+		Thread t2=new Thread(c2::count);
+		t1.start();
+		t2.start();
+	}
+
+}
+
+
+
+If method reference was not there,
+class A implements Runnable
+{
+
+	@Override
+	public void run() {
+		Counter c1=new Counter("Good Morning");
+		c1.count();
+	}
+	
+}
+
+
+this involves introducing additional class
+---------------------------------------------
+Stream API
+-------------
+What is stream api?
+	wrapper on a collection that allows us to 
+		filter
+		sort
+		map
+		group
+and lot of operations done
+mostly which we would have done using iteration
+
+stream api, mostly is used as a replacement of looping
+
+each operation on stream may return another stream
+stream does not store any result in itself, we can collect the result
+it works on the copy of a collection and does not affect the collection
+
+terminal operations
+	forEach
+	collect
+
+intermediate operations
+	map
+	filter
+	sort
+
+
+
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class App {
+
+	public static void main(String[] args) {
+		List<String> countries = Arrays.asList("Nepal","Bhutan","Germany","Pakistan","Sri lanka","India", "Australia");
+//		List<String> result = countries.stream()
+//		.map((c)->c.toUpperCase())
+//		.collect(Collectors.toList());
+//		
+		
+		
+		countries.stream()
+		.map((c)->c.toUpperCase())
+		.forEach(System.out::println);
+	}
+
+}
+
+
+
+
+
+
+
+
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+public class App2 {
+
+	public static void main(String[] args) throws ParseException {
+		List<Employee> empList=new ArrayList<>();
+		SimpleDateFormat sdf=new SimpleDateFormat("dd-MMM-yyyy");
+		empList.add(new Employee(7, "Babu", sdf.parse("08-Jan-2002")));
+		empList.add(new Employee(3, "Alexander", sdf.parse("01-Jun-2011")));
+		empList.add(new Employee(5, "Zaheer", sdf.parse("08-Sep-2012")));
+		empList.add(new Employee(2, "Suresh", sdf.parse("18-Apr-2007")));
+		empList.add(new Employee(4, "Raja", sdf.parse("11-Feb-2005")));
+
+		empList.stream()
+		.map((e)->e.getName())
+		.forEach(System.out::println);
+	}
+
+}
+
+
+
+
+
+
+
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
+class A implements Predicate<Employee>{
+
+	@Override
+	public boolean test(Employee t) {
+		return t.getName().length()<5;
+	}
+	
+}
+
+public class App3 {
+
+	public static void main(String[] args) throws ParseException {
+		List<Employee> empList=new ArrayList<>();
+		SimpleDateFormat sdf=new SimpleDateFormat("dd-MMM-yyyy");
+		empList.add(new Employee(7, "Babu", sdf.parse("08-Jan-2002")));
+		empList.add(new Employee(3, "Alexander", sdf.parse("01-Jun-2011")));
+		empList.add(new Employee(5, "Zaheer", sdf.parse("08-Sep-2012")));
+		empList.add(new Employee(2, "Suresh", sdf.parse("18-Apr-2007")));
+		empList.add(new Employee(4, "Raja", sdf.parse("11-Feb-2005")));
+
+		empList.stream()
+		.filter((t)->t.getName().length()>5)		//lambda
+		.forEach(System.out::println);		//method reference
+	}
+
+}
+
+
+
+
+
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
+class A implements Predicate<Employee>{
+
+	@Override
+	public boolean test(Employee t) {
+		return t.getName().length()<5;
+	}
+	
+}
+
+public class App3 {
+
+	public static void main(String[] args) throws ParseException {
+		List<Employee> empList=new ArrayList<>();
+		SimpleDateFormat sdf=new SimpleDateFormat("dd-MMM-yyyy");
+		empList.add(new Employee(7, "Babu", sdf.parse("08-Jan-2002")));
+		empList.add(new Employee(3, "Alexander", sdf.parse("01-Jun-2011")));
+		empList.add(new Employee(5, "Zaheer", sdf.parse("08-Sep-2012")));
+		empList.add(new Employee(2, "Suresh", sdf.parse("18-Apr-2007")));
+		empList.add(new Employee(4, "Raja", sdf.parse("11-Feb-2005")));
+
+		empList.stream()
+		.filter((t)->t.getName().length()>5)
+		.sorted((a,b)->b.getName().compareTo(a.getName()))
+		.forEach(System.out::println);
+	}
+
+}
+
+
+
+
+Stream api with group by
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+class A implements Predicate<Employee>{
+
+	@Override
+	public boolean test(Employee t) {
+		return t.getName().length()<5;
+	}
+	
+}
+
+public class App3 {
+
+	public static void main(String[] args) throws ParseException {
+		List<Employee> empList=new ArrayList<>();
+		SimpleDateFormat sdf=new SimpleDateFormat("dd-MMM-yyyy");
+		empList.add(new Employee(7, "Babu", sdf.parse("08-Jan-2002"), "ECE",100000));
+		empList.add(new Employee(3, "Alexander", sdf.parse("01-Jun-2011"), "IT",100000));
+		empList.add(new Employee(5, "Zaheer", sdf.parse("08-Sep-2012"), "IT",100000));
+		empList.add(new Employee(2, "Suresh", sdf.parse("18-Apr-2007"), "CSE",100000));
+		empList.add(new Employee(4, "Raja", sdf.parse("11-Feb-2005"), "CSE",100000));
+
+		Map<String, Integer> map = empList.stream()
+		.collect(Collectors.groupingBy(Employee::getDepartment, Collectors.summingInt(Employee::getSalary)));
+		
+		for(Entry<String, Integer> e:map.entrySet())
+			System.out.println(e);
+	}
+
+}
+
+
+
+----------------------------------------------------------------
+Java 8 onwards, interfaces supports
+	static and default methods with body
+
+before java 8, interfaces can contain only
+	abstract methods
+	constant
+
+all members of an interface are public by default.
+
+default methods of interface, is considered as default implementation.
+When the implementing classes, do not override, default methods, then default is taken
+When overridden, then the overridden method is taken
+
+static methods in interface, can be called using interface name.
+
+---------------------------------
+Optional class
+before java 8,
+	methods returning objects are ofter needed to check null, to avoid NullPointerException
+
+
+Optional class provides methods:
+	isEmpty()
+	isPresent()
+
+we can always use these methods check before accessing any member of an object.
+
+thereby we can avoid NullPointerException
+
+
+-------------------------
+Java 11 features:
+
+Local-Variable Syntax for Lambda Parameters: Use var in lambda expressions.
+
+
+(x,y)->{
+}
+
+instead of that 
+
+(var x, var y)->{
+}
+
+by using type declaration, we are allowed to use annotations
+
+
+(@Nullable var x, @Notnull var y)->{
+}
+
+
+
+-------------------------------
+java 11 introduces HttpClient
+
+to replace 
+HttpURLConnection
+
+
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
+public class APITester {
+   public static void main(String[] args) {
+      HttpClient httpClient = HttpClient.newBuilder()
+         .version(HttpClient.Version.HTTP_2)
+         .connectTimeout(Duration.ofSeconds(10))
+         .build(); 
+         try {
+            HttpRequest request = HttpRequest.newBuilder()
+            .GET()
+            .uri(URI.create("https://www.google.com"))
+            .build();                              
+            HttpResponse<String> response = httpClient.send(request,
+            HttpResponse.BodyHandlers.ofString()); 
+
+         System.out.println("Status code: " + response.statusCode());                            
+         System.out.println("Headers: " + response.headers().allValues("content-type"));
+         System.out.println("Body: " + response.body());
+      } catch (IOException | InterruptedException e) {
+         e.printStackTrace();
+      }
+   }
+}
+
+
+
+
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
+public class ApiTest {
+   public static void main(String[] args) {
+      HttpClient httpClient = HttpClient.newBuilder()
+         .version(HttpClient.Version.HTTP_2)
+         .connectTimeout(Duration.ofSeconds(10))
+         .build(); 
+         try {
+            HttpRequest request = HttpRequest.newBuilder()
+            .GET()
+            .uri(URI.create("https://jsonplaceholder.typicode.com/todos/1"))
+            .build();                              
+            HttpResponse<String> response = httpClient.send(request,
+            HttpResponse.BodyHandlers.ofString()); 
+
+         System.out.println("Status code: " + response.statusCode());                            
+         System.out.println("Headers: " + response.headers().allValues("content-type"));
+         System.out.println("Body: " + response.body());
+      } catch (IOException | InterruptedException e) {
+         e.printStackTrace();
+      }
+   }
+}
+
+
+--------------------------------
+Nest-Based Access Control: Improved encapsulation of nested classes.
+
+
+Basically a parent class can access inner class members and vice versa as unconditional access
+even the private members
+
+
+
+public class Outer {
+
+    public void outerPublic() {
+    }
+
+    private void outerPrivate() {
+    }
+
+    class Inner {
+
+        public void innerPublic() {
+            outerPrivate();
+        }
+    }
+}
+
+in above example, inner class is able to call outer class's private method.
+
+
+Java 17
+----------
+Sealed interface
+	permits only certain classes to implement
+	how is it different from other interfaces?
+		interfaces are always allowed to be implemented by a class
+		but sealed interfaces are not allowed by all classes to implement.
+		only those classes permitted by the sealed interface are allowed to implement
+
+
+
+sealed interface Person permits Student
+{
+	
+}
+
+non-sealed class Student implements Person
+{
+	
+}
+
+public class App {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}
+
+
+
+
+Pattern Matching for instanceof: Simplifies type checking.
+
+
+
+normally, we use "instanceof" operator to check if an object is instance of a class
+and it returns true
+if it in the inheritance hierarchy
+
+not only exact match
+
+
+// Java Program to Illustrate Pattern matching for 
+// instanceof Keyword 
+
+public class GFG { 
+
+	public static void resolveTypeOfObject(Animal animal) 
+	{ 
+		if (animal instanceof Cat cat) { 
+			cat.meow(); 
+			// other cat operations 
+		} 
+		else if (animal instanceof Dog dog) { 
+			dog.woof(); 
+			// other dog operations 
+		} 
+	} 
+
+	public static void main(String[] args) 
+	{ 
+		Animal animal = new Dog(); 
+		resolveTypeOfObject(animal); 
+
+		animal = new Cat(); 
+		resolveTypeOfObject(animal); 
+	} 
+}
+
+
+
+
+Records: Introduces compact syntax for immutable data classes.
+
+
+Normally, when we create a class with some properties, often we use boiler plate code
+	constructors
+	getters
+	setters
+	toString
+
+(of course, you will say, Lombok can be used to eliminate the need to write the above). My point is different.
+
+we dont even need to create this class.
+
+
+record User(String username, String password) {}
+public class RecordDemo {
+
+	public static User method()
+	{
+		//i want to return one object containing 2 properties
+		return new User("raja","suresh");
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(method());
+	}
+
+}
+
+
+
+
+
+
+lot of things to observe in record:
+	it is final
+
+
+
+
+Part 2: SOLID Principals( 30 minutes)
+- Explanation of the SOLID acronym (Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion) 
+- Importance of SOLID principles in object-oriented design and development 
+-  Benefits of adhering to SOLID principles (maintainable, extensible, and testable code)
+
+
+Part 3: Design Patterns
+-Definition of design patterns 
+-Benefits of using design patterns (reusable solutions, code maintainability, common language among developers) 
+
+
+
+
+SOLID
+	Single Responsibility Principle
+	Open Closed Principle
+	Liskov Substitution Principle
+	Interface Segregation Principle
+	Dependency Inversion Principle
+
+
+SRP	Single Responsibility Principle
+A class must be created for a single responsibility only.
+we should not combine multiple classes together.
+A class must contain method related to a single entity.
+
+
+
+for example:
+public class Invoice
+{
+            public void AddInvoice()
+            { 
+                // your logic
+            }
+
+            public void DeleteInvoice()
+            { 
+                // your logic
+            }
+
+            public void GenerateReport()
+            { 
+                // your logic
+            }
+
+            public void EmailReport()
+            { 
+                // your logic
+            }
+}
+
+
+the above class does not follow the SRP.
+So it is refactored as follows:
+
+public class Invoice
+{
+            public void AddInvoice()
+            {
+                // your logic
+            }
+
+            public void DeleteInvoice()
+            {
+                // your logic
+            }
+}
+
+public class Report
+{
+
+            public void GenerateReport()
+            {
+                // your logic
+            }
+}
+
+public class Email
+{
+            public void EmailReport()
+            {
+                // your logic
+            }
+}
+
+-----------------------------------------------
+Open Close Principle
+
+Open to extension
+Close to modification
+
+A class can be extended by a sub class
+and new features can be added to the sub class
+existing features are modified in the sub class (overriding) but the existing class is not modified.
+
+
+Liskov Substitution Principle
+------------------------------------
+An object of a sub class should be a "kind of" super class or its parent class
+
+Ex:
+
+class Person
+
+class Student extends Person
+
+class JavaStudent extends Student
+
+
+JavaStudent raja=new new JavaStudent();
+
+raja is a java student
+raja is a student
+raja is a person
+
+
+-------------------------------
+Interface Segregation Principle
+
+What is an interface?
+	seperates the declaration from implementation
+
+If you go to a computer coaching center, they will give you a broucher.
+Broucher contains the list of topics they will teach.
+Book contain topics and content everything.
+
+now, you can relate an interface with a broucher
+and a class with the book
+
+When we access a web service, actually, we are calling the method of a class which is running in a server.
+through internet.
+
+To be able to call a method, we need object
+to have an object, we need the class.
+
+They will not share the class to you, because, it is running server and we call it via internet.
+
+So, they will share only the interface.
+
+Person s=new Student();		like that,
+
+
+
+Dependency Inversion Principle
+----------------------------------------
+List<Integer> list=new ArrayList<>();
+
+
+
+public void display1(ArrayList<Integer> x)	//accepts only arraylist
+public void display2(LinkedList<Integer> x)	//accepts only linkedlist
+public void display3(List<Integer> x)		//accepts linkedlist, arraylist, vector, etc.
