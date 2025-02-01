@@ -1,0 +1,519 @@
+Part 2: SOLID Principals( 30 minutes)
+- Explanation of the SOLID acronym (Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion) 
+- Importance of SOLID principles in object-oriented design and development 
+-  Benefits of adhering to SOLID principles (maintainable, extensible, and testable code)
+
+
+Part 3: Design Patterns
+-Definition of design patterns 
+-Benefits of using design patterns (reusable solutions, code maintainability, common language among developers) 
+
+
+8.2
+Part 1: Design Patterns(1 hour 40 minutes)
+--------------------------------------------------
+Single Responsibility principle
+Open/closed principle
+Liskov Substitution principle
+Interface Segregation principle
+Dependency Inversion principle
+
+GoF - Gang of Four
+Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides
+
+
+3 categories of design patterns:
+	Creational
+	Structural
+	Behavioral
+
+
+
+Creational design patterns:-
+	Singleton 
+	Factory
+	Prototype
+
+What is singleton pattern?
+	refers to a pattern of creating classes, for which only 1 object exists.
+	and creating objects is restricted.
+	the only object available is obtained using a static method
+
+
+
+public class Company {
+	private static Company company;
+	private String name;
+	private String location;
+	
+	private Company() {}
+
+	private Company(String name, String location) {
+		super();
+		this.name = name;
+		this.location = location;
+	}
+	
+	public static Company getInstance() {
+		if(company==null)
+			company=new Company();
+		return company;
+	}
+
+	public final String getName() {
+		return name;
+	}
+
+	public final void setName(String name) {
+		this.name = name;
+	}
+
+	public final String getLocation() {
+		return location;
+	}
+
+	public final void setLocation(String location) {
+		this.location = location;
+	}
+
+	@Override
+	public String toString() {
+		return "Company [name=" + name + ", location=" + location + "]";
+	}
+	
+	
+}
+
+
+
+public class App {
+
+	public static void main(String[] args) {
+		System.out.println("Hello world");
+//		Company c=new Company();
+		Company c=Company.getInstance();
+		c.setName("A");
+		c.setLocation("Thiruvananthapuram");
+		
+//		Company c2=new Company();
+		Company c2 = Company.getInstance();
+		c2.setName("B");
+		c2.setLocation("Cochin");
+		
+		System.out.println(c.getName()); //what is the output?
+		System.out.println(c.getLocation());
+		//c, c2 both are same objects
+	}
+
+}
+
+
+
+steps for creating a singleton class;
+1) create a private constructor for the class		we have prevented object creation
+2) singleton class should contain a static instance
+	of same class type
+3) create a public static method that returns instance of itself
+	check if instance is null, then create and return.
+
+
+
+---------------------------------------
+Factory method design pattern:
+--------------------------------------
+
+Factory is a place where manufacturing happens. manufactoring = creation
+so it is a creational pattern.
+
+Factory pattern, allows us to get instance of class from a factory.
+hides the creation logic from the users.
+
+Do you know JDBC?
+	in jdbc, what are 
+		Connection
+		Statement
+		ResultSet
+
+these are interfaces.
+	the implementation of these interfaces are provided by the database vendor.
+
+So, 
+	Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/ust", uid, pwd);
+		
+Connection is interface,
+con is assigned with an implementation of Connection interface.
+But we never know what is the class that implemented Connection interface, whose object is returned by DriverManager
+
+the implementation of Connection interface is hidden.
+
+
+Hibernate session factory is an example
+
+
+
+
+
+public interface Shape {
+	void draw();
+}
+
+
+
+public class Ciricle implements Shape
+{
+
+	@Override
+	public void draw() {
+		System.out.println("Drawing a circle now...");
+	}
+
+}
+
+
+
+
+public class Rectangle implements Shape
+{
+
+	@Override
+	public void draw() {
+		System.out.println("Drawing a Rectangle now...");
+	}
+
+}
+
+
+
+
+
+public class Triangle implements Shape
+{
+
+	@Override
+	public void draw() {
+		System.out.println("Drawing a triangle now...");
+	}
+
+}
+
+
+
+
+
+public class ShapeFactory {
+	public static Shape getShape(String type)
+	{
+		Shape obj=null;
+		switch(type.toLowerCase())
+		{
+		case "triangle":
+			obj=new Triangle();
+			break;
+		case "rectangle":
+			obj=new Rectangle();
+			break;
+		case "circle":
+			obj=new Ciricle();
+			break;
+		}
+		return obj;
+	}
+}
+
+
+
+
+import java.util.Scanner;
+
+public class AppFactory {
+
+	public static void main(String[] args) {
+		Scanner sc=new Scanner(System.in);
+		Shape s=null;
+		do
+		{
+			System.out.println("Which shape you want to draw? (Press 0 to exit)");
+			String choic=sc.next();
+			if(choic.equals("0"))
+					return;
+			Shape shape = ShapeFactory.getShape(choic);
+			shape.draw();
+		}while(true);
+	}
+
+}
+
+
+Prototype method design pattern:
+-----------------------------------------
+	prototype = cloning
+
+cloning is different from referencing
+ex:
+	Employee e=new Employee(1,"Raja");
+	Employee f=e;		//is not cloning. 
+
+the above is not cloning because, a cloning should produce another object.
+but in above, there is only one object and 2 reference variables.
+
+
+
+
+
+public class Employee {
+	private Integer id;
+	private String name;
+	public Employee() {}
+	public Employee(Integer id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
+	public final Integer getId() {
+		return id;
+	}
+	public final void setId(Integer id) {
+		this.id = id;
+	}
+	public final String getName() {
+		return name;
+	}
+	public final void setName(String name) {
+		this.name = name;
+	}
+	@Override
+	public String toString() {
+		return "Employee [id=" + id + ", name=" + name + "]";
+	}
+	
+	public Employee clone()
+	{
+//		return this;	//not a clone. ref to existing object
+		return new Employee(id, name);	// a new object having same values
+	}
+}
+
+
+
+
+public class AppClone {
+
+	public static void main(String[] args) {
+		Employee e1=new Employee();
+		e1.setId(100);
+		e1.setName("Ravi");
+		
+		Employee e2 = e1.clone();
+		e2.setName("Abdul");
+		System.out.println(e1);
+	}
+
+}
+
+
+
+
+
+
+--------------------------------------
+Structural Design pattern
+-----------------------------
+defines how the objects are arranged
+architecture design
+
+Adapter design pattern
+	adapters provide empty implementation of interface
+	so that we can override only those methods of our choice
+
+Adapter Pattern: The Adapter Pattern allows one class to work with another class that has a different interface. It acts as a bridge between two incompatible interfaces.
+
+
+Decorator Pattern: The Decorator Pattern allows you to add new behaviors or responsibilities to objects without altering their existing code. It’s like adding layers of wrapping to a gift.
+
+
+Proxy Pattern: The Proxy Pattern provides a placeholder of another object to control access to it. It’s like having a remote control for a TV; you interact with the remote instead of directly with the TV.
+
+
+
+
+
+---------------------------------
+Behavioral design pattern
+-----------------------------
+Chain of Responsibility Pattern: The Chain of Responsibility Pattern is a desing pattern in software development. It lets you pass a request through a series of objects, each having its own logic to handle the request or pass it along the chain. This pattern helps in making code more modular and flexibly, as it seprates the sender of a request from the receiver, allowing multiple objects to participate in handling requests.
+
+When an object receives a request, it may either process the request or it may pass the request to a chain of other objects, where one of the appropriate object handle the request.
+
+Observer Pattern: The Observer Pattern establishes a relationship where one thing (called the subject) is watched by several other things (knows as observers).
+Based on publish-subscribe model
+
+
+
+---------------------------------------------------------
+Part 2: Diagrams(45 minutes)
+
+UML
+	Unified Modeling Language
+
+Booch's method
+Rumbaugh's OMT
+Jacobson's OOSE
+
+
+these 3 were unified into UML
+
+static view
+	structural diagrams
+		Class diagram
+		Object diagram
+		Package diagram
+		Component diagram
+		Deployment diagram
+
+	dynamic view
+		Activity diagram
+		Sequence diagram
+		State machine diagram
+		Interaction overview diagram
+		Communication diagram
+		Timing diagram
+		use case diagram
+
+If all these diagrams are effectively used by design team, then the programmer need not have any doubt while coding. These diagrams will answer all your doubts.
+
+For example,
+what are all the classes to be created?
+	class diagram
+what should be login for a particular method?
+	activity diagram
+which method of which object calls wich method of which object?
+	sequence diagram
+even the life line of an object is specified in the sequence diagram and also the order of method invocation using numbers
+
+
+
+
+Use case diagram
+--------------------
+	this is based on user view
+	any end user can understand the use case diagram easily
+	contains, 
+		actors		symbol with one head 2 hands and 2 legs a mid line
+		use cases		oval symbol
+		arrows		solid/ dotted arrows
+		system boundary	vertical rectangle
+
+
+what is an use case?
+	is a process, in the domain
+for ex:
+	if you do a project for ATM, then the following are example for use cases:
+		withdraw
+		deposit
+		check balance
+		change pin
+		validate pin
+
+if you ellaborate an use case, then you will get an Activity diagram (almost like a flow chart)
+
+step 1:
+	identify the use cases covered in the scope of the project
+	draw the use cases as oval
+	connect actors and use cases such that, which actor does which use case is understood.
+
+step 2:
+	review the use cases, you may
+		combine some use cases into one (or)
+		split an use case into multiple
+
+use cases can intern call other use cases as
+	include	(or)
+	extend
+
+if you call "withdraw" use case, it includes, "validate pin" use case
+if you prefer then "withdraw" use case, extends to call "print receipt"
+
+MS Office Visio
+	a very good tool for drawing uml diagrams
+	it will validate if your diagram is right or wrong
+	for ex:
+		if you have a class diagram, then only, it will allow you to create objects in Object diagram
+		only after object diagram is created, then only it will allow, sequence diagrams
+		because, sequence diagrams uses objects life line
+
+
+
+
+Class diagram
+
+a class is drawn as a rectangle that contains 3 compartments
+1) class name
+2) properties/ fields/ attributes
+3) operations/ methods/ functions
+
+in class diagrams, 
+	+	public
+	-	private
+	#	protected
+	~	default
+
+example:
+
+- id: Integer
++name: String
+
+
+methods:
+
++ acceptDetails(id:Integer, name:String):void
+
+
+
+Sequence diagram:
+
+left side of the diagram should contain objects with high life line
+right side as low life line
+
+Explains which object invokes which object's method
+
+State machine diagram:
+
+ex:
+	Medicine is in stock		100 qty available		state = instock
+	Customer purchase 100 qty medicine
+	now the state = out of stock
+
+the state of an object can be changed by any trigger
+triggger can be a time		6pm onwards, office is closed, so state changes
+trigger can be a method call
+
+
+Rectangle
+an object enters the rectangle and exits the rectange
+	in between there is a state change.
+
+from source state -> target state, 
+in between, there can be parallel states also
+
+in between these transitions, there can be a situation where an object exits abruptly (flow final)
+an X inside circle symbol
+
+------------------------------
+Mind Map
+-------------
+To express our idea, and to brainstorm with the team
+basically a central problem/topic is taken and drawn in the center.
+All relavent sub topics are also mentions surrounding the central problem
+use connections and no restrictions on the levels
+
+Powerpoint
+-------------
+MS Office provides us lot of tools like
+	Word
+	Excel
+	Access
+	Powerpoint
+
+
+Powerpoint is used to present ideas using slides and transitions, also provides animations
+word art, smart art (earlier clipart)
