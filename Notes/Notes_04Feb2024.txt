@@ -1,0 +1,341 @@
+The importance of mastering advanced SQL concepts and problem-solving skills for data analysis and database management
+
+SQL
+	ANSI recommended this standard called SQL for RDBMS products by different vendors like
+		IBM
+		Microsoft
+		Oracle
+
+MySQL is based on ANSI, so sometimes, called as ANSI SQL
+	is a product of Sun Microsystems and later in 2010, Oracle corporation has adopted Sun.
+
+ 
+MySQL workbench is a client tool to connect with a mysql server running in our computer or anywhere in the world
+
+aagvsl2p77zaz7.cljtedwklhul.ap-south-1.rds.amazonaws.com
+127.0.0.1		(localhost)
+
+3306
+
+root	
+
+DDL		Data Definition Language
+	CREATE
+	ALTER
+	DROP
+	TRUNCATE
+	RENAME
+DML		Data Manipulation Language
+	INSERT
+	UPDATE
+	DELETE
+DQL		Data Query Language
+	SELECT
+DCL		Data Control Language
+	GRANT
+	REVOKE
+TCL		Transaction Control Language
+	COMMIT
+	SAVEPOINT
+	ROLLBACK
+
+
+
+
+Advanced SQL Query Techniques: 
+
+Revisit and reinforce advanced SQL query techniques, such as:
+
+- Joins (inner, outer, self, and complex joins)
+- Subqueries and correlated subqueries
+- Window functions (ranking, aggregations, and analytics)
+- Common Table Expressions (CTEs) and recursive queries
+- Advanced filtering and pattern matching with regular expressions
+
+
+
+JOINS
+-------
+	use JOIN when we need to retrieve columns from more than 1 table
+
+
+ex:
+	display all the customers who has taken loan
+
+
+SELECT C.CUSTID, C.FNAME 
+FROM CUSTOMER C
+JOIN LOAN L
+ON C.CUSTID=L.CUSTID;
+
+The above query produces correct result. But it is not good idea to use JOIN in this scenario.
+Why?
+JOIN is PRODUCT.	Multiplication
+
+T1 records count multiplied by T2 records count
+and then filter the records based on join condition
+
+
+The above quey displays all columns only from CUSTOMER table. 	1 table
+
+So, join is not necessary for this case.
+
+How to solve this now?
+
+SELECT C.CUSTID, C.FNAME 
+FROM CUSTOMER C
+WHERE C.CUSTID IN
+(
+SELECT CUSTID FROM LOAN
+);
+
+Unless a correlated subquery is used, the subquery is 
+	subquery rows + outer query rows		Not multiplication, but addition
+
+
+JOIN Types:
+--------------
+INNER JOIN
+LEFT OUTER JOIN
+RIGHT OUTER JOIN
+FULL OUTER JOIN
+CROSS JOIN			cartesian product
+NATURAL JOIN			common column
+SELF JOIN
+EQUI JOIN
+NON EQUI JOIN
+
+What is equi join?
+	when the value of a column in one table,
+	matches the value of a column in another table
+		=
+		!=		<>
+
+if = is used in join condition
+or != is used in join condition
+	then it is equi join
+
+
+what is non-equi join
+	IN		or 	NOT IN
+	BETWEEN		or	NOT BETWEEN
+	
+Example for non-equi join:- 
+--------------------------------
+SELECT E.EMPLOYEE_ID, E.FIRST_NAME, E.SALARY, J.JOB_TITLE
+    FROM HR.EMPLOYEES E
+    JOIN HR.JOBS J
+	ON E.SALARY BETWEEN J.MIN_SALARY AND J.MAX_SALARY;
+
+
+the above query is an
+	INNER JOIN
+	NON-EQUI JOIN
+
+INNER JOIN
+	produces result only when the join condition is true
+	produces only matching records
+
+for example:
+
+SELECT * FROM HR.EMPLOYEES;
+107 rows selected.
+
+SELECT * FROM HR.DEPARTMENTS;
+27 rows selected.
+
+
+Now, there are some departments, where no employees found
+
+Only 11 departments have employees.
+16 departments does not have employees.
+
+So, when i do inner join, i will get only those 11 departments 
+when, DEPARTMENTS JOIN EMPLOYEES
+
+Another point.
+1 Employee does not belong to any department.
+So, 106 employees only belong to department
+so, that 1 employee (Kimberely Grant) will not appear in INNER JOIN
+
+
+
+
+SELECT E.FIRST_NAME, E.LAST_NAME, E.DEPARTMENT_ID, D.DEPARTMENT_NAME
+FROM HR.EMPLOYEES E
+JOIN HR.DEPARTMENTS D
+ON E.DEPARTMENT_ID=D.DEPARTMENT_ID;
+
+106 rows selected.
+
+1 employee do not have department id. Kimberely Grant's department id is null. 
+So, in department table, department id is primary key and hence none of them is null.
+NO matching for null in department id
+
+The above is an INNER JOIN, so only matching rows found.
+
+Same, way 
+Not all departments appeared here.
+Only those departments where employees exist, are returned.
+
+OUTER JOIN
+	use outer join when you want to retrieve non matching records also
+
+In the above query, kindly modify that all employees are retrieved.
+EMPLOYEES JOIN DEPARTMENTS
+here, EMPLOYEES is in left side
+so use LEFT OUTER JOIN for all rows from left side table to be retrieved.
+
+
+SELECT E.FIRST_NAME, E.LAST_NAME, E.DEPARTMENT_ID, D.DEPARTMENT_NAME
+FROM HR.EMPLOYEES E
+LEFT JOIN HR.DEPARTMENTS D
+ON E.DEPARTMENT_ID=D.DEPARTMENT_ID;
+
+107 rows selected.
+
+
+
+
+
+
+
+
+
+SELECT E.FIRST_NAME, E.LAST_NAME, E.DEPARTMENT_ID, D.DEPARTMENT_NAME
+FROM HR.EMPLOYEES E
+FULL OUTER JOIN HR.DEPARTMENTS D
+ON E.DEPARTMENT_ID=D.DEPARTMENT_ID;
+
+
+SELF JOIN
+--------------
+Display the 	
+employee id
+first name
+manager id
+manager name
+
+
+SELECT E.EMPLOYEE_ID, E.FIRST_NAME, E.MANAGER_ID, M.FIRST_NAME
+    FROM HR.EMPLOYEES E
+    JOIN HR.EMPLOYEES M
+    ON E.MANAGER_ID=M.EMPLOYEE_ID
+	order by e.employee_id;
+
+
+
+UNION	is addition		query 1 UNION query 2	
+JOIN	is product
+
+
+SELECT * FROM HR.EMPLOYEES WHERE EMPLOYEE_ID<103
+    UNION ALL
+SELECT * FROM HR.EMPLOYEES WHERE EMPLOYEE_ID>101 AND EMPLOYEE_ID<105;
+
+3 + 3 = 6 		in UNION ALL
+
+
+
+
+
+
+SELECT * FROM HR.EMPLOYEES WHERE EMPLOYEE_ID<103
+    UNION ALL
+SELECT * FROM HR.EMPLOYEES WHERE EMPLOYEE_ID>101 AND EMPLOYEE_ID<105;
+
+3 + 3 = 5		Because, EMPLOYEE ID 102 is common in both queries
+
+
+
+
+what is group by?
+	whenever we use aggregate functions,
+	we get 1 result per relation (table)
+	we can get 1 result per group, by using group by
+
+select department_id, sum(salary) from hr.employees
+group by department_id;
+
+if the above query displays, each department_id and their sum of salary,
+then how to find the highest salaried department?
+
+
+select department_id, sum(salary) from hr.employees
+group by department_id
+having sum(salary)>=ALL
+(
+    select sum(salary) from hr.employees
+group by department_id
+);
+
+the above problem can be solved in another way as follows:-
+
+
+select department_id, sum(salary) from hr.employees
+group by department_id
+having sum(salary)=(
+    SELECT MAX(T1.TOTAL) FROM (
+    SELECT DEPARTMENT_ID, SUM(SALARY) TOTAL
+    FROM HR.EMPLOYEES
+    GROUP BY DEPARTMENT_ID
+) T1
+);
+
+
+
+Do you know what is CTE?
+	Common Table Expression
+
+when you want to keep the result of a query as temporary table, BUT IN A SINGLE QUERY
+
+
+Find the account wise balance
+
+sum of all deposits for a particular account - sum of all withdrawals for that particular account
+is the balance.
+
+
+
+WITH DEPOSITS AS (
+SELECT ACNUMBER, SUM(TRANSACTION_AMOUNT) AS D
+FROM TRANDETAILS 
+WHERE TRANSACTION_TYPE='Deposit'
+GROUP BY ACNUMBER
+),
+WITHDRAWALS AS(
+SELECT ACNUMBER, SUM(TRANSACTION_AMOUNT) as W
+FROM TRANDETAILS 
+WHERE TRANSACTION_TYPE='Withdrawal'
+GROUP BY ACNUMBER
+)
+SELECT D.ACNUMBER, D.D- W.W AS BALANCE FROM DEPOSITS D
+JOIN WITHDRAWALS W
+ON D.ACNUMBER=W.ACNUMBER;
+
+
+
+
+
+
+
+AC1	-3000
+AC2	-2000
+AC7	14000
+
+
+
+select d.acnumber, d.deposit, w.withdrawal, (d.deposit-w.withdrawal) Balance from 
+(select acnumber, sum(transaction_amount) as deposit from trandetails where transaction_type='Deposit'
+group by acnumber ) d
+JOIN
+(select acnumber, sum(transaction_amount) as withdrawal from trandetails where transaction_type='Withdrawal'
+group by acnumber ) w
+ON d.acnumber=w.acnumber;
+
+
+How to use regular expressions in select queries?
+
+SELECT * FROM CUSTOMER WHERE FNAME REGEXP '^[AEIOU]+[a-z]+$';
+
+
