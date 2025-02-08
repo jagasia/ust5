@@ -1,0 +1,380 @@
+10.2
+Session 2: Spring MVC
+--------------------------
+In our previous session, we discussed Spring core.
+in java itself, we call java SE as core java.
+then java EE is used for web (web applications, web services)and enterprise applications
+then Java ME is used for mobile applications.
+
+The spring solution for web applications => Spring MVC
+
+Spring MVC
+Spring boot MVC
+
+Before you learn Spring MVC, You should understand 
+what is web application and what is dynamic web project in eclipse/ STS
+What are Servlets & JSP?
+
+Ofcourse, HTML knowledge is required
+
+
+Spring boot MVC is very simplified when compared to spring MVC in terms of number of steps 
+and also many features of Spring boot (like inbuild app server like apache tomcat, convention over config, etc)
+
+First lets see how to create a basic web application in java using eclipse/sts
+
+Demo:
+--------
+what is target runtime?
+	whenever you deploy web applications to a server,
+	the web server provides virtual directory for our web pages to be stored in remote
+	and clients access our website from anywhere using internet
+	
+	but, if you want your website to run some scripts in server, 
+		then server should provide a runtime environment that can execute your java code
+		and the results are sent to browser
+
+	if your website contains only client side scripts lke javascript, then
+	no need for runtime in the server
+
+
+	we use Apache tomcat as a target runtime, and this will provide JRE for our web pages
+
+
+Lab setup:
+	if you are using spring boot, we dont need to download apache tomcat server
+	because it is inbuilt in spring boot
+	
+	but now, we are not using springboot,
+	so download apache tomcat server from
+		https://tomcat.apache.org/download-10.cgi
+
+
+once you create a web project,
+understand the folder structure.
+
+src/main/java
+	is used for your java programs, servlets, etc
+
+src/main/webapp
+	is used for your html, jsp, etc 	(views)
+
+
+right click the project
+	new
+		jsp
+
+index.jsp
+	in body,
+		Hello world 
+
+right click jsp code,
+	run as 
+		run on server
+
+choose apache tomcat whichever version you have
+
+Error:
+	Problem Occurred
+		Starting Tomcat v11.0 Server at localhost has encountered a problem
+
+	Port 8080 required..... is already in use
+
+Solution:
+	1) we can run our project in different port number
+		to run our project in different port number:
+			in eclipse -> Servers -> double click the tomcat server
+			change http port from 8080 to 8081 or any other port above 1000
+
+http://localhost:8081/08-feb-website-1/index.jsp
+
+	or
+	2) find the process running in 8080 and kill the process
+		cmd prompt:
+			netstat -aon
+		find the pid of the process that runs in 8080
+		kill that using task manager
+		
+		now, run again
+http://localhost:8080/08-feb-website-1/index.jsp
+
+
+
+lets create a servlet
+	what is a servlet?
+		a java class that extends HttpServlet and is configured as a servlet
+			name of servlet
+			class of the servlet
+			url mapping
+
+when we give a hyperlink or submit form to that URL, the servlet receives the request
+
+Request		HttpServletRequest
+Response		HttpServletResponse
+
+request 		from browser to Servlet/JSP
+response		from Servlet/JSP to browser
+
+Servlet life cycle
+	init
+	service
+		doGet
+		doPost
+	destroy
+
+
+right click the project and create a servlet
+
+
+http://localhost:8081/08-feb-website-1/maths?no1=2&no2=3
+
+
+the above url is an example for Query string or URL re-writing or Request Param
+
+no1 and no2 are request paramters obtained by the servlet from the JSP
+
+
+in JSP body:
+
+<form action="maths">
+	Number 1: <input type="number" name="no1" /><br/>
+	Number 2: <input type="number" name="no2" /><br/>
+	<input type=submit />
+</form>
+
+
+
+in servlet:
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int no1=Integer.parseInt(request.getParameter("no1"));
+		int no2=Integer.parseInt(request.getParameter("no2"));
+		PrintWriter out = response.getWriter();
+		String output=String.format("Sum of %d and %d is %d", no1, no2, (no1+no2));
+		out.print(output);
+	}
+
+
+
+-----------------------------
+Introducing MVC
+What is MVC?
+	Model View Controller
+
+this is a design pattern
+	Model
+		any code that 
+			defines data		data definition Entity class that maps to table
+			access data		ex: dao, JDBC, JPA, Hibernate 
+	View
+		Input
+		Output
+		User Interface	(CUI/ GUI)	
+			CUI	Scanner, System.out.println	
+			GUI	JFrame, JApplet, Servlet, JSP, HTML
+	Controller
+		in java, the controller is always a Servlet (directly or indirectly)
+		provides web access for views 
+		views from anywhere in the world, can access model using controller
+		If controller is not there, then only Model and View, then both must be in same system
+		by having a controller, views from anywhere can access model
+		Dynamic web project: Controller is created using Servlet
+		Spring MVC:	Controller is a POJO class but in the background there is a servlet (Dispatcher Servlet)
+
+
+
+
+Deployment Descriptor:	(web.xml)
+\src\main\webapp\WEB-INF\web.xml
+
+if this file is missing in the project, that means, while creating project, we have not tick this in 3rd page.
+we can add it by
+	right click project
+		Java EE tools
+			Generate Deployment Descriptor stub
+
+what is web.xml
+	this is our web application configuration file
+
+
+
+
+<servlet>
+    <description></description>
+    <display-name>MyServlet</display-name>
+    <servlet-name>MyServlet</servlet-name>
+    <servlet-class>controller.MyServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MyServlet</servlet-name>
+    <url-pattern>/MyServlet</url-pattern>
+    <url-pattern>/ms</url-pattern>
+    <url-pattern>/myservlet</url-pattern>
+  </servlet-mapping>
+
+
+
+a class extends HttpServlet is a servlet
+but we need to mark that class as a servlet class in our web.xml like above.
+
+    <url-pattern>/*</url-pattern>
+	the above url pattern matches with any url entered
+	so, we will have only 1 servlet and that servlet is called as "DispatcherServlet"
+	this will decide, which method to be called, based on the URL
+
+
+Spring MVC:
+we will have only 1 servlet "DispatcherServlet" this is not created by us, it is part of Spring MVC
+and we are configuring such a way, all requests are recieved by this 1 servlet.
+
+
+Steps for Spring MVC:
+----------------------------
+1) create a dynamic web project
+	ensure that web.xml is present.
+
+2) convert this into a maven project
+	right click project
+		configure
+			convert to maven project
+
+group: com.ust.demo
+artifact: 08-feb-mvc-1
+packaging: war
+
+now we got pom.xml
+3) lets add the dependencies to pom.xml
+<dependency>
+  		  <groupId>com.fasterxml.jackson.core</groupId>
+  		  <artifactId>jackson-databind</artifactId>
+  		  <version>2.18.2</version>
+  		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>6.2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>6.2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>3.0-alpha-1</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>2.0</version>
+		</dependency>
+				<dependency>
+			<groupId>jakarta.servlet.jsp.jstl</groupId>
+			<artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.glassfish.web</groupId>
+			<artifactId>jakarta.servlet.jsp.jstl</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+
+
+4) in web.xml
+	we will configure dispatcher servlet so that it will receive requests from any URL
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+	id="WebApp_ID" version="3.1">
+	<display-name>08-feb-mvc-1</display-name>
+	
+	<servlet>
+		<servlet-name>spring</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>spring</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+</web-app>
+
+5) do you remember we used xml configuration in our spring core session (last session)
+	but this time file name has a convention
+		something-servlet.com
+
+in web.xml, what is the servlet name of dispatcher servlet???? that is something
+
+so file name will be
+	dispatcher-servlet.xml
+
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/mvc
+                           http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!-- Enable annotation-based configuration -->
+    <mvc:annotation-driven />
+
+    <!-- Scan the base package for annotated components like @Controller -->
+    <context:component-scan base-package="com.ust.demo" />
+
+    <!-- View Resolver for resolving JSP files -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/views/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+
+</beans>
+
+
+what is prefix and suffix
+	a controller will mention the name of the view
+	for ex:		index
+
+	it is prefixed and suffixed as
+		/WEB-INF/views/index.jsp
+
+	prefix:
+		/WEB-INF/views/
+	suffix:
+		.jsp
+
+ensure that we keep all views in location mentioned in the prefix
+
+
+6) create the controller but where?
+	notice the spring-servlet.xml mentions the base package:
+
+<context:component-scan base-package="com.ust.demo" />
+
+so, 
+keep all your controller classes only under com.ust.demo
+sub packages are allowed.
+
+
+now,
+lets use JDBC to retrieve all branches from ust45 database branch table
+
+what dependency should be added for mysql in pom.xml
+
+<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <version>5.1.47</version>
+</dependency>
+
+
+you can use version 8
+

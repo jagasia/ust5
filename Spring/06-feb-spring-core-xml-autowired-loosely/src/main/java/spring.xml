@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+
+	<bean id="sony" class="com.ust.demo.Sony"></bean>
+	<bean id="jbl" class="com.ust.demo.Jbl"></bean>
+
+	<bean id="car" class="com.ust.demo.Car" autowire="byName" > 
+	<!-- i dont 
+		inject the sony myself. But i autowire --> 
+		</bean>
+
+	<!-- <bean id="car" class="com.ust.demo.Car">
+		<property name="audio" ref="jbl"></property>
+	</bean> -->
+
+</beans>

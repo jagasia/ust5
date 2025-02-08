@@ -1,0 +1,622 @@
+10.1
+Session 1: Spring Core
+
+● Introduction to Spring Framework
+● Dependency Injection and Inversion of Control principles
+● Spring Bean life cycle
+● Coding demos
+
+Spring framework
+	why is it called as Spring?
+	There was a framework called EJB (Enterprise Java Beans) which provided several benefits but was considered as winter season for developers. Winter they consider as difficult to live.
+So, they introduced a framework that simplified EJB and they named it as Spring framework. Considered as Spring season for EJB developers.
+
+What did EJB provide, that Spring now provides?
+Bean management
+	life cycle management
+	scalability
+Persistence
+	transaction management
+Security
+
+
+What is Bean?
+	java bean?
+		any component developed in java language is called as java bean
+what is a component?
+	is any reusable piece of code that can be plugged into any type of application
+
+type of application?
+	console application		jar	System.out.println		Scanner
+	windows application		jar	JFrame, AWT, Swing
+	web application		war/ear	jsp, servlet, applet
+	mobile application			MIDlet
+
+if you create a java class,
+	that does not contain main method (main is there means, it is application)
+
+component vs application
+
+components does not have main method. so i cannot run a component.
+i can plug the component into another component or application and i run the application
+
+console applications can be run in command prompt/ console
+
+
+web application can be run in servers (like apache tomcat, jboss, glassfish, weblogic etc)
+
+components in java are called as java beans.
+
+some guidelines for java beans:
+	public class
+	non public data members
+	public getters and setters
+	if any arg constructors are there, then no arg constructor also
+	public methods
+
+the above apply for any POJO class	(Plain Old Java Objects)
+
+such java beans are created by the bean developer 
+
+What is the scenario, Java bean becomes Enterprise Java Beans?
+	Enterprise Java Beans =  Java Bean + Services
+
+https://studentofjava.blog/understanding-enterprise-javabeans-ejb-and-their-use-cases/
+
+Concurrency
+Security
+Persistence
+Transaction
+
+Any application, may require some common services:
+they are called as "Generic Services"
+
+For example, 
+	we send parcels through courier.
+	what i send, what you send, what others send, it all depends on the person who send parcel.
+	But, there are certain services common irrespective of the person who send the parcel
+		parcel should be safe from hot sun
+		parcel should be safe from rain
+		parcel should be safe from thieves
+		parcel should .......
+
+	who provide these services?
+		CONTAINER
+
+Same way, for our java bean also, there are some services, common for any application called as 
+Generic services
+	Concurrency
+	Security
+	Persistence
+	Transaction
+
+These are provided by container.
+If it is EJB, then EJB Container
+If it is Spring framework, then it is IOC Container.
+
+What is container?
+	container is a special JVM, that provides generic services.
+
+What a bean developer do?
+	concentrate on the bean development
+	works on the application specific services.
+		calculation
+		validation
+		CRUD
+			whatever it is
+
+Earlier, before EJB, developer was responsible for handling those generic services.
+
+You are creating a web application called "Facebook"
+when you test it, and when you give demo, it works absolutely fine.
+
+But in real life, when the number of users increase?
+scalability issue arises.
+
+So, container will do the following to ensure that, with a limited memory, it can handle more users, by 
+	passivating the beans
+	activating the beans
+
+The container, usually maintains a pool of bean instances. say 100 objects at any time
+
+so, 1st to 100 users are served.
+when 101st user access our application?
+	there is no object available?
+		container will find the most idle object and passivate that object
+
+passivate
+	the state of the object is stored in secondary storage (temp file)
+	the object's memory is reclaimed.
+	that memory is used by 101st user
+
+for every next user, comes, a passivation happens and memory is reclaimed.
+
+What if the passivated user, becomes active?
+	consider that user as 102nd user and do the same
+
+		find another idle object, passivate, reclaim and use that memory for this object
+
+activate
+	when an idle user becomes active, the passivated object's state is taken from secondary storage 
+	and a new object is created, and the state is filled in that object
+
+Life cycle of a bean
+	construct
+	passivate
+	activate
+	destroy
+
+
+postConstruct
+prePassivate
+postActivate
+preDestroy
+
+
+Since, we want the f/w to take care of life cycle of the bean, WE ARE NOT SUPPOSED TO CREATE OBJECT OF BEAN. Instead, we get the object of the bean from IOC container.
+	getBean() method instead of "new" operator
+
+
+How can we mark a class as a Bean?
+	how a class becomes a bean?
+		i) using XML configuration
+		2) using Annotations
+			i) @Component
+			ii) @Bean
+
+component = bean
+
+Demo:
+how to begin with spring framework?
+
+For spring core, we create "Maven" quickstart archetype
+which is a core java project created using maven
+
+for mvc, we use webapp archetype
+
+an archetype is nothing but a project template in maven
+
+Maven allows us to
+	create
+	build
+	test
+	package
+		projects
+
+demo starts at 19:34
+---------------------------
+	
+com/org				com
+companyname/organisation name	ust
+projectname			demo
+
+group id:	com.ust.demo
+artifact id: 06-feb-spring-core
+package: same as group id
+
+Every maven project has
+	pom.xml
+
+Project Object Model	(pom)
+What is a dependency in maven	(do not confuse this with Dependency Injection that is different)
+we will add the following dependencies to pom.xml
+
+  	<dependency>
+  	 <groupId>org.springframework</groupId>
+  	 <artifactId>spring-context</artifactId>
+  	 <version>6.2.2</version>
+  	</dependency>
+  	
+
+
+this will download corresponding jar file to our maven local repository	(downloaded from mvnrepository.com)
+
+
+C:\Users\rjaga\.m2\repository\org\springframework\spring-context\6.2.2\spring-context-6.2.2.jar
+
+
+Lets create a bean now:
+
+package com.ust.demo;
+
+public class Mathematics {
+	private Integer no1;
+	private Integer no2;
+	
+	public Mathematics() {}
+
+	public Mathematics(Integer no1, Integer no2) {
+		super();
+		this.no1 = no1;
+		this.no2 = no2;
+	}
+
+	public Integer getNo1() {
+		return no1;
+	}
+
+	public void setNo1(Integer no1) {
+		this.no1 = no1;
+	}
+
+	public Integer getNo2() {
+		return no2;
+	}
+
+	public void setNo2(Integer no2) {
+		this.no2 = no2;
+	}
+	
+	public int sum()
+	{
+		return no1+no2;
+	}
+}
+
+
+
+The above is just a class.
+How can we make it as a bean?
+
+in this demo, we use XML configuration to configure beans
+
+create an xml file directly in src/main/java folder
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns = "http://www.springframework.org/schema/beans"
+   xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:p="http://www.springframework.org/schema/p"
+   xsi:schemaLocation = "http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<bean id="maths" class="com.ust.demo.Mathematics">
+		<property name="no1" value="2" />
+		<property name="no2" value="3" />
+	</bean>
+
+</beans>
+
+
+now, lets check if we are able to get a bean from Spring IOC Container?
+in App.java, under main method:
+
+package com.ust.demo;
+
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+/**
+ * Hello world!
+ *
+ */
+public class App 
+{
+    public static void main( String[] args )
+    {
+    	//represent the xml file as an object
+    	ClassPathXmlApplicationContext ctx=new ClassPathXmlApplicationContext("spring.xml");
+    	//Mathematics m = ctx.getBean(Mathematics.class);
+	Mathematics m=(Mathematics) ctx.getBean("maths");
+    	System.out.println(m.sum());
+        System.out.println( "Hello World!" );
+    }
+}
+
+
+
+------------------------------------------------------------------------------------------------
+
+lets understand the xml code
+
+	<bean id="maths" class="com.ust.demo.Mathematics">
+		<property name="no1" value="12" />
+		<property name="no2" value="13" />
+	</bean>
+
+
+what is the meaning of <property>
+
+in java:
+a non public data member of the class, 
+	which has getter		only getter = read only property
+	or setter			only setter = write only property
+	or both
+is a property
+
+in bean tag, we use property means, IOC Container will use setter method
+
+The above is an example for "Setter based injection"
+
+now, 
+lets see how we do "Constructor based injection"
+
+ 	<bean id="maths" class="com.ust.demo.Mathematics">
+		<constructor-arg name="no1" value="5" />
+		<constructor-arg name="no2" value="3" />		
+	</bean>
+
+
+So, the above example is about Dependency Injection:
+	constructor based
+	setter based
+
+--------------------------
+In java, whatever we do using xml configuration, there will be an annotation based configuration also
+
+so the same example, i am going to do without xml but annotation.
+
+package com.ust.demo;
+
+import org.springframework.stereotype.Component;
+
+@Component("maths")
+public class Mathematics {
+	private Integer no1;
+	private Integer no2;
+	
+	public Mathematics() {
+		this.no1 = 2;
+		this.no2 = 3;
+	}
+
+	public Mathematics(Integer no1, Integer no2) {
+		super();
+		this.no1 = no1;
+		this.no2 = no2;
+	}
+
+	public Integer getNo1() {
+		return no1;
+	}
+
+	public void setNo1(Integer no1) {
+		this.no1 = no1;
+	}
+
+	public Integer getNo2() {
+		return no2;
+	}
+
+	public void setNo2(Integer no2) {
+		this.no2 = no2;
+	}
+	
+	public int sum()
+	{
+		return no1+no2;
+	}
+}
+
+
+
+
+
+package com.ust.demo;
+
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+/**
+ * Hello world!
+ *
+ */
+public class App 
+{
+    public static void main( String[] args )
+    {
+    	//represent the xml file as an object
+    	AnnotationConfigApplicationContext ctx=new AnnotationConfigApplicationContext();
+    	ctx.scan("com");
+    	ctx.refresh();
+    	Mathematics m = ctx.getBean(Mathematics.class);
+    	System.out.println(m.sum());
+        System.out.println( "Hello World!" );
+    }
+}
+
+
+
+We can scan the base packages using Configuration class.
+
+lets create a configuration class
+
+package com.ust.demo;
+
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@ComponentScan(basePackages = {"com"})
+public class MyConfiguration {
+
+}
+
+
+
+package com.ust.demo;
+
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+/**
+ * Hello world!
+ *
+ */
+public class App2 
+{
+    public static void main( String[] args )
+    {
+    	//represent the xml file as an object
+    	AnnotationConfigApplicationContext ctx=new AnnotationConfigApplicationContext(MyConfiguration.class);		//note this
+//    	ctx.scan("com");
+//    	ctx.refresh();
+    	Mathematics m = ctx.getBean(Mathematics.class);
+    	System.out.println(m.sum());
+        System.out.println( "Hello World!" );
+    }
+}
+
+
+
+What is the difference between @Component and @Bean
+
+component=bean
+
+but where can we use these annotations, vary.
+
+@Component
+	can be used on the class
+
+@Bean
+	can be used on the method only		(method inside config class)
+
+
+
+package com.ust.demo;
+
+public class Mathematics {
+	private Integer no1;
+	private Integer no2;
+	
+	public Mathematics() {
+		this.no1 = 2;
+		this.no2 = 3;
+	}
+
+	public Mathematics(Integer no1, Integer no2) {
+		super();
+		this.no1 = no1;
+		this.no2 = no2;
+	}
+
+	public Integer getNo1() {
+		return no1;
+	}
+
+	public void setNo1(Integer no1) {
+		this.no1 = no1;
+	}
+
+	public Integer getNo2() {
+		return no2;
+	}
+
+	public void setNo2(Integer no2) {
+		this.no2 = no2;
+	}
+	
+	public int sum()
+	{
+		return no1+no2;
+	}
+}
+
+
+
+
+package com.ust.demo;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@ComponentScan(basePackages = {"com"})
+public class MyConfiguration {
+
+	@Bean
+	public Mathematics maths()
+	{
+		return new Mathematics(100, 200);
+	}
+}
+
+
+
+
+package com.ust.demo;
+
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+public class App {
+
+	public static void main(String[] args) {
+		AnnotationConfigApplicationContext ctx=new AnnotationConfigApplicationContext(MyConfiguration.class);
+		Mathematics maths=(Mathematics) ctx.getBean("maths");
+		System.out.println(maths.sum());
+	}
+
+}
+--------------------------------------------------------------------------------
+Autowiring
+------------
+What is autowiring?
+	Ability of the IOC container to find and inject the eligible beans as dependency.
+	When 2 beans have composition / aggregation relationship, then the dependency injection can be done by IOC automatically when autowired
+
+Autowiring types:
+	ByType
+	ByName
+
+Aggregation:
+	A has B and both can exist independently
+
+Composition:
+	A has B and A controls the life time of B. B cannot exist independently
+
+in both cases, B can be injected into A using
+	constructor or
+	Setter
+
+when mentioned autowired, then IOC will inject B into A
+
+Demo for autowiring using XML
+
+refer to git for the project
+	06-feb-spring-core-xml-autowired
+
+bean scope
+	singleton		(default)
+	prototype
+
+
+What is loosely coupled?
+	Car has Sony		tightly coupled Because, Sony is a class		
+	Car has Jbl		tightly coupled Because, Jbl is a class
+	Car has Audio		loosely coupled. Because Audio is an interface. 
+				Why?	we can inject either sony or jbl
+
+
+Autowiring by annotation:
+-------------------------------
+06-feb-spring-core-annotation
+06-feb-spring-core-annotation2
+06-feb-spring-core-annotation-autowired-loosely
+
+
+
+Questions in spring core:
+What is IOC?
+	Inversion of Control
+		instead of loosely coupling the dependencies, use interface to inject any implementation
+	
+What is DI?
+	Dependency Injection
+		ability to inject an implementation of dependency using constructor or setter
+
+Types of DI?
+	Setter based DI
+	Constructor based DI
+
+What are the bean scopes?
+	Singleton		(default)
+	Prototype
+
+What is Autowiring?
+	IOC container to find and inject the eligible dependent bean
+
+Types of autowiring?
+	byType
+	byName
+
+when there is a single eligible bean, then byType will work
+when there are multiple eligible beans, then byName will work
+	@Qualifier to specify the bean of our choice to autowire
+
