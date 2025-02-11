@@ -41,14 +41,14 @@ public class BranchController {
 //		Branch branch=new Branch(bid, bname, bcity);
 		BranchDaoImpl bdao=new BranchDaoImpl();
 		bdao.create(branch);
-		return showBranchPage();
+		return select(branch.getBid());
 	}
 	
 	@RequestMapping(value = "/dml", method = RequestMethod.POST, params = "update")
 	public ModelAndView updateBranch(Branch branch) throws SQLException {
 		BranchDaoImpl bdao=new BranchDaoImpl();
 		bdao.update(branch);
-		return showBranchPage();
+		return select(branch.getBid());
 	}
 	
 	@RequestMapping(value = "/dml", method = RequestMethod.POST, params = "delete")

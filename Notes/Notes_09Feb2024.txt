@@ -1,0 +1,425 @@
+Yesterday, we have created a spring MVC project and configured
+DispatcherServlet to receive all URL requests and based on the url,
+it calls the corresponding method of the controller
+
+This approach allows us to have controller classes as POJO class (rather than a servlet which is not POJO)
+
+Discuss the various ways to handle requests in Spring MVC, such as @RequestMapping, @PathVariable, and @RequestParam annotations. Explain how to handle different types of requests (GET, POST, PUT, DELETE) and how to work with request and response data.
+
+Request mapping
+	@RequestMapping(value="/add", method=RequestMethod.GET
+	the above is same as below
+	@GetMapping("/add")
+
+	when the url contains additional information, it can be captured by the controller method in 2 different ways:- request param and path variable
+
+@RequestParam
+	url:
+		http://localhost:8080/projectname/view?key=2
+
+	in hyperlink:
+		<a href="/view?key=2">click me</a>
+
+	also, whenever we submit a form, that contains form elements like text, select, etc, 
+	the value of those form elements are sent a request param 
+	that you might remember in  servlet, jsp, i shown
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int no1=Integer.parseInt(request.getParameter("no1"));
+		int no2=Integer.parseInt(request.getParameter("no2"));
+		PrintWriter out = response.getWriter();
+		String output=String.format("Sum of %d and %d is %d", no1, no2, (no1+no2));
+		out.print(output);
+	}
+
+	request.getParameter
+	@RequestParam
+
+
+@PathVariable
+	url:
+		http://localhost:8080/projectname/view/2
+
+	in hyperlink:
+		<a href="/view/2">click me</a>
+
+
+
+
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+	<div class="container-fluid p-5 bg-primary text-white text-center">
+		<h1>My First Bootstrap Page</h1>
+		<p>Resize this responsive page to see the effect!</p>
+	</div>
+
+	<div class="container mt-5">
+		<div class="row text-center">
+			<div class="col-sm-4"></div>
+			<div class="col-sm-4">
+			<h3>Branch Form here</h3>
+			<form method="post" action="/08-feb-mvc-1/branch/dml">
+				Id:<input type="text" class="form-control" name="bid" value="${branch.bid }" />
+				Name:<input type="text" class="form-control" name="bname" value="${branch.bname }" />
+				City:<input type="text" class="form-control" name="bcity" value="${branch.bcity }" /><br/>
+				<input type="submit" class="btn btn-success" value="Add" name="add" />&nbsp;
+				<input type="submit" class="btn btn-warning" value="Update" name="update" />&nbsp;
+				<input type="submit" class="btn btn-danger" value="Delete" name="delete" />&nbsp;
+			</form>
+			</div>
+			<div class="col-sm-4"></div>
+		</div>
+
+		<div class="row text-center">
+			<div class="col-sm-2"></div>
+			<div class="col-sm-8">
+				<table class="table table-bordered table-striped table-hover">
+					<thead>
+						<tr>
+							<th>Bid</th>
+							<th>BName</th>
+							<th>BCity</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach var="b" items="${branches }">
+							<tr>
+								<td>${b.bid }</td>
+								<td>${b.bname }</td>
+								<td>${b.bcity }</td>
+								<td>
+									<a class="btn btn-info" href="/08-feb-mvc-1/branch/select/${b.bid }">Select</a>
+								</td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</div>
+			<div class="col-sm-2"></div>
+		</div>
+	</div>
+</body>
+</html>
+
+
+
+
+package com.ust.demo.controller;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.ust.demo.model.Branch;
+import com.ust.demo.model.BranchDaoImpl;
+
+@Controller
+@RequestMapping("/branch")
+public class BranchController {
+
+//	@GetMapping
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView showBranchPage() throws SQLException
+	{
+		ModelAndView mv=new ModelAndView();
+		mv.setViewName("branch");
+		BranchDaoImpl bdao=new BranchDaoImpl();
+		List<Branch> branches = bdao.read();
+		mv.addObject("branches",branches);
+		mv.addObject("branch", new Branch());
+		return mv;
+	}
+	
+//	@GetMapping("/dml")
+	@RequestMapping(value = "/dml", method = RequestMethod.POST, params = "add")
+//	public ModelAndView addBranch(@RequestParam("bid") String bid,@RequestParam("bname") String bname,@RequestParam("bcity") String bcity) throws SQLException {
+	public ModelAndView addBranch(Branch branch) throws SQLException {
+//		Branch branch=new Branch(bid, bname, bcity);
+		BranchDaoImpl bdao=new BranchDaoImpl();
+		bdao.create(branch);
+		return showBranchPage();
+	}
+	
+	@RequestMapping(value = "/dml", method = RequestMethod.POST, params = "update")
+	public ModelAndView updateBranch(Branch branch) throws SQLException {
+		BranchDaoImpl bdao=new BranchDaoImpl();
+		bdao.update(branch);
+		return showBranchPage();
+	}
+	
+	@RequestMapping(value = "/dml", method = RequestMethod.POST, params = "delete")
+	public ModelAndView deleteBranch(@RequestParam("bid")String bid) throws SQLException {
+		BranchDaoImpl bdao=new BranchDaoImpl();
+		bdao.delete(bid);
+		return showBranchPage();
+	}
+	
+	@GetMapping("/select/{bid}")
+	public ModelAndView select(@PathVariable("bid") String bid) throws SQLException
+	{
+		BranchDaoImpl bdao=new BranchDaoImpl();
+		Branch branch = bdao.read(bid);
+		ModelAndView mv=new ModelAndView();
+		mv.setViewName("branch");
+		List<Branch> branches = bdao.read();
+		mv.addObject("branches",branches);
+		mv.addObject("branch", branch);
+		return mv;
+	}
+}
+
+
+
+Http methods:
+
+GET		used to retrieve information
+POST		used to add an entry
+PUT		used to update an entry
+DELETE		used to delete and entry
+PATCH		used to update (partial fields)
+
+
+when a form is submitted, then it can be either GET or POST
+
+other http methods, can be tested in postman
+
+
+---------------------------------
+Session 3: Spring Boot Basics
+----------------------------------
+
+Spring boot
+	is working above Spring f/w layer
+	so it is not entirely different at all.
+	provides us a starter project that we can bootstrap
+
+convention over configuration
+	if you follow the convention, then you do not need to do configuration
+	ex:
+		in spring, we use configuration class to mention base package location
+			@ComponentScan
+
+		in spring boot, we do not mention base packages using component scan if
+			if we put the beans under base package or its sub package
+		what is a base package?
+			when you create a spring boot application, we specify
+			our Application.java is present in a package. That is our base package
+			sub packages are allowed
+
+internal server
+	Apache tomcat
+	Jetty
+	Undertow
+
+		so we do not need to download any server
+	
+Spring boot 
+	has main method
+	to run as java application
+	and at runtime, it will create a server and deploy
+
+0 XML configuration
+	no need to use XML
+	of course, we can use if required
+
+3 types of configuration
+	xml
+	application.properties/yml		text file
+	configuration class			@Configuration
+
+opinionated default configuration
+	for ex:
+		if you add spring data jap dependency, then it will assume and configure the datasource
+		so that we can only override when required. (it assumes in memory database)
+
+		same way spring security also
+
+	these are called as auto configuration
+
+
+Starter dependencies
+	instead of having one dependency per jar file, we may have starters, who contain many jars
+	
+Spring boot CLI
+	command line interface 
+		to create, test, run apps in cmd prompt
+
+
+
+Demo:
+how to run our first spring boot application?
+
+in STS:
+
+File -> New -> Spring starter project
+
+group:	com.ust.demo
+artifact:	08-Feb-spring-boot-demo-1
+package:	same as group
+
+next window, choose the dependencies to be added to pom.xml
+	Spring web
+
+finish
+
+now, open the Application.java
+and run
+
+if 8080 port is available, then it will run
+
+else
+change the port in which it should run:
+steps:
+	src/main/resources
+		application.properties
+
+server.port=8081
+
+-------------------------------------
+in spring boot
+	we do not need to use @ComponentScan because, we are following one convention
+	what?	we keep all beans in base package or its sub packages
+
+
+we do not need to use any xml configuration at all.  REALLY? then can you do a MVC project without xml?
+
+
+
+if we are using eclipse (not sts) then 
+go to
+	https://start.spring.io/
+
+generate a project, download, unzip and import to eclipse
+
+
+Demo 
+-------
+Spring boot MVC
+
+1) we have created a project from spring initializr and imported to our workspace
+	group:	com.ust.demo
+	package:	same
+	artifact:	09-feb-boot-mvc
+	java:	17
+	jar
+	maven
+
+2) dependencies:
+	spring web
+	mysql driver
+
+3) prefix and suffix
+src/main/resources
+	application.properties
+
+server.port=5000
+spring.mvc.view.prefix=/WEB-INF/views/
+spring.mvc.view.suffix=.jsp
+
+
+4) as mentioned in the prefix, create folders
+under webapp folder, create
+		WEB-INF/views
+
+since we have chosen jar, "webapp" folder is not found in src/main
+so, i created that folder also and inside webapp, created WEB-INF/views folder
+
+5) inside views folder, create the index.jsp file
+
+6) create a controller
+	where?
+		remember convention over configuration
+
+	create only inside base package or its sub package
+
+
+we have created MyController.java inside com.ust.demo.controller package
+
+
+7) run the project as java application
+8) go to localhost:5000
+
+9) problem 404
+and in console we get the following error:
+
+"Path with "WEB-INF" or "META-INF": [WEB-INF/views/index.jsp]"
+
+solution:
+in pom.xml, choose the server
+we dont need to download / install server, but just choose
+<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-jasper</artifactId>
+			<version>10.1.33</version>
+		</dependency>
+
+
+
+
+
+for jstl add the following dependencies:
+
+		<dependency>
+			<groupId>jakarta.servlet.jsp.jstl</groupId>
+			<artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.glassfish.web</groupId>
+			<artifactId>jakarta.servlet.jsp.jstl</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+
+
+
+
+------------------------------
+What is spring FORMS?
+like jstl, spring also provides, custom tag libraries including spring forms
+we can manage not only the form states, using model attribute, 
+we can also do validations using spring forms
+
+we need to add the taglib directive for spring forms
+
+
+@Controller
+@RestController		thursday
+@RequestMapping
+	used for any http method like GET, POST, PUT, DELETE, PATCH
+@GetMapping
+@PostMapping
+@PutMapping
+@DeleteMapping
+@PatchMapping
+
+@ModelAttribute
+@ResponseBody
+@RequestBody		thursday
+
+@PathVariable
+@RequestParam
+
+@Valid			tuesday

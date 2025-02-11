@@ -1,0 +1,888 @@
+ORM	-	Object Relational Mapping
+What is the need for ORM?
+It starts from E-R diagram
+Entity - Relationship
+
+You identify the entities involved in the business
+and their relationships
+
+Entities become Table in database
+Entities become entity classes in Java
+
+If i find 1 row from employee table,
+it is 1 employee (1 entity)
+How do you represent 1 employee in java?
+	An object of Employee class
+
+How do you represent multiple employees in java?
+	either Array of Employee objects or List or Set 
+
+Attributes
+	An entity can have attributes
+	attributes become columns in the table
+	and properties in java class
+
+Relationship
+	1 to 1
+	1 to many
+	many to 1
+	many to many
+
+1 to 1
+	A Department have only 1 head
+	A Book has only 1 Author.	But 1 Author can write many books. So it is not 1 to 1
+	Book vs Author is 		Many to One
+	Author vs Book		One to Many
+
+how to deal with 1 to 1
+	Mostly, 1 will be merged with 1 only
+	we may not necessarily have 2 tables in this case.
+
+
+But some books are authored by more than 1 authors.
+In such case, it is Many to Many
+
+Many to 1
+	Many Employees belongs to 1 Department
+	
+1 to Many
+	1 Department has Many Employees
+
+how to deal with 1 to many?
+	1 will join many.
+
+ex:
+	1 Department has Many Employees
+	so, that departmentId will become a column in Employees table
+
+vice versa will not be possible
+	Department table cannot contain employeeid column because,
+	in 1 row of department table, how we can accommodate, many employee ids?
+
+Many to Many
+how to deal many to many?
+	the relationship will be come an entity
+	
+ex:
+	Many Customers buy Many Products
+relationship is m to m
+so that relationship becomes an entity 
+
+CUSTOMER	SALES	PRODUCTS
+
+CUSTOMER to SALES	is		1 to Many
+SALES to PRODUCTS	is		Many to 1
+
+still, many to many is possible (but not without 3rd entity)
+
+Object in java, is mapped to a Relation in database	ORM
+
+a class which can be ORM is an entity class.
+
+Why?
+
+if you notice our dao impl, then
+the same concept can be applied to any entity class.
+
+In java, we can do reflection
+
+What is reflection?
+	reading meta data
+	ability to write java code that can understand another java code
+
+ex:
+	finding what are all methods available in a class. We can write a program for that.
+
+Same way,
+if we create an entity class,
+cant we create another java program that can understand how many properties are there?
+what are they?
+and accordingly, automatically, write an SQL statement according to the entity class?
+Yes. of course.
+
+That gave the way for new framework called JPA
+JPA is a concept implemented by EJB
+and then Hibernate
+
+Hibernate framework is based on Java Persistence API
+
+JDBC often requires us to write common boilerplate code.
+JPA based frameworks, eliminate the need for writing basic sql statement.
+
+Only thing, we need to map class with table and configure
+
+advantage is our java code will remain same IRRESPECTIVE OF the type of RDBMS
+
+so, if i change my db from mysql to oracle, 
+it does not require any change in my java code.
+Only the configuration will change
+
+Evolution of JPA
+
+EJB
+Hibernate framework
+
+Hibernate configurations
+	hibernate.cfg.xml		(though any name is allowed)
+		provides details about
+			driver-class-name
+			url
+			username
+			password
+			dialect		(which SQL code should be generated)
+			ddl auto		should i create table/ drop and create/ update
+			show sql		should i show generated sql 
+			format sql	
+
+	entity.hbm.xml
+		mapping file for each entity class
+			table name vs entity class name
+			column name vs property name and types
+			primary key field name
+
+we can also use annotations for mapping instead of xml
+
+		Configuration cfg=new Configuration();
+		cfg.configure("hibernate.cfg.xml");
+		SessionFactory sf = cfg.buildSessionFactory();
+		return sf.openSession();
+
+
+xml config file is not represented as object
+using that object, you are logging into database. That is what called as session
+
+
+	public void create(Student student) {
+		Session session = retrieveSession();
+		Transaction tran = session.beginTransaction();
+		session.persist(student);
+		tran.commit();
+		session.close();
+	}
+
+
+
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-configuration SYSTEM 
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<property name="connection.url">jdbc:mysql://localhost:3306/wipro3</property>
+
+		<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+
+		<property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
+
+		<property name="connection.username">root</property>
+		<property name="connection.password"></property>
+
+		<!-- DB schema will be updated if needed -->
+		<property name="hbm2ddl.auto">update</property>
+		<property name="show_sql">true</property>
+		<property name="format_sql">false</property>
+		<mapping resource="student.hbm.xml" />
+	<!-- 	<mapping class="mla.mar_20_1.model.Actor" /> -->
+	</session-factory>
+</hibernate-configuration>
+
+
+
+
+
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name = "com.wipro.abcd.model.Student" table = "STUDENT">
+      
+      <meta attribute = "class-description">
+         This class contains the Student detail. 
+      </meta>
+      
+      <id name = "id" type = "int" column = "id">
+         <generator class="native"/>
+      </id>
+      
+      <property name = "name" column = "name" type = "string"/>
+      <property name = "dateOfBirth" column="dob"  type = "date"/>      
+   </class>
+</hibernate-mapping>
+
+
+---------------------------------------
+After using hibernate for few years, 
+when spring framework was introduced, then
+spring introduced HibernateTemplate
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.3.4.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.example</groupId>
+	<artifactId>pranesh-project-1</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+	<name>pranesh-project-1</name>
+	<description>Demo project for Spring Boot</description>
+
+	<properties>
+		<java.version>1.8</java.version>
+	</properties>
+
+	<dependencies>
+	<!-- https://mvnrepository.com/artifact/javax.servlet/jstl -->
+<dependency>
+    <groupId>javax.servlet</groupId>
+    <artifactId>jstl</artifactId>
+    <version>1.2</version>
+</dependency>
+	
+	
+	<dependency>
+		<groupId>org.apache.tomcat.embed</groupId>
+		<artifactId>tomcat-embed-jasper</artifactId>
+	</dependency>
+	     <dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-context</artifactId>
+    <version>5.2.7.RELEASE</version>
+</dependency>
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-context-support</artifactId>
+    <version>5.2.7.RELEASE</version>
+</dependency>
+
+<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <version>5.1.47</version>
+</dependency>
+      <dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>5.2.7.RELEASE</version>
+		</dependency>
+
+<dependency>
+    <groupId>org.hibernate</groupId>
+    <artifactId>hibernate-core</artifactId>
+    <version>5.2.2.Final</version>
+</dependency>
+	
+	
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.junit.vintage</groupId>
+					<artifactId>junit-vintage-engine</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
+
+
+////////			application.properties
+spring.datasource.url=jdbc:mysql://localhost:3306/jag
+spring.datasource.username=root
+spring.datasource.password=
+spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+spring.jpa.database-platform = org.hibernate.dialect.MySQL5Dialect
+spring.jpa.generate-ddl=true
+spring.jpa.hibernate.ddl-auto = update
+spring.mvc.view.prefix=/WEB-INF/jsp/
+spring.mvc.view.suffix=.jsp
+
+
+
+
+
+/////////////			bean.xml
+<?xml version = "1.0" encoding = "UTF-8"?>
+
+<beans xmlns = "http://www.springframework.org/schema/beans"
+xmlns:context="http://www.springframework.org/schema/context"
+   xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation = "http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+   http://www.springframework.org/schema/context
+   http://www.springframework.org/schema/context/spring-context.xsd">
+<!-- 
+	<context:component-scan base-package="model" /> -->
+	
+	
+<bean id="ds" class="org.springframework.jdbc.datasource.DriverManagerDataSource">  
+<property name="driverClassName" value="com.mysql.jdbc.Driver" />  
+<property name="url" value="jdbc:mysql://localhost:3306/jag" />  
+<property name="username" value="root" />  
+<property name="password" value="" />  
+</bean>  
+  
+<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+   	<property name="dataSource" ref="ds" />
+   	<property name="hibernateProperties">
+   		<props>
+   			<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+   			<prop key="hibernate.show_sql">true</prop>
+   		</props>
+   	</property>
+   	<property name="annotatedClasses">
+   		<list>
+   			<value>com.example.demo.Employee</value>
+   		</list>
+   	</property>
+   </bean>
+   
+   <bean id="ht" class="org.springframework.orm.hibernate5.HibernateTemplate" >
+   	<property name="sessionFactory">
+   	<ref bean="sessionFactory" />
+   	</property>
+   </bean>
+         
+<bean id="edao" class="com.example.demo.EmployeeDAO">  
+<property name="ht" ref="ht"></property>  
+</bean>   
+
+	
+</beans>
+
+
+
+///////////
+package com.example.demo;
+
+import java.util.List;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+@SpringBootApplication
+public class PraneshProject1Application {
+
+	public static void main(String[] args) {
+		SpringApplication.run(PraneshProject1Application.class, args);
+		  ApplicationContext ctx=new ClassPathXmlApplicationContext("bean.xml");
+	        EmployeeDAO edao= (EmployeeDAO) ctx.getBean("edao");
+	        List<Employee> emps = edao.getEmployees();
+	        for(Employee e:emps)
+	        	System.out.println(e);
+	}
+
+}
+
+
+
+
+
+package com.example.demo;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="Employee")
+public class Employee {
+	@Id							//primary key
+	private int employeeId;
+	private String firstName;
+	private String lastName;
+	
+	public Employee() {}
+
+	public Employee(int employeeId, String firstName, String lastName) {
+		super();
+		this.employeeId = employeeId;
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+
+	public int getEmployeeId() {
+		return employeeId;
+	}
+
+	public void setEmployeeId(int employeeId) {
+		this.employeeId = employeeId;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	@Override
+	public String toString() {
+		return "Employee [employeeId=" + employeeId + ", firstName=" + firstName + ", lastName=" + lastName + "]";
+	}
+	
+}
+
+
+
+
+
+
+
+
+
+package com.example.demo;
+import java.util.ArrayList;
+import java.util.List;
+import org.springframework.orm.hibernate5.HibernateTemplate;  
+
+public class EmployeeDAO {  
+	HibernateTemplate ht;  
+
+
+	public HibernateTemplate getHt() {
+		return ht;
+	}
+	public void setHt(HibernateTemplate ht) {
+		this.ht = ht;
+	}
+	//method to save employee  
+	public void saveEmployee(Employee e){  
+		ht.save(e);  
+	}  
+	//method to update employee  
+	public void updateEmployee(Employee e){  
+		ht.update(e);  
+	}  
+	//method to delete employee  
+	public void deleteEmployee(Employee e){  
+		ht.delete(e);  
+	}  
+	//method to return one employee of given id  
+	public Employee getById(int id){  
+		Employee e=(Employee)ht.get(Employee.class,id);  
+		return e;  
+	}  
+	//method to return all employees  
+	public List<Employee> getEmployees(){  
+		List<Employee> list=new ArrayList<Employee>();  
+		list=ht.loadAll(Employee.class);  
+		return list;  
+	}  
+} 
+
+
+
+
+---------------------------------
+Hibernate -> HibernateTemplate (spring) -> Spring data jpa (spring boot)
+
+
+Spring data jpa
+	crud repository
+	jpa repository
+	paging and sorting repository
+
+
+I will give demo using spring boot first.
+
+Demo:
+on 9th feb, we did "09-feb-boot-mvc" using jdbc
+same mvc, i do now with hibernate (spring data jpa)
+
+Lombok
+	can be used to avoid boilerplate code
+	lombok can generate
+		constructors
+		getters, setters
+		toString etc
+
+steps for lombok
+you have to download lombok
+	double click the downloaded jar file
+	and it will open a window
+	there, browse your eclipse/sts and install lombok.
+
+
+i have created a spring boot app now
+	11-feb-boot-mvc-jpa
+
+dependencies:
+	spring web
+	spring data jpa
+	mysql driver
+	lombok
+	jstl
+				<dependency>
+			<groupId>jakarta.servlet.jsp.jstl</groupId>
+			<artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.glassfish.web</groupId>
+			<artifactId>jakarta.servlet.jsp.jstl</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+
+
+
+
+what is a dialect?
+	slang of a language
+	hibernate will generate sql statements and you want to generate in which sql dialect?
+
+
+If entity class name is JavaStudent,
+then table name will be JAVA_STUDENT
+
+in rdbms, usually full capital letters are used. 
+So to differentiate multiple words, _ is used
+in java, to differentiate multiple words, capital letter is used.
+
+But when you explicitly specify the table/column names, then that case is used exactly
+
+still, we dont need to mention them, and choose the naming strategy
+
+
+so our application.properties is finally like:-
+
+spring.application.name=11-feb-boot-mvc-jpa
+server.port=8081
+spring.datasource.url=jdbc:mysql://localhost:3306/ust45
+spring.datasource.username=root
+spring.datasource.password=
+spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQLDialect
+spring.jpa.properties.hibernate.id.new_generator_mappings = false
+spring.jpa.properties.hibernate.format_sql = false
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+logging.level.org.hibernate.SQL=DEBUG
+logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+
+spring.jpa.properties.hibernate.show_sql=true
+
+next steps will be
+	entity
+	repository
+	service
+	controller
+
+
+lets create entity class
+Product
+	id
+	name
+	price
+	expiryDate
+	picture
+
+
+
+for converting byte[] into Base64 encoded string and vice versa,
+apache common dependency
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.17.0</version>
+		</dependency>
+
+package com.ust.demo.entity;
+
+import java.util.Date;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+@ToString
+public class Product {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer id;
+	private String name;
+	private Double price;
+	private Date expiryDate;
+	@Lob
+	private String picture;	
+	
+}
+
+
+
+
+package com.ust.demo.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.ust.demo.entity.Product;
+
+@Repository
+public interface ProductRepository extends JpaRepository<Product, Integer>
+{
+
+}
+
+
+
+
+
+
+
+package com.ust.demo.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.ust.demo.entity.Product;
+import com.ust.demo.exception.ProductNotFoundException;
+import com.ust.demo.repository.ProductRepository;
+
+@Service
+public class ProductService {
+	@Autowired
+	private ProductRepository pr;
+	
+	public Product create(Product product) {
+		return pr.save(product);
+	}
+	public List<Product> read() {
+		return pr.findAll();
+	}
+	public Product read(Integer id) throws ProductNotFoundException {
+		Optional<Product> temp = pr.findById(id);
+		Product product=null;
+		if(temp.isPresent())
+			product=temp.get();
+		else
+			throw new ProductNotFoundException("No product found for given id:"+id);
+		return product;
+	}
+	public Product update(Product product) throws ProductNotFoundException {
+		Product temp = read(product.getId());
+		return pr.save(product);
+	}
+	public Product delete(Integer id) throws ProductNotFoundException {
+		Product temp = read(id);
+		pr.delete(temp);
+		return temp;
+	}
+	
+}
+
+
+
+
+
+
+package com.ust.demo.controller;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.ust.demo.entity.Product;
+import com.ust.demo.service.ProductService;
+
+import jakarta.servlet.annotation.MultipartConfig;
+
+@Controller
+@RequestMapping("/product")
+@MultipartConfig
+public class ProductController {
+	@Autowired
+	private ProductService ps;
+
+	@GetMapping
+	public ModelAndView showProductPage() {
+		ModelAndView mv=new ModelAndView();
+		List<Product> products = ps.read();
+		mv.addObject("products",products);
+		mv.setViewName("product");
+		return mv;
+	}
+	
+	@PostMapping(value = "/dml", params = "add")
+	public ModelAndView dml(@RequestParam("name") String name,@RequestParam("price") Double price,@RequestParam("expiryDate") String expdt,@RequestParam("picture") MultipartFile file) throws ParseException, IOException{
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+		Date expiryDate=sdf.parse(expdt);
+		InputStream is = file.getInputStream();
+		byte []data=new byte[is.available()];
+		is.read(data);
+		String picture=Base64.encodeBase64String(data);
+		Product product=new Product(null, name, price, expiryDate, picture);
+		ps.create(product);
+		return showProductPage();
+	}
+}
+
+
+
+
+
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+<div class="container-fluid p-5 bg-primary text-white text-center">
+  <h1>My First Bootstrap Page</h1>
+  <p>Resize this responsive page to see the effect!</p> 
+</div>
+  
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-sm-4">
+    </div>
+    <div class="col-sm-4">
+      <h3>Product Admin Page </h3>
+		<form method="post" action="/product/dml" enctype="multipart/form-data">
+			Id: <input type="number" class="form-control" name="id" />
+			Name: <input type="text" class="form-control" name="name" />
+			Price: <input type="number" class="form-control" name="price" />
+			Expiry date: <input type="date" class="form-control" name="expiryDate" />
+			Picture: <input type="file" class="form-control" name="picture" />
+			<br/>
+			<input type="submit" name="add" value="Add" class="btn btn-success" />
+		</form>
+    </div>
+    <div class="col-sm-4">
+
+    </div>
+  </div>
+</div>
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-sm-2">
+    </div>
+    <div class="col-sm-8">
+      <h3>List of Product</h3>
+		<c:if test="${products.size() ne 0 }">
+		<table class="table table-bordered table-striped table-hover">
+			<thead>
+				<tr>
+					<th>Id</th><th>Name</th><th>Price</th><th>Expiry date</th><th>Picture</th><th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<c:forEach var="p" items="${products }">
+					<tr>
+						<td>${p.id }</td>
+						<td>${p.name }</td>
+						<td>${p.price }</td>
+						<td>${p.expiryDate1 }</td>
+						<td>
+							<img src="data:image/jpg;base64,${p.picture}" width="150" />
+						</td>
+						<td></td>
+					</tr>
+				</c:forEach>
+			</tbody>
+		</table>
+		</c:if>
+		<c:if test="${products.size() eq 0 }">
+		No Products to display
+		</c:if>
+    </div>
+    <div class="col-sm-2">
+
+    </div>
+  </div>
+</div>
+</body>
+</html>
+
+
+-----------------------------------------------
+Hibernate Query Language:
+Though hibernate can write sql statements on behalf of us, 	for most common requirements.
+sometimes, we may have to write sql statements by ourselves, 	when we have specific requirements
+like
+	additional conditions to filter the list of products
+	find product by name
+	find product by price range
+	
+lets add a category field now
+
+
+we need to retrieve all distinct categories so that we can populate them in dropdownlist
+
+in repository, lets write query
+
