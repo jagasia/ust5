@@ -1,0 +1,201 @@
+Spring REST
+---------------
+What is REST?
+	REpresentational State Transfer
+	is an architectural style of web services
+
+What is a web service?
+	Lets consider a scenario.
+	We need to send an SMS OTP to the customer during signup.
+	how do we send sms from java servlet or controller?
+		we are not the owner of SMS service provided by telephone operator companies.
+		so we need to call a method through internet and that method will send SMS for us.
+
+	how do you display cricket score in your website?
+
+Webservices are web components that run in web app servers and can be accessed by applications developed in any platform, running anywhere in the world
+
+http is used to access web services.
+
+when webservices were introduced first, they were SOAP web services.
+SOAP	Simple Object Access Protocol		2001
+
+SOAP supported data exchange in XML format.
+
+Front end client technologies most commonly used JSON as data exchange format. So RESTful web services became a trend and overshadowed SOAP.
+Another reason why REST became trend was REST is based on microservices architecture.
+SOAP has single URL for entire web service
+
+REST provides 1 URL per web method. 
+
+i learned RESTful webservices first using Jersey
+
+
+REST apis can be created using various technologies
+	including
+		jersey
+		spring
+		
+JSON server is one simple way of creating a rest api
+if you have installed nodejs in your system
+
+npm i -g json-server
+
+json-server --watch db.json
+
+what is db.json
+	it is a file that contains JSON structured data
+
+{
+"products":[
+	{"id":1,"name":"Pencil","category":"Stationery","price":20},
+{"id":2,"name":"Pen","category":"Stationery","price":45}
+]
+}
+
+
+POST	adding
+PUT	updating
+GET	find all
+GET	/id	find by id
+DELETE	delete
+PATCH	partial update
+
+
+Spring MVC vs Spring boot MVC
+same way, we can do
+Spring REST vs Spring boot REST also
+
+
+@RestController vs @Controller
+
+
+if you remember in our MVC project, 
+	@Controller class web methods always return
+		view
+		model and view
+
+	but when those methods use @ResponseBody, then the web methods return
+		content instead of view
+
+@RestController 	is like		@Controller + @ResponseBody
+	means,	
+		web methods in rest controller returns the content	ie., response body
+		not the view
+
+Demo:
+create a spring boot application
+	spring web
+	spring boot devtools		automatic restart when saving changes
+
+application.properties
+	server.port=8082			//any port of your choice above 1000
+
+@RestController
+public class MyRestControlller
+{
+	@GetMapping
+	public String hello() {
+		return "Hello world by my REST api. Thiis is a change done now";
+	}
+}
+
+
+Remember:
+	No prefix, no suffix
+	no apache tomcat embed jasper in pom.xml
+	not webapp/WEB-INF/views folder
+
+
+
+
+REST principles
+	RESTful webservices are stateless.
+		can anyone tell me what is stateless means?
+			state means, the class level instance/static variables
+			these are available across all methods of the class
+
+	what is sum(2,3)?	you will say 5
+	what is product?	you will say 6	(see, product of what????? you remembered 2,3 from 		previous method call. This is called as STATEFULLNESS
+
+	A class has multiple methods,
+		i pass argument for one method
+		and when call another method, it remembers my arguments, 	
+		that is stateful
+
+		it is possible if same object is used to call multiple methods.
+	But in rest ful webservices,
+		each time you call a method, it may be a different object used to call the methods
+		so it is stateless
+
+
+	Uniform interface
+		the URL of the rest api should be intutive
+		suppose, if you see the url of rest api as 
+			http://localhost:8080/product
+		then, 
+			POST http://localhost:8080/product		CREATE (ADD)
+			PUT http://localhost:8080/product/id		UPDATE
+			DELETE http://localhost:8080/product		DELETE
+			GET http://localhost:8080/product		READ	(ALL)
+			GET http://localhost:8080/product/id		READ BY ID
+
+
+
+
+the key things to know about REST API principles:
+
+REST APIs (Representational State Transfer APIs) are a type of API architecture that provides several standards and conventions that must be followed to facilitate communication between applications.
+REST APIs are designed to be stateless, scalable, flexible, and easy to use.
+REST APIs are platform-independent and can be used with any programming language.
+REST APIs support multiple data formats, such as JSON, XML, and plain text.
+REST APIs can take advantage of HTTP caching mechanisms, reducing server load and improving response times for repeated requests.
+
+
+HTTP status codes
+	a rest api may not only return the data, but also the status code
+	to understand whether, we are successful in getting response from the api server
+
+	20x
+		200		OK
+	40x	
+		401		unauthorized
+		403		Forbidden.
+		404		not found
+	50x
+		500		server side error. in sts/eclipse console you can see the error
+
+
+ Use Standard HTTP Status Codes:
+
+200 OK: Request succeeded.
+201 Created: Resource created successfully.
+400 Bad Request: Client-side input validation failed.
+401 Unauthorized: Authentication required.
+403 Forbidden: Client authenticated but does not have permission.
+404 Not Found: Resource not found.
+500 Internal Server Error: Server encountered an unexpected condition.
+
+
+https://blog.dreamfactory.com/rest-apis-an-overview-of-basic-principles
+https://restfulapi.net/hateoas/
+
+
+
+@PathVariable
+	is useful in REST apis and MVCs also
+		http://localhost:8080/product/2			2 is the value for path var
+@RequestParam
+	is useful in MVC because, every form input elements send data in the form of request param
+		Request.getParameter in servlets
+			http://localhost:8080/product?id=20&name=pencil
+
+
+
+	@GetMapping
+	public ResponseEntity<?> hello() {
+//		return "Hello world by my REST api. Thiis is a change done now";
+		return new ResponseEntity<>("Hello world", HttpStatus.FORBIDDEN);
+	}
+
+
